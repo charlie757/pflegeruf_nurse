@@ -1,0 +1,97 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:nurse/api/apiservice.dart';
+import 'package:nurse/api/apiurl.dart';
+import 'package:nurse/config/approutes.dart';
+import 'package:nurse/model/login_model.dart';
+import 'package:nurse/screens/dashboard/dashboard_screen.dart';
+import 'package:nurse/utils/app_validation.dart';
+import 'package:nurse/utils/session_manager.dart';
+import 'package:nurse/utils/utils.dart';
+
+class LoginProvider extends ChangeNotifier {
+  LoginModel? loginModel;
+  final formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isLoading = false;
+  bool isKeepSigned = false;
+  bool isVisiblePassword = true;
+
+  /// to show the textfield error
+  String? emailValidationMsg = '';
+  String? passwordValidationMsg = '';
+
+  clearValues() {
+    emailController.clear();
+    passwordController.clear();
+    isKeepSigned = false;
+    isVisiblePassword = true;
+  }
+
+  updateIsVisiblePassword(value) {
+    isVisiblePassword = value;
+    notifyListeners();
+  }
+
+  updateKeepSigned(value) {
+    /// again update value when click on login button (if user changes the value after select the "keep me signed in")
+    isKeepSigned = value;
+    SessionManager.setKeepMySignedIn = value;
+    SessionManager.setUserEmail = emailController.text;
+    SessionManager.setuserPassword = passwordController.text;
+    notifyListeners();
+  }
+
+  updateLoading(value) {
+    isLoading = value;
+    notifyListeners();
+  }
+
+  checkValidation() {
+    if (emailValidationMsg == null && passwordValidationMsg == null) {
+      callApiFunction();
+    } else {
+      emailValidationMsg = AppValidation.emailValidator(emailController.text);
+      passwordValidationMsg =
+          AppValidation.passwordValidator(passwordController.text);
+    }
+    notifyListeners();
+  }
+
+  callApiFunction() {
+    updateLoading(true);
+    var data = {
+      "username": emailController.text,
+      "password": passwordController.text,
+      "device": Platform.isIOS ? 'ios' : 'android'
+    };
+    String body = Uri(queryParameters: data).query;
+    print(body);
+    ApiService.apiMethod(
+      url: ApiUrl.loginUrl,
+      body: body,
+      method: checkApiMethod(httpMethod.post),
+    ).then((value) {
+      updateLoading(false);
+      if (value != null) {
+        loginModel = LoginModel.fromJson(value);
+
+        if (loginModel!.data != null && loginModel!.data!.status == true) {
+          /// check account type
+          if (loginModel!.data!.userDetails!.userAccountType == 2) {
+            if (SessionManager.keepMySignedIn) {
+              updateIsVisiblePassword(true);
+            }
+            SessionManager.setToken = loginModel!.data!.token;
+            AppRoutes.pushReplacementNavigation(const DashboardScreen());
+          } else {
+            Utils.errorSnackBar('User not found', navigatorKey.currentContext);
+          }
+        } else {
+          Utils.errorSnackBar(loginModel!.message, navigatorKey.currentContext);
+        }
+      }
+    });
+  }
+}

@@ -1,0 +1,27 @@
+import 'package:flutter/material.dart';
+import 'package:nurse/helper/appcolor.dart';
+import 'package:nurse/helper/appimages.dart';
+import 'package:nurse/helper/fontfamily.dart';
+import 'package:nurse/helper/getText.dart';
+import 'package:nurse/helper/screensize.dart';
+import 'package:nurse/languages/string_key.dart';
+import 'package:get/get.dart';
+
+Widget noDataWidget() {
+  return Column(
+    children: [
+      Image.asset(
+        AppImages.noDataIcon,
+        height: 136,
+        width: 140,
+      ),
+      ScreenSize.height(24),
+      getText(
+          title: StringKey.noData.tr,
+          size: 16,
+          fontFamily: FontFamily.poppinsRegular,
+          color: AppColor.blackColor,
+          fontWeight: FontWeight.w400)
+    ],
+  );
+}
