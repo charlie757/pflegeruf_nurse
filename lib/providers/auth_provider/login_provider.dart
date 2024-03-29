@@ -60,6 +60,10 @@ class LoginProvider extends ChangeNotifier {
   }
 
   callApiFunction() {
+    /// set the values
+    SessionManager.setUserEmail = emailController.text;
+    SessionManager.setuserPassword = passwordController.text;
+
     updateLoading(true);
     var data = {
       "username": emailController.text,

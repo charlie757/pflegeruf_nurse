@@ -7,6 +7,7 @@ import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
+import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/home_provider.dart';
@@ -55,16 +56,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             myProvider.homeModel!.data!.userDetails != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              myProvider.homeModel!.data!.userDetails!
+                            child: NetworkImageHelper(
+                              img: myProvider.homeModel!.data!.userDetails!
                                           .pUserPhoto ==
                                       null
                                   ? "${myProvider.homeModel!.data!.profilePath}${myProvider.homeModel!.data!.userDetails!.displayProfileImage}"
                                   : "${myProvider.homeModel!.data!.profilePath}${myProvider.homeModel!.data!.userDetails!.pUserPhoto}",
-                              height: 40,
-                              width: 40,
-                            ),
-                          )
+                              height: 40.0,
+                              width: 40.0,
+                            ))
                         : Image.asset(
                             'assets/images/dummyProfile.png',
                             height: 40,
@@ -319,12 +319,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 15,
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            "${provider.homeModel!.data!.bannerPath}${provider.homeModel!.data!.banners![itemIndex].bannerImage}",
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                            borderRadius: BorderRadius.circular(15),
+                            child: NetworkImageHelper(
+                              img:
+                                  "${provider.homeModel!.data!.bannerPath}${provider.homeModel!.data!.banners![itemIndex].bannerImage}",
+                              height: 168.0,
+                              width: double.infinity,
+                              isAnotherColorOfLodingIndicator: true,
+                            )),
                       );
                     },
                     options: CarouselOptions(

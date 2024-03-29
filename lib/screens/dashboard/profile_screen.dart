@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nurse/helper/appbutton.dart';
 import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/customtextfield.dart';
@@ -7,6 +9,8 @@ import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
+import 'package:nurse/utils/app_validation.dart';
+import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
@@ -28,6 +32,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   callInitFunction() {
     final myProvider = Provider.of<ProfileProvider>(context, listen: false);
     myProvider.clearValues();
+    myProvider.setControllersValues();
+    myProvider.passwordController.text = SessionManager.userPassword;
   }
 
   @override
@@ -74,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  profileImageWidget(),
+                  profileImageWidget(myProvider),
                   ScreenSize.height(27),
                   getText(
                       title: StringKey.firstName.tr,
@@ -86,6 +92,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CustomTextfield(
                     controller: myProvider.firstNameController,
                     hintText: StringKey.enterFirstName.tr,
+                    errorMsg: myProvider.firstNamevalidationMsg,
+                    onChanged: (val) {
+                      myProvider.firstNamevalidationMsg =
+                          AppValidation.firstNameValidator(val);
+                      setState(() {});
+                    },
                     icon: GestureDetector(
                       onTap: () {},
                       child: Icon(
@@ -106,6 +118,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CustomTextfield(
                     controller: myProvider.lastNameController,
                     hintText: StringKey.enterLastName.tr,
+                    errorMsg: myProvider.lastNamevalidationMsg,
+                    onChanged: (val) {
+                      myProvider.lastNamevalidationMsg =
+                          AppValidation.lastNameValidator(val);
+                      setState(() {});
+                    },
                     icon: GestureDetector(
                       onTap: () {},
                       child: Icon(
@@ -126,6 +144,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CustomTextfield(
                     controller: myProvider.emailController,
                     hintText: StringKey.enterYourEmail.tr,
+                    isReadOnly: true,
+                    errorMsg: myProvider.emailValidationMsg,
+                    onChanged: (val) {
+                      myProvider.emailValidationMsg =
+                          AppValidation.emailValidator(val);
+                      setState(() {});
+                    },
                     icon: GestureDetector(
                       onTap: () {},
                       child: Icon(
@@ -146,6 +171,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CustomTextfield(
                     controller: myProvider.phoneController,
                     hintText: StringKey.enterYourPhonenUmber.tr,
+                    textInputType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10)
+                    ],
+                    errorMsg: myProvider.phoneValidationMsg,
+                    onChanged: (val) {
+                      myProvider.phoneValidationMsg =
+                          AppValidation.phoneNumberValidator(val);
+                      setState(() {});
+                    },
                     icon: GestureDetector(
                       onTap: () {},
                       child: Icon(
@@ -167,6 +203,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: myProvider.passwordController,
                     hintText: StringKey.enterYourPasword.tr,
                     isObscureText: myProvider.isVisiblePassword,
+                    isReadOnly: true,
+                    errorMsg: myProvider.passwordValidationMsg,
+                    onChanged: (val) {
+                      myProvider.passwordValidationMsg =
+                          AppValidation.reEnterpasswordValidator(
+                              val, myProvider.passwordController.text);
+                      setState(() {});
+                    },
                     icon: GestureDetector(
                       onTap: () {
                         if (myProvider.isVisiblePassword) {
@@ -192,7 +236,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 54,
                         width: double.infinity,
                         buttonColor: AppColor.appTheme,
-                        onTap: () {}),
+                        onTap: () {
+                          myProvider.checkValidation();
+                        }),
                   ),
                 ],
               ),
@@ -203,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  profileImageWidget() {
+  profileImageWidget(ProfileProvider provider) {
     return Align(
       alignment: Alignment.center,
       child: Stack(
@@ -215,16 +261,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Positioned(
             right: 0,
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                  color: AppColor.whiteColor,
-                  borderRadius: BorderRadius.circular(15)),
-              child: Icon(
-                Icons.edit,
-                color: AppColor.textBlackColor.withOpacity(.3),
-                size: 20,
+            child: GestureDetector(
+              onTap: () {
+                imagePickerBottomSheet(provider);
+              },
+              child: Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                    color: AppColor.whiteColor,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Icon(
+                  Icons.edit,
+                  color: AppColor.textBlackColor.withOpacity(.3),
+                  size: 20,
+                ),
               ),
             ),
           )
@@ -424,6 +475,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         );
       },
+    );
+  }
+
+  imagePickerBottomSheet(ProfileProvider profileProvider) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            padding:
+                const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    getText(
+                        title: 'Profile Photo',
+                        size: 17,
+                        fontFamily: FontFamily.poppinsMedium,
+                        color: AppColor.blackColor,
+                        fontWeight: FontWeight.w500),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.close))
+                  ],
+                ),
+                ScreenSize.height(25),
+                Row(
+                  children: [
+                    imagePickType(Icons.camera_alt_outlined, 'Camera', () {
+                      Navigator.pop(context);
+                      profileProvider.imagePicker(ImageSource.camera);
+                    }),
+                    ScreenSize.width(30),
+                    imagePickType(Icons.image_outlined, 'Gallery', () {
+                      Navigator.pop(context);
+                      profileProvider.imagePicker(ImageSource.gallery);
+                    }),
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  imagePickType(icon, String title, Function() onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+              color: AppColor.lightTextColor.withOpacity(.2),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: AppColor.blackColor.withOpacity(.3),
+            ),
+          ),
+          ScreenSize.height(5),
+          getText(
+              title: title,
+              size: 14,
+              fontFamily: FontFamily.poppinsRegular,
+              color: AppColor.blackColor,
+              fontWeight: FontWeight.w400)
+        ],
+      ),
     );
   }
 }
