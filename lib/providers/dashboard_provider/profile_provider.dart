@@ -170,6 +170,7 @@ class ProfileProvider extends ChangeNotifier {
       Navigator.pop(navigatorKey.currentContext!);
       var dataAll = json.decode(vb.body);
       Utils.successSnackBar(dataAll['message'], navigatorKey.currentContext!);
+      getProfileApiFunction(true);
     } else {
       Navigator.pop(navigatorKey.currentContext!);
 

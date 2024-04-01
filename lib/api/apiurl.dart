@@ -11,4 +11,5 @@ class ApiUrl {
   static String profileUpdateUrl = '${baseUrl}profile/update-profile';
   static String profilePhotoUrl = '${baseUrl}profile/update-photo';
   static String deleteAccountUrl = '${baseUrl}profile/delete-account';
+  static String bookingListUrl = '${baseUrl}Mylisting/booking-list';
 }

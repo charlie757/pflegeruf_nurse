@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +8,7 @@ import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/customtextfield.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
+import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
@@ -254,11 +257,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
       alignment: Alignment.center,
       child: Stack(
         children: [
-          Image.asset(
-            'assets/images/dummyProfile.png',
-            height: 100,
-            width: 100,
-          ),
+          provider.profileModel!.data!.details!.displayProfileImage.isNotEmpty
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: NetworkImageHelper(
+                    img: provider
+                        .profileModel!.data!.details!.displayProfileImage,
+                    height: 100.0,
+                    width: 100.0,
+                  ),
+                )
+              : provider.imgFile != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Image.file(
+                        File(provider.imgFile!.path),
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                      ))
+                  : Image.asset(
+                      'assets/images/dummyProfile.png',
+                      height: 100,
+                      width: 100,
+                    ),
           Positioned(
             right: 0,
             child: GestureDetector(

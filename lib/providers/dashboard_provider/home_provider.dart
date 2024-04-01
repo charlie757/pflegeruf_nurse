@@ -34,4 +34,22 @@ class HomeProvider extends ChangeNotifier {
       }
     });
   }
+
+  bookingApiFunction() {
+    var data = {'': ''};
+    String body = Uri(queryParameters: data).query;
+    print(body);
+    ApiService.apiMethod(
+            url: ApiUrl.bookingListUrl,
+            body: body,
+            method: checkApiMethod(httpMethod.post),
+            isErrorMessageShow: false,
+            isBodyNotRequired: true)
+        .then((value) {
+      if (value != null) {
+        // homeModel = HomeModel.fromJson(value);
+        notifyListeners();
+      }
+    });
+  }
 }

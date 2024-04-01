@@ -11,6 +11,7 @@ import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/home_provider.dart';
+import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/screens/dashboard/notification_screen.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -39,9 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+
     return MediaQuery(
       data: mediaQuery,
       child: Consumer<HomeProvider>(builder: (context, myProvider, child) {
+        // myProvider.bookingApiFunction();
         return Scaffold(
             appBar: AppBar(
               backgroundColor: AppColor.appTheme,
@@ -51,30 +55,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(left: 0, right: 0),
                 child: Row(
                   children: [
-                    myProvider.homeModel != null &&
-                            myProvider.homeModel!.data != null &&
-                            myProvider.homeModel!.data!.userDetails != null
+                    profileProvider.profileModel != null &&
+                            profileProvider.profileModel!.data != null &&
+                            profileProvider.profileModel!.data!.details !=
+                                null &&
+                            profileProvider.profileModel!.data!.details!
+                                .displayProfileImage.isNotEmpty
                         ? ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(100),
                             child: NetworkImageHelper(
-                              img: myProvider.homeModel!.data!.userDetails!
-                                          .pUserPhoto ==
-                                      null
-                                  ? "${myProvider.homeModel!.data!.profilePath}${myProvider.homeModel!.data!.userDetails!.displayProfileImage}"
-                                  : "${myProvider.homeModel!.data!.profilePath}${myProvider.homeModel!.data!.userDetails!.pUserPhoto}",
+                              img: profileProvider.profileModel!.data!.details!
+                                  .displayProfileImage,
                               height: 40.0,
                               width: 40.0,
+                              isAnotherColorOfLodingIndicator: true,
                             ))
                         : Image.asset(
                             'assets/images/dummyProfile.png',
                             height: 40,
                             width: 40,
+                            fit: BoxFit.cover,
                           ),
                     ScreenSize.width(10),
                     Flexible(
                       child: getText(
                           title:
-                              '${StringKey.welcome.tr}, ${myProvider.homeModel != null && myProvider.homeModel!.data != null && myProvider.homeModel!.data!.userDetails != null ? (myProvider.homeModel!.data!.userDetails!.firstName.toString().substring(0).toUpperCase()[0] + myProvider.homeModel!.data!.userDetails!.firstName.toString().substring(1)) : ''}',
+                              '${StringKey.welcome.tr}, ${profileProvider.profileModel != null && profileProvider.profileModel!.data != null && profileProvider.profileModel!.data!.details != null ? (profileProvider.profileModel!.data!.details!.firstName.toString().substring(0).toUpperCase()[0] + profileProvider.profileModel!.data!.details!.firstName.toString().substring(1)) : ''}',
                           size: 16,
                           fontFamily: FontFamily.poppinsSemiBold,
                           color: AppColor.whiteColor,
