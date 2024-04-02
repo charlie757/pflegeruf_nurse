@@ -6,4 +6,6 @@ class Constants {
   static String KEEP_ME_SIGNED_IN = 'KEEP_ME_SIGNED_IN';
   static String EMAIL_ID = 'EMAIL_ID';
   static String PASSWORD = 'PASSWORD';
+  static String LAT = "LAT";
+  static String LNG = 'LNG';
 }

@@ -39,4 +39,14 @@ class SessionManager {
   static set setToken(String value) {
     sharedPrefs.setString(Constants.TOKEN, value);
   }
+
+  static String get lat => sharedPrefs.getString(Constants.LAT) ?? "";
+  static set setLat(String value) {
+    sharedPrefs.setString(Constants.LAT, value);
+  }
+
+  static String get lng => sharedPrefs.getString(Constants.LNG) ?? "";
+  static set setLng(String value) {
+    sharedPrefs.setString(Constants.LNG, value);
+  }
 }

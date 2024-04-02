@@ -52,14 +52,17 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   checkValidation() {
+    print('object');
     if (firstNamevalidationMsg == null &&
         lastNamevalidationMsg == null &&
         phoneValidationMsg == null &&
         emailValidationMsg == null &&
         passwordValidationMsg == null) {
+      print('if');
       updateProfileApiFunction();
       // callApiFunction(route);
     } else {
+      print('else');
       firstNamevalidationMsg =
           AppValidation.firstNameValidator(firstNameController.text);
       lastNamevalidationMsg =
@@ -111,9 +114,9 @@ class ProfileProvider extends ChangeNotifier {
     var data = {
       'p_user_name': firstNameController.text,
       'p_user_surname': lastNameController.text,
-      // 'p_user_email': emailController.text,
       'p_user_mobile': phoneController.text,
-      // 'p_user_password': passwordController.text
+      'latitude': SessionManager.lat,
+      'longitude': SessionManager.lng
     };
     print(data);
     String body = Uri(queryParameters: data).query;
@@ -121,12 +124,12 @@ class ProfileProvider extends ChangeNotifier {
       url: ApiUrl.profileUpdateUrl,
       body: body,
       method: checkApiMethod(httpMethod.post),
-      isErrorMessageShow: false,
+      isErrorMessageShow: true,
     ).then((value) {
       Navigator.pop(navigatorKey.currentContext!);
-      getProfileApiFunction(false);
       if (value != null) {
-        Utils.successSnackBar(value['message'], navigatorKey.currentContext!);
+        getProfileApiFunction(false);
+        Utils.successSnackBar(value['status'], navigatorKey.currentContext!);
         notifyListeners();
       }
     });

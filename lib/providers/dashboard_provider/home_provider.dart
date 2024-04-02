@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nurse/api/apiservice.dart';
 import 'package:nurse/api/apiurl.dart';
+import 'package:nurse/model/booking_model.dart';
 import 'package:nurse/model/home_model.dart';
 import 'package:nurse/utils/showcircleprogressdialog.dart';
 import 'package:nurse/utils/utils.dart';
@@ -8,6 +9,7 @@ import 'package:nurse/utils/utils.dart';
 class HomeProvider extends ChangeNotifier {
   int currentSliderIndex = 0;
   HomeModel? homeModel;
+  BookingModel? bookingModel;
   updateSliderIndex(value) {
     currentSliderIndex = value;
     notifyListeners();
@@ -47,6 +49,7 @@ class HomeProvider extends ChangeNotifier {
             isBodyNotRequired: true)
         .then((value) {
       if (value != null) {
+        bookingModel = BookingModel.fromJson(value);
         // homeModel = HomeModel.fromJson(value);
         notifyListeners();
       }

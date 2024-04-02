@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/screensize.dart';
@@ -7,6 +8,7 @@ import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/screens/dashboard/booking/booking_screen.dart';
 import 'package:nurse/screens/dashboard/home_screen.dart';
 import 'package:nurse/screens/dashboard/profile_screen.dart';
+import 'package:nurse/utils/location_service.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -39,8 +41,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const BookingsScreen(),
     const ProfileScreen()
   ];
+
+  var latitude = "";
+  var longitude = "";
+  Position? currentPosition;
+
   @override
   Widget build(BuildContext context) {
+    // getLcoation();
     return MediaQuery(
       data: mediaQuery,
       child: Consumer<DashboardProvider>(builder: (context, myProvider, child) {

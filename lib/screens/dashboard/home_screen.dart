@@ -13,7 +13,9 @@ import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/home_provider.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/screens/dashboard/notification_screen.dart';
+import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/utils/utils.dart';
+import 'package:nurse/widgets/no_data_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 
@@ -36,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   callInitFunction() {
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
     myProvider.homeApiFunction();
+    myProvider.bookingApiFunction();
   }
 
   @override
@@ -45,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return MediaQuery(
       data: mediaQuery,
       child: Consumer<HomeProvider>(builder: (context, myProvider, child) {
-        // myProvider.bookingApiFunction();
         return Scaffold(
             appBar: AppBar(
               backgroundColor: AppColor.appTheme,
@@ -136,23 +138,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 50),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    headerWidget(myProvider),
-                    ScreenSize.height(40),
-                    bookingForYouWidget()
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  headerWidget(myProvider),
+                  ScreenSize.height(40),
+                  bookingForYouWidget(myProvider)
+                ],
               ),
             ));
       }),
     );
   }
 
-  bookingForYouWidget() {
+  bookingForYouWidget(HomeProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -166,14 +165,28 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.w600),
         ),
         ScreenSize.height(37),
-        bookingUi(),
-        ScreenSize.height(20),
-        bookingUi(),
+        provider.bookingModel != null &&
+                provider.bookingModel!.data != null &&
+                provider.bookingModel!.data!.myListing != null
+            ? ListView.separated(
+                separatorBuilder: (context, sp) {
+                  return ScreenSize.height(20);
+                },
+                itemCount: provider.bookingModel!.data!.myListing!.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 50),
+                itemBuilder: (context, index) {
+                  return bookingUi(provider, index);
+                })
+            : Center(
+                child: noDataWidget(),
+              ),
       ],
     );
   }
 
-  bookingUi() {
+  bookingUi(HomeProvider provider, int index) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
@@ -193,13 +206,17 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               getText(
-                  title: 'Alexandra Will',
+                  title: provider.bookingModel!.data!.myListing![index].user !=
+                          null
+                      ? "${provider.bookingModel!.data!.myListing![index].user!.pUserName != null ? provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(1) : ''} ${provider.bookingModel!.data!.myListing![index].user!.pUserSurname != null ? provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(1) : ''}"
+                      : '',
                   size: 20,
                   fontFamily: FontFamily.poppinsMedium,
                   color: AppColor.blackColor,
                   fontWeight: FontWeight.w600),
-              const getText(
-                  title: '2:30',
+              getText(
+                  title: TimeFormat.convertBookingTime(provider
+                      .bookingModel!.data!.myListing![index].productCreatedAt),
                   size: 14,
                   fontFamily: FontFamily.poppinsRegular,
                   color: AppColor.rejectColor,
@@ -216,10 +233,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 22,
               ),
               ScreenSize.width(17),
-              const Flexible(
+              Flexible(
                 child: getText(
                     title:
-                        'Boxhagener Str. 36, Hamburg Groß Flottbek, Hamburg, Germany',
+                        provider.bookingModel!.data!.myListing![index].user !=
+                                null
+                            ? provider.bookingModel!.data!.myListing![index]
+                                    .user!.pUserAddress ??
+                                ''
+                            : '',
                     size: 13,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.lightTextColor,
@@ -240,7 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
                 getText(
-                    title: "02 Jan 2023",
+                    title: TimeFormat.convertBookingDate(provider.bookingModel!
+                        .data!.myListing![index].productCreatedAt),
                     size: 15,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
@@ -259,12 +282,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
-                getText(
-                    title: "Wound Care",
-                    size: 15,
-                    fontFamily: FontFamily.poppinsMedium,
-                    color: AppColor.blackColor,
-                    fontWeight: FontWeight.w500),
+                Text(
+                  provider.bookingModel!.data!.myListing![index].category !=
+                          null
+                      ? provider.bookingModel!.data!.myListing![index].category!
+                              .categoryName ??
+                          ""
+                      : "",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: FontFamily.poppinsMedium,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.w500),
+                )
               ],
             ),
           ),
