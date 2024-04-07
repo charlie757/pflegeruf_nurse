@@ -61,6 +61,36 @@ class ApiService {
     }
   }
 
+  static Future multiPartApiMethod(
+      {required String url,
+      required var body,
+      bool isErrorMessageShow = true,
+      bool isBodyNotRequired = false}) async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          Map<String, String> headers = {
+            "Authorization": "Bearer ${SessionManager.token}"
+          };
+
+          var request = http.MultipartRequest('POST', Uri.parse(url));
+          request.headers.addAll(headers);
+          request.fields.addAll(body);
+          var res = await request.send();
+          var vb = await http.Response.fromStream(res);
+          log(vb.body);
+          return _handleResponse(vb, isErrorMessageShow);
+        } on Exception catch (_) {
+          rethrow;
+        }
+      } else {}
+    } on SocketException catch (_) {
+      Utils.internetSnackBar(navigatorKey.currentContext!);
+      // print('not connected');
+    }
+  }
+
   // Helper method to handle API response
   static Map<String, dynamic>? _handleResponse(
       http.Response response, isErrorMessageShow) {

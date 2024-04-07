@@ -11,5 +11,9 @@ class ApiUrl {
   static String profileUpdateUrl = '${baseUrl}profile/update-profile';
   static String profilePhotoUrl = '${baseUrl}profile/update-photo';
   static String deleteAccountUrl = '${baseUrl}profile/delete-account';
-  static String bookingListUrl = '${baseUrl}Mylisting/booking-list';
+  static String homeBookingListUrl = '${baseUrl}Mylisting/booking-list';
+  static String bookingDetails = '${baseUrl}Mylisting/booking-detail';
+  static String acceptBookingUrl = '${baseUrl}Mylisting/request-accept';
+  static String sendMessageUrl = '${baseUrl}Mylisting/send-message-booking';
+  static String bookingListUrl = '${baseUrl}Mylisting/booking-list-accepted';
 }

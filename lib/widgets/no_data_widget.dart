@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 Widget noDataWidget() {
   return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Image.asset(
         AppImages.noDataIcon,

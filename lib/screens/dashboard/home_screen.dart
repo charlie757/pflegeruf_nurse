@@ -12,6 +12,7 @@ import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/home_provider.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
+import 'package:nurse/screens/dashboard/booking/patient_details_screen.dart';
 import 'package:nurse/screens/dashboard/notification_screen.dart';
 import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/utils/utils.dart';
@@ -168,166 +169,206 @@ class _HomeScreenState extends State<HomeScreen> {
         provider.bookingModel != null &&
                 provider.bookingModel!.data != null &&
                 provider.bookingModel!.data!.myListing != null
-            ? ListView.separated(
-                separatorBuilder: (context, sp) {
-                  return ScreenSize.height(20);
-                },
-                itemCount: provider.bookingModel!.data!.myListing!.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(bottom: 50),
-                itemBuilder: (context, index) {
-                  return bookingUi(provider, index);
-                })
-            : Center(
-                child: noDataWidget(),
-              ),
+            ? provider.bookingModel!.data!.myListing!.isEmpty
+                ? Center(
+                    child: noDataWidget(),
+                  )
+                : ListView.separated(
+                    separatorBuilder: (context, sp) {
+                      return ScreenSize.height(20);
+                    },
+                    itemCount: provider.bookingModel!.data!.myListing!.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(bottom: 50),
+                    itemBuilder: (context, index) {
+                      return bookingUi(provider, index);
+                    })
+            : Container(),
       ],
     );
   }
 
   bookingUi(HomeProvider provider, int index) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-          color: AppColor.whiteColor,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-                offset: const Offset(0, 2),
-                color: AppColor.blackColor.withOpacity(.2),
-                blurRadius: 10)
-          ]),
-      padding: const EdgeInsets.only(left: 18, top: 25, bottom: 25, right: 18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              getText(
-                  title: provider.bookingModel!.data!.myListing![index].user !=
-                          null
-                      ? "${provider.bookingModel!.data!.myListing![index].user!.pUserName != null ? provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(1) : ''} ${provider.bookingModel!.data!.myListing![index].user!.pUserSurname != null ? provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(1) : ''}"
-                      : '',
-                  size: 20,
-                  fontFamily: FontFamily.poppinsMedium,
-                  color: AppColor.blackColor,
-                  fontWeight: FontWeight.w600),
-              getText(
-                  title: TimeFormat.convertBookingTime(provider
-                      .bookingModel!.data!.myListing![index].productCreatedAt),
-                  size: 14,
-                  fontFamily: FontFamily.poppinsRegular,
-                  color: AppColor.rejectColor,
-                  fontWeight: FontWeight.w400)
-            ],
-          ),
-          ScreenSize.height(16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset(
-                AppImages.locationIcon,
-                height: 22,
-                width: 22,
-              ),
-              ScreenSize.width(17),
-              Flexible(
-                child: getText(
-                    title:
-                        provider.bookingModel!.data!.myListing![index].user !=
-                                null
-                            ? provider.bookingModel!.data!.myListing![index]
-                                    .user!.pUserAddress ??
-                                ''
-                            : '',
-                    size: 13,
-                    fontFamily: FontFamily.poppinsRegular,
-                    color: AppColor.lightTextColor,
-                    fontWeight: FontWeight.w400),
-              )
-            ],
-          ),
-          ScreenSize.height(24),
-          Padding(
-            padding: const EdgeInsets.only(left: 45),
-            child: Row(
+    return GestureDetector(
+      onTap: () {
+        AppRoutes.pushCupertinoNavigation(PatientDetailSreen(
+          bookingId: provider.bookingModel!.data!.myListing![index].bookingId
+              .toString(),
+        ));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+            color: AppColor.whiteColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  offset: const Offset(0, 2),
+                  color: AppColor.blackColor.withOpacity(.2),
+                  blurRadius: 10)
+            ]),
+        padding:
+            const EdgeInsets.only(left: 18, top: 25, bottom: 25, right: 18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
-                    title: "${StringKey.bookingDate.tr}:",
-                    size: 14,
-                    fontFamily: FontFamily.poppinsSemiBold,
-                    color: AppColor.blackColor,
-                    fontWeight: FontWeight.w600),
-                getText(
-                    title: TimeFormat.convertBookingDate(provider.bookingModel!
-                        .data!.myListing![index].productCreatedAt),
-                    size: 15,
+                    title: provider
+                                .bookingModel!.data!.myListing![index].user !=
+                            null
+                        ? "${provider.bookingModel!.data!.myListing![index].user!.pUserName != null ? provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(1) : ''} ${provider.bookingModel!.data!.myListing![index].user!.pUserSurname != null ? provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(1) : ''}"
+                        : '',
+                    size: 20,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w600),
+                getText(
+                    title: TimeFormat.convertBookingTime(provider.bookingModel!
+                        .data!.myListing![index].productCreatedAt),
+                    size: 14,
+                    fontFamily: FontFamily.poppinsRegular,
+                    color: AppColor.rejectColor,
+                    fontWeight: FontWeight.w400)
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 45, top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ScreenSize.height(16),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                getText(
-                    title: "${StringKey.serviceName.tr}:",
-                    size: 14,
-                    fontFamily: FontFamily.poppinsSemiBold,
-                    color: AppColor.blackColor,
-                    fontWeight: FontWeight.w600),
-                Text(
-                  provider.bookingModel!.data!.myListing![index].category !=
-                          null
-                      ? provider.bookingModel!.data!.myListing![index].category!
-                              .categoryName ??
-                          ""
-                      : "",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: FontFamily.poppinsMedium,
-                      color: AppColor.blackColor,
-                      fontWeight: FontWeight.w500),
+                Image.asset(
+                  AppImages.locationIcon,
+                  height: 22,
+                  width: 22,
+                ),
+                ScreenSize.width(17),
+                Flexible(
+                  child: getText(
+                      title:
+                          provider.bookingModel!.data!.myListing![index].user !=
+                                  null
+                              ? provider.bookingModel!.data!.myListing![index]
+                                      .user!.pUserAddress ??
+                                  ''
+                              : '',
+                      size: 13,
+                      fontFamily: FontFamily.poppinsRegular,
+                      color: AppColor.lightTextColor,
+                      fontWeight: FontWeight.w400),
                 )
               ],
             ),
-          ),
-          ScreenSize.height(30),
-          Padding(
-            padding: const EdgeInsets.only(left: 40),
-            child: Row(
-              children: [
-                Flexible(
-                  child: AppButton(
-                      title: StringKey.accept.tr,
-                      height: 45,
-                      width: double.infinity,
-                      buttonColor: AppColor.appTheme,
-                      onTap: () {
-                        acceptDialogBox();
-                      }),
-                ),
-                ScreenSize.width(20),
-                Flexible(
-                  child: AppButton(
-                      title: StringKey.reject.tr,
-                      height: 45,
-                      width: double.infinity,
-                      buttonColor: AppColor.rejectColor,
-                      onTap: () {}),
-                ),
-              ],
+            ScreenSize.height(24),
+            Padding(
+              padding: const EdgeInsets.only(left: 45),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  getText(
+                      title: "${StringKey.bookingDate.tr}:",
+                      size: 14,
+                      fontFamily: FontFamily.poppinsSemiBold,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.w600),
+                  getText(
+                      title: provider.bookingModel!.data!.myListing![index]
+                                  .productCreatedAt !=
+                              null
+                          ? TimeFormat.convertBookingDate(provider.bookingModel!
+                              .data!.myListing![index].productCreatedAt)
+                          : '',
+                      size: 15,
+                      fontFamily: FontFamily.poppinsMedium,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.w500),
+                ],
+              ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(left: 45, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  getText(
+                      title: "${StringKey.serviceName.tr}:",
+                      size: 14,
+                      fontFamily: FontFamily.poppinsSemiBold,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.w600),
+                  Text(
+                    provider.bookingModel!.data!.myListing![index].category !=
+                            null
+                        ? provider.bookingModel!.data!.myListing![index]
+                                .category!.categoryName ??
+                            ""
+                        : "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: FontFamily.poppinsMedium,
+                        color: AppColor.blackColor,
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+            ),
+            ScreenSize.height(30),
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: AppButton(
+                        title: StringKey.accept.tr,
+                        height: 45,
+                        width: double.infinity,
+                        buttonColor: AppColor.appTheme,
+                        onTap: () {
+                          confirmationDialogBox(
+                              title: StringKey.accept.tr,
+                              subTitle:
+                                  StringKey.confirmationToAcceptRequest.tr,
+                              noTap: () {
+                                Navigator.pop(context);
+                              },
+                              yesTap: () {
+                                Navigator.pop(context);
+                                provider.acceptBookingApiFunction(
+                                  provider.bookingModel!.data!.myListing![index]
+                                      .bookingId
+                                      .toString(),
+                                );
+                              });
+                          // acceptDialogBox();
+                        }),
+                  ),
+                  ScreenSize.width(20),
+                  Flexible(
+                    child: AppButton(
+                        title: StringKey.reject.tr,
+                        height: 45,
+                        width: double.infinity,
+                        buttonColor: AppColor.rejectColor,
+                        onTap: () {
+                          confirmationDialogBox(
+                              title: StringKey.reject.tr,
+                              subTitle:
+                                  StringKey.confirmationToRejectRequest.tr,
+                              noTap: () {
+                                Navigator.pop(context);
+                              },
+                              yesTap: () {});
+                        }),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -420,7 +461,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  acceptDialogBox() {
+  confirmationDialogBox(
+      {required String title,
+      required String subTitle,
+      required Function() noTap,
+      required Function() yesTap}) {
     showGeneralDialog(
       context: context,
       barrierLabel: "Barrier",
@@ -441,45 +486,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      AppImages.checkImage,
-                      height: 90,
-                      width: 90,
-                    ),
-                  ),
-                  ScreenSize.height(32),
-                  Align(
-                    alignment: Alignment.center,
-                    child: getText(
-                        title: StringKey.requestAccepted.tr,
-                        size: 16,
-                        fontFamily: FontFamily.poppinsSemiBold,
-                        color: AppColor.textBlackColor,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  ScreenSize.height(31),
                   getText(
-                      title: StringKey.messgeForPatient.tr,
-                      size: 12,
-                      fontFamily: FontFamily.poppinsSemiBold,
-                      color: AppColor.appTheme,
+                      title: subTitle,
+                      size: 14,
+                      textAlign: TextAlign.center,
+                      fontFamily: FontFamily.poppinsMedium,
+                      color: AppColor.textBlackColor,
                       fontWeight: FontWeight.w600),
-                  ScreenSize.height(10),
-                  commentTextField(),
-                  ScreenSize.height(37),
+                  ScreenSize.height(31),
                   Padding(
-                    padding: const EdgeInsets.only(left: 7, right: 7),
-                    child: AppButton(
-                        title: StringKey.send.tr,
-                        height: 50,
-                        width: double.infinity,
-                        buttonColor: AppColor.appTheme,
-                        onTap: () {
-                          Navigator.pop(context);
-                        }),
-                  )
+                      padding: const EdgeInsets.only(left: 7, right: 7),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: AppButton(
+                                title: StringKey.no.tr,
+                                height: 50,
+                                width: double.infinity,
+                                buttonColor: AppColor.redColor,
+                                onTap: noTap),
+                          ),
+                          ScreenSize.width(15),
+                          Flexible(
+                            child: AppButton(
+                                title: StringKey.yes.tr,
+                                height: 50,
+                                width: double.infinity,
+                                buttonColor: AppColor.appTheme,
+                                onTap: yesTap),
+                          ),
+                        ],
+                      ))
                 ],
               ),
             ),
@@ -502,26 +539,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
-    );
-  }
-
-  commentTextField() {
-    return TextFormField(
-      maxLines: 5,
-      decoration: InputDecoration(
-        hintText: StringKey.messageForPatientExample.tr,
-        hintStyle: TextStyle(
-            color: AppColor.lightTextColor.withOpacity(.6),
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            fontFamily: FontFamily.poppinsRegular),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColor.dcColor)),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColor.dcColor)),
-      ),
     );
   }
 }

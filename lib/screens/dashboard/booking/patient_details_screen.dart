@@ -8,14 +8,20 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/providers/dashboard_provider/booking/patient_details_provider.dart';
 import 'package:nurse/screens/dashboard/booking/reviews_screen.dart';
 import 'package:nurse/screens/dashboard/booking/show_navigation_screen.dart';
+import 'package:nurse/utils/enum_booking_status.dart';
+import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/widgets/appBar.dart';
+import 'package:nurse/widgets/no_data_widget.dart';
 import 'package:nurse/widgets/ratingwidget.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
 class PatientDetailSreen extends StatefulWidget {
-  const PatientDetailSreen({super.key});
+  final bookingId;
+  const PatientDetailSreen({super.key, this.bookingId});
 
   @override
   State<PatientDetailSreen> createState() => _PatientDetailSreenState();
@@ -23,36 +29,62 @@ class PatientDetailSreen extends StatefulWidget {
 
 class _PatientDetailSreenState extends State<PatientDetailSreen> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.whiteColor,
-      appBar: appBar(title: StringKey.patientDetails.tr, showLeading: true),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ScreenSize.height(5),
-            patientDetailsWidget(),
-            ScreenSize.height(35),
-            reviewsWidget(),
-            ScreenSize.height(50),
-            Padding(
-              padding: const EdgeInsets.only(left: 37, right: 37),
-              child: AppButton(
-                  title: StringKey.endBooking.tr,
-                  height: 54,
-                  width: double.infinity,
-                  buttonColor: AppColor.appTheme,
-                  onTap: () {}),
-            ),
-            ScreenSize.height(40),
-          ],
-        ),
-      ),
-    );
+  void initState() {
+    callInitFunction();
+    super.initState();
   }
 
-  Widget patientDetailsWidget() {
+  callInitFunction() async {
+    final provider =
+        Provider.of<PatientDetailsProvider>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      provider.callApiFunction(widget.bookingId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<PatientDetailsProvider>(
+        builder: (context, myProider, child) {
+      return Scaffold(
+          backgroundColor: AppColor.whiteColor,
+          appBar: appBar(title: StringKey.patientDetails.tr, showLeading: true),
+          body: myProider.isLoading
+              ? Center(child: noDataWidget())
+              : myProider.model != null &&
+                      myProider.model!.data != null &&
+                      myProider.model!.data!.myListing != null
+                  ? SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ScreenSize.height(5),
+                          patientDetailsWidget(myProider),
+                          ScreenSize.height(35),
+                          reviewsWidget(),
+                          ScreenSize.height(50),
+                          myProider.model!.data!.myListing!.bookingStatus ==
+                                  BookingTypes.ACCEPTED.value
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 37, right: 37),
+                                  child: AppButton(
+                                      title: StringKey.endBooking.tr,
+                                      height: 54,
+                                      width: double.infinity,
+                                      buttonColor: AppColor.appTheme,
+                                      onTap: () {}),
+                                )
+                              : Container(),
+                          ScreenSize.height(40),
+                        ],
+                      ),
+                    )
+                  : Container());
+    });
+  }
+
+  Widget patientDetailsWidget(PatientDetailsProvider provider) {
     return Container(
       margin: const EdgeInsets.only(left: 9, right: 6),
       clipBehavior: Clip.none,
@@ -74,7 +106,16 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
             children: [
               Flexible(
                   child: Text(
-                'Alexandra Will',
+                provider.model!.data!.myListing!.patient != null &&
+                        provider.model!.data!.myListing!.patient!.name != null
+                    ? provider.model!.data!.myListing!.patient!.name
+                            .toString()
+                            .substring(0)
+                            .toUpperCase()[0] +
+                        provider.model!.data!.myListing!.patient!.name
+                            .toString()
+                            .substring(1)
+                    : '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -84,10 +125,22 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontWeight: FontWeight.w600),
               )),
               getText(
-                  title: "(${StringKey.completed.tr})",
+                  title: provider.model!.data!.myListing!.bookingStatus ==
+                          BookingTypes.NEW.value
+                      ? "(${StringKey.pending.tr})"
+                      : provider.model!.data!.myListing!.bookingStatus ==
+                              BookingTypes.ACCEPTED.value
+                          ? "(${StringKey.accept.tr})"
+                          : "(${StringKey.completed.tr})",
                   size: 12,
                   fontFamily: FontFamily.poppinsSemiBold,
-                  color: AppColor.appTheme,
+                  color: provider.model!.data!.myListing!.bookingStatus ==
+                          BookingTypes.NEW.value
+                      ? AppColor.redColor
+                      : provider.model!.data!.myListing!.bookingStatus ==
+                              BookingTypes.ACCEPTED.value
+                          ? AppColor.greenColor
+                          : AppColor.appTheme,
                   fontWeight: FontWeight.w600)
             ],
           ),
@@ -103,8 +156,8 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               ScreenSize.width(17),
               const Flexible(
                 child: getText(
-                    title:
-                        'Boxhagener Str. 36, Hamburg Groß Flottbek, Hamburg, Germany',
+                    title: '',
+                    // 'Boxhagener Str. 36, Hamburg Groß Flottbek, Hamburg, Germany',
                     size: 13,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.lightTextColor,
@@ -125,7 +178,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
                 getText(
-                    title: "02 Jan 2023",
+                    title: provider.model!.data!.myListing!.bookingDate != null
+                        ? TimeFormat.convertBookingDate(
+                            provider.model!.data!.myListing!.bookingDate)
+                        : "",
                     size: 15,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
@@ -144,12 +200,22 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
-                getText(
-                    title: "Wound Care",
-                    size: 15,
-                    fontFamily: FontFamily.poppinsMedium,
-                    color: AppColor.blackColor,
-                    fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    provider.model!.data!.myListing!.service != null &&
+                            provider.model!.data!.myListing!.service!.name !=
+                                null
+                        ? provider.model!.data!.myListing!.service!.name
+                        : "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: FontFamily.poppinsMedium,
+                        color: AppColor.blackColor,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
               ],
             ),
           ),
@@ -161,16 +227,20 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               color: AppColor.blackColor,
               fontWeight: FontWeight.w500),
           ScreenSize.height(10),
-          detailsWidget(),
+          detailsWidget(provider),
           ScreenSize.height(43),
-          AppButton(
-              title: StringKey.showNavigation.tr,
-              height: 54,
-              width: double.infinity,
-              buttonColor: AppColor.rejectColor,
-              onTap: () {
-                AppRoutes.pushCupertinoNavigation(const ShowNavigationScreen());
-              })
+          provider.model!.data!.myListing!.bookingStatus ==
+                  BookingTypes.NEW.value
+              ? Container()
+              : AppButton(
+                  title: StringKey.showNavigation.tr,
+                  height: 54,
+                  width: double.infinity,
+                  buttonColor: AppColor.rejectColor,
+                  onTap: () {
+                    AppRoutes.pushCupertinoNavigation(
+                        const ShowNavigationScreen());
+                  })
         ],
       ),
     );
@@ -314,10 +384,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
     );
   }
 
-  Widget detailsWidget() {
+  Widget detailsWidget(PatientDetailsProvider provider) {
     return Container(
       decoration: BoxDecoration(
-          color: Color(0xffF9F6FF),
+          color: const Color(0xffF9F6FF),
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -329,11 +399,30 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          customDetailsRow(StringKey.insurance.tr, 'Private'),
+          customDetailsRow(
+              StringKey.insurance.tr,
+              provider.model!.data!.myListing!.patient != null &&
+                      provider.model!.data!.myListing!.patient!.insurance !=
+                          null
+                  ? provider.model!.data!.myListing!.patient!.insurance
+                  : ''),
           ScreenSize.height(10),
-          customDetailsRow(StringKey.insuranceNo.tr, '32012'),
+          customDetailsRow(
+              StringKey.insuranceNo.tr,
+              provider.model!.data!.myListing!.patient != null &&
+                      provider.model!.data!.myListing!.patient!
+                              .insuranceNumber !=
+                          null
+                  ? provider.model!.data!.myListing!.patient!.insuranceNumber
+                  : ''),
           ScreenSize.height(10),
-          customDetailsRow(StringKey.birthDate.tr, '02 Jan 2000'),
+          customDetailsRow(
+              StringKey.birthDate.tr,
+              provider.model!.data!.myListing!.patient != null &&
+                      provider.model!.data!.myListing!.patient!.dob != null
+                  ? TimeFormat.convertBookingDate(
+                      provider.model!.data!.myListing!.patient!.dob)
+                  : ""),
         ],
       ),
     );

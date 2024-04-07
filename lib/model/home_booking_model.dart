@@ -1,14 +1,14 @@
-class BookingModel {
+class HomeBookingModel {
   dynamic status;
   dynamic code;
   dynamic authStatus;
   dynamic message;
   Data? data;
 
-  BookingModel(
+  HomeBookingModel(
       {this.status, this.code, this.authStatus, this.message, this.data});
 
-  BookingModel.fromJson(Map<String, dynamic> json) {
+  HomeBookingModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     code = json['code'];
     authStatus = json['authStatus'];

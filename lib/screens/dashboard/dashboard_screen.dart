@@ -8,7 +8,6 @@ import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/screens/dashboard/booking/booking_screen.dart';
 import 'package:nurse/screens/dashboard/home_screen.dart';
 import 'package:nurse/screens/dashboard/profile_screen.dart';
-import 'package:nurse/utils/location_service.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
 

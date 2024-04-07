@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   callInitFunction() {
     final myProvider = Provider.of<ProfileProvider>(context, listen: false);
-    myProvider.clearValues();
+    // myProvider.clearValues();
     myProvider.setControllersValues();
     myProvider.passwordController.text = SessionManager.userPassword;
   }

@@ -39,7 +39,16 @@ class ChangePasswordProvider extends ChangeNotifier {
   }
 
   checkValidation(String email, String code) {
-    if (passwordValidationMsg == null && reEnterPasswordValidationMsg == null) {
+    if (AppValidation.reEnterpasswordValidator(
+                enterNewPassword.text, reEnterNewPassword.text) ==
+            null &&
+        AppValidation.reEnterpasswordValidator(
+                reEnterNewPassword.text, enterNewPassword.text) ==
+            null) {
+      passwordValidationMsg = AppValidation.reEnterpasswordValidator(
+          enterNewPassword.text, reEnterNewPassword.text);
+      reEnterPasswordValidationMsg = AppValidation.reEnterpasswordValidator(
+          reEnterNewPassword.text, enterNewPassword.text);
       callApiFunction(email, code);
     } else {
       passwordValidationMsg = AppValidation.reEnterpasswordValidator(

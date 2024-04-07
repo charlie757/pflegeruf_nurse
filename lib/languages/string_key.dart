@@ -93,6 +93,8 @@ class StringKey {
   static const accept = "accept";
   static const reject = "reject";
   static const requestAccepted = "requestAccepted";
+  static const confirmationToAcceptRequest = "confirmationToAcceptRequest";
+  static const confirmationToRejectRequest = "confirmationToRejectRequest";
   static const messgeForPatient = "messgeForPatient";
   static const messageForPatientExample = "messageForPatientExample";
 

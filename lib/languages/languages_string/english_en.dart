@@ -65,6 +65,10 @@ const englishEN = {
   StringKey.enterYourBirthDate: "Enter your birth date",
   StringKey.submit: "Submit",
   StringKey.requestAccepted: "Request Accepted",
+  StringKey.confirmationToAcceptRequest:
+      "Are your sure you want to accept the request?",
+  StringKey.confirmationToRejectRequest:
+      "Are your sure you want to reject the request?",
   StringKey.profile: "Profile",
   StringKey.saveChanges: "Save Changes",
   StringKey.emailId: "Email Id",
