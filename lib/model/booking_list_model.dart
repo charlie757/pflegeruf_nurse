@@ -260,8 +260,8 @@ class User {
   dynamic pUserPhoto;
   dynamic pUserAccountType;
   dynamic pUserAddress;
-  double? pUserLat;
-  double? pUserLon;
+  dynamic pUserLat;
+  dynamic pUserLon;
   dynamic pUserAddressNo;
   dynamic pUserAddressPostal;
   dynamic pUserAddressLocation;
@@ -417,7 +417,7 @@ class Nurse {
   dynamic pUserPhoto;
   dynamic pUserAccountType;
   dynamic pUserAddress;
-  double? pUserLat;
+  dynamic pUserLat;
   dynamic pUserLon;
   dynamic pUserAddressNo;
   dynamic pUserAddressPostal;

@@ -91,6 +91,7 @@ class StringKey {
   /// booking for you
   static const bookingsForYou = "bookingsForYou";
   static const accept = "accept";
+  static const accepted = "accepted";
   static const reject = "reject";
   static const requestAccepted = "requestAccepted";
   static const confirmationToAcceptRequest = "confirmationToAcceptRequest";

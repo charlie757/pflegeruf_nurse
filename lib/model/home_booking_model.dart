@@ -75,6 +75,10 @@ class MyListing {
   dynamic patientId;
   dynamic nurseId;
   dynamic bookingId;
+  dynamic address;
+  dynamic street;
+  dynamic postalCode;
+  dynamic city;
   dynamic status;
   dynamic statusCreatedAt;
   dynamic statusUpdatedAt;
@@ -104,6 +108,10 @@ class MyListing {
       this.patientId,
       this.nurseId,
       this.bookingId,
+      this.address,
+      this.street,
+      this.postalCode,
+      this.city,
       this.status,
       this.statusCreatedAt,
       this.statusUpdatedAt,
@@ -133,6 +141,10 @@ class MyListing {
     patientId = json['patient_id'];
     nurseId = json['nurse_id'];
     bookingId = json['booking_id'];
+    address = json['address'];
+    street = json['street'];
+    postalCode = json['postal_code'];
+    city = json['city'];
     status = json['status'];
     statusCreatedAt = json['status_created_at'];
     statusUpdatedAt = json['status_updated_at'];
@@ -165,6 +177,10 @@ class MyListing {
     data['patient_id'] = patientId;
     data['nurse_id'] = nurseId;
     data['booking_id'] = bookingId;
+    data['address'] = address;
+    data['street'] = street;
+    data['postal_code'] = postalCode;
+    data['city'] = city;
     data['status'] = status;
     data['status_created_at'] = statusCreatedAt;
     data['status_updated_at'] = statusUpdatedAt;

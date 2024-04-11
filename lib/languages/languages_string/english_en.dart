@@ -100,6 +100,7 @@ const englishEN = {
   StringKey.noData: "No Data",
   StringKey.bookingsForYou: "Bookings for you",
   StringKey.accept: "Accept",
+  StringKey.accepted: "Accepted",
   StringKey.reject: "Reject",
   StringKey.messgeForPatient: "Message for patient",
   StringKey.messageForPatientExample:

@@ -130,7 +130,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       ? "(${StringKey.pending.tr})"
                       : provider.model!.data!.myListing!.bookingStatus ==
                               BookingTypes.ACCEPTED.value
-                          ? "(${StringKey.accept.tr})"
+                          ? "(${StringKey.accepted.tr})"
                           : "(${StringKey.completed.tr})",
                   size: 12,
                   fontFamily: FontFamily.poppinsSemiBold,
@@ -154,10 +154,11 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                 width: 22,
               ),
               ScreenSize.width(17),
-              const Flexible(
+              Flexible(
                 child: getText(
-                    title: '',
-                    // 'Boxhagener Str. 36, Hamburg Groß Flottbek, Hamburg, Germany',
+                    title: provider.model!.data!.myListing!.patient != null
+                        ? "${provider.model!.data!.myListing!.patient!.address ?? ""}, ${provider.model!.data!.myListing!.patient!.street ?? ""}, ${provider.model!.data!.myListing!.patient!.city ?? ""}, ${provider.model!.data!.myListing!.patient!.postalCode.toString()}"
+                        : '',
                     size: 13,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.lightTextColor,

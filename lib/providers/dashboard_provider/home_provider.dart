@@ -82,6 +82,23 @@ class HomeProvider extends ChangeNotifier {
     });
   }
 
+  rejectBookingApiFunction(String id) {
+    showCircleProgressDialog(navigatorKey.currentContext!);
+    var map = {
+      'booking_id': id,
+    };
+    ApiService.multiPartApiMethod(
+            url: ApiUrl.rejectBookingUrl, body: map, isErrorMessageShow: true)
+        .then((value) {
+      Navigator.pop(navigatorKey.currentContext!);
+      if (value != null) {
+        Utils.successSnackBar(value['message'], navigatorKey.currentContext!);
+        bookingApiFunction();
+        // notifyListeners();
+      }
+    });
+  }
+
   sendMessageApiFunction(
     String id,
   ) {

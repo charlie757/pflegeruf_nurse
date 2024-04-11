@@ -99,6 +99,10 @@ class Patient {
   dynamic insurance;
   dynamic insuranceNumber;
   dynamic dob;
+  dynamic address;
+  dynamic street;
+  dynamic postalCode;
+  dynamic city;
   dynamic rating;
 
   Patient(
@@ -108,6 +112,10 @@ class Patient {
       this.insurance,
       this.insuranceNumber,
       this.dob,
+      this.address,
+      this.street,
+      this.postalCode,
+      this.city,
       this.rating});
 
   Patient.fromJson(Map<String, dynamic> json) {
@@ -117,6 +125,10 @@ class Patient {
     insurance = json['insurance'];
     insuranceNumber = json['insurance_number'];
     dob = json['dob'];
+    address = json['address'];
+    street = json['street'];
+    postalCode = json['postal-code'];
+    city = json['city'];
     rating = json['rating'];
   }
 
@@ -128,6 +140,10 @@ class Patient {
     data['insurance'] = insurance;
     data['insurance_number'] = insuranceNumber;
     data['dob'] = dob;
+    data['address'] = address;
+    data['street'] = street;
+    data['postal-code'] = postalCode;
+    data['city'] = city;
     data['rating'] = rating;
     return data;
   }

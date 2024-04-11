@@ -248,12 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Flexible(
                   child: getText(
                       title:
-                          provider.bookingModel!.data!.myListing![index].user !=
-                                  null
-                              ? provider.bookingModel!.data!.myListing![index]
-                                      .user!.pUserAddress ??
-                                  ''
-                              : '',
+                          "${provider.bookingModel!.data!.myListing![index].address ?? ''}, ${provider.bookingModel!.data!.myListing![index].street ?? ''}, ${provider.bookingModel!.data!.myListing![index].city ?? ''}, ${provider.bookingModel!.data!.myListing![index].postalCode ?? ''}",
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.lightTextColor,
@@ -298,20 +293,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontFamily: FontFamily.poppinsSemiBold,
                       color: AppColor.blackColor,
                       fontWeight: FontWeight.w600),
-                  Text(
-                    provider.bookingModel!.data!.myListing![index].category !=
-                            null
-                        ? provider.bookingModel!.data!.myListing![index]
-                                .category!.categoryName ??
-                            ""
-                        : "",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: FontFamily.poppinsMedium,
-                        color: AppColor.blackColor,
-                        fontWeight: FontWeight.w500),
+                  ScreenSize.width(5),
+                  Flexible(
+                    child: Text(
+                      provider.bookingModel!.data!.myListing![index].category !=
+                              null
+                          ? provider.bookingModel!.data!.myListing![index]
+                                  .category!.categoryName ??
+                              ""
+                          : "",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: FontFamily.poppinsMedium,
+                          color: AppColor.blackColor,
+                          fontWeight: FontWeight.w500),
+                    ),
                   )
                 ],
               ),
@@ -361,7 +359,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               noTap: () {
                                 Navigator.pop(context);
                               },
-                              yesTap: () {});
+                              yesTap: () {
+                                Navigator.pop(context);
+                                provider.rejectBookingApiFunction(
+                                  provider.bookingModel!.data!.myListing![index]
+                                      .bookingId
+                                      .toString(),
+                                );
+                              });
                         }),
                   ),
                 ],
