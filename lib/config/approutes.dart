@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:nurse/utils/utils.dart';
 
 class AppRoutes {
-  static pushCupertinoNavigation(
+  static Future pushCupertinoNavigation(
     route,
   ) {
-    Navigator.push(navigatorKey.currentContext!,
+    return Navigator.push(navigatorKey.currentContext!,
         CupertinoPageRoute(builder: (context) => route));
   }
 

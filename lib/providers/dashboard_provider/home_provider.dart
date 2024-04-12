@@ -113,6 +113,7 @@ class HomeProvider extends ChangeNotifier {
     ).then((value) {
       Navigator.pop(navigatorKey.currentContext!);
       if (value != null) {
+        bookingApiFunction();
         Navigator.pop(navigatorKey.currentContext!);
         Utils.successSnackBar(value['data'], navigatorKey.currentContext!);
         commentController.clear();
@@ -218,6 +219,7 @@ class HomeProvider extends ChangeNotifier {
     return TextFormField(
       maxLines: 5,
       controller: commentController,
+      textInputAction: TextInputAction.done,
       decoration: InputDecoration(
         hintText: StringKey.messageForPatientExample.tr,
         hintStyle: TextStyle(

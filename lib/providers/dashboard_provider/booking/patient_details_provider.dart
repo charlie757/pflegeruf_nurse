@@ -21,9 +21,12 @@ class PatientDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  callApiFunction(String id) async {
-    model = null;
-    updateLoading(true);
+  getBookingApiFunction(String id, bool isLoading) async {
+    if (isLoading) {
+      model = null;
+    }
+    updateLoading(
+        isLoading); // to handle the no data widget in case of any error
     showCircleProgressDialog(navigatorKey.currentContext!);
     var map = {
       'booking_id': id,
@@ -36,6 +39,24 @@ class PatientDetailsProvider extends ChangeNotifier {
       if (value != null) {
         print('value..$value');
         model = PatientBookingModel.fromJson(value);
+        // notifyListeners();
+      }
+    });
+  }
+
+  completeBookingApiFunction(String id) {
+    showCircleProgressDialog(navigatorKey.currentContext!);
+    var map = {
+      'booking_id': id,
+    };
+    ApiService.multiPartApiMethod(
+            url: ApiUrl.bookingCompleteUrl, body: map, isErrorMessageShow: true)
+        .then((value) {
+      updateLoading(false);
+      Navigator.pop(navigatorKey.currentContext!);
+      if (value != null) {
+        Utils.successSnackBar(value['message'], navigatorKey.currentContext!);
+        getBookingApiFunction(id, false);
         // notifyListeners();
       }
     });

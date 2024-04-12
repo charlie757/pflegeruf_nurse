@@ -38,7 +38,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
     final provider =
         Provider.of<PatientDetailsProvider>(context, listen: false);
     Future.delayed(Duration.zero, () {
-      provider.callApiFunction(widget.bookingId);
+      provider.getBookingApiFunction(widget.bookingId, true);
     });
   }
 
@@ -73,7 +73,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                                       height: 54,
                                       width: double.infinity,
                                       buttonColor: AppColor.appTheme,
-                                      onTap: () {}),
+                                      onTap: () {
+                                        myProider.completeBookingApiFunction(
+                                            widget.bookingId);
+                                      }),
                                 )
                               : Container(),
                           ScreenSize.height(40),

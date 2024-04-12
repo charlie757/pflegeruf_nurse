@@ -17,4 +17,5 @@ class ApiUrl {
   static String sendMessageUrl = '${baseUrl}Mylisting/send-message-booking';
   static String bookingListUrl = '${baseUrl}Mylisting/booking-list-accepted';
   static String rejectBookingUrl = '${baseUrl}Mylisting/request-reject';
+  static String bookingCompleteUrl = '${baseUrl}Mylisting/booking-complete';
 }

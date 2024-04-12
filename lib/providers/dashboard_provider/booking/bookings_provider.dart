@@ -14,10 +14,10 @@ class BookingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bookingApiFunction() {
+  bookingApiFunction(isLoading) {
     var data = {'': ''};
-    showCircleProgressDialog(navigatorKey.currentContext!);
-    updateLoading(true);
+    isLoading ? showCircleProgressDialog(navigatorKey.currentContext!) : null;
+    updateLoading(isLoading);
     String body = Uri(queryParameters: data).query;
     ApiService.apiMethod(
             url: ApiUrl.bookingListUrl,
@@ -27,7 +27,7 @@ class BookingsProvider extends ChangeNotifier {
             isBodyNotRequired: true)
         .then((value) {
       updateLoading(false);
-      Navigator.pop(navigatorKey.currentContext!);
+      isLoading ? Navigator.pop(navigatorKey.currentContext!) : null;
       if (value != null) {
         model = BookingListModel.fromJson(value);
         notifyListeners();

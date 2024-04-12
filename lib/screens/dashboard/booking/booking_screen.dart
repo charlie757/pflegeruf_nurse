@@ -31,7 +31,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   callInitFunction() {
     final provider = Provider.of<BookingsProvider>(context, listen: false);
     Future.delayed(Duration.zero, () {
-      provider.bookingApiFunction();
+      provider.bookingApiFunction(true);
     });
   }
 
@@ -66,7 +66,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
         AppRoutes.pushCupertinoNavigation(PatientDetailSreen(
           bookingId:
               provider.model!.data!.myListing![index].bookingId.toString(),
-        ));
+        )).then((value) {
+          provider.bookingApiFunction(false);
+        });
       },
       child: Container(
         decoration: BoxDecoration(
