@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -17,22 +18,38 @@ import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/providers/onboarding_provider.dart';
 import 'package:nurse/screens/splash_screen.dart';
+import 'package:nurse/utils/notifiaction_service.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await SessionManager().init();
+
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
+  getFCMToken();
   runApp(const MyApp());
 }
 
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
+}
+
 String selectedLanguage = 'en';
+getFCMToken() async {
+  FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.instance.getAPNSToken();
+  FirebaseMessaging.instance.getToken().then((token) async {
+    SessionManager.setFcmToken = token!;
+  });
+}
 
 void configLoading() {
   EasyLoading.instance
@@ -46,10 +63,19 @@ void configLoading() {
     ..dismissOnTap = false;
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final NotificationService notificationService = NotificationService();
+
   @override
   Widget build(BuildContext context) {
+    notificationService.initialize();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),

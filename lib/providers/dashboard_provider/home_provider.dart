@@ -47,8 +47,9 @@ class HomeProvider extends ChangeNotifier {
     });
   }
 
-  bookingApiFunction() {
+  bookingApiFunction(bool isLoading) {
     var data = {'': ''};
+    isLoading ? showCircleProgressDialog(navigatorKey.currentContext!) : null;
     String body = Uri(queryParameters: data).query;
     ApiService.apiMethod(
             url: ApiUrl.homeBookingListUrl,
@@ -57,10 +58,13 @@ class HomeProvider extends ChangeNotifier {
             isErrorMessageShow: false,
             isBodyNotRequired: true)
         .then((value) {
+      isLoading ? Navigator.pop(navigatorKey.currentContext!) : null;
       if (value != null) {
         bookingModel = HomeBookingModel.fromJson(value);
         // homeModel = HomeModel.fromJson(value);
         notifyListeners();
+      } else {
+        bookingModel = null;
       }
     });
   }
@@ -70,13 +74,14 @@ class HomeProvider extends ChangeNotifier {
     var map = {
       'booking_id': id,
     };
+
     ApiService.multiPartApiMethod(
             url: ApiUrl.acceptBookingUrl, body: map, isErrorMessageShow: true)
         .then((value) {
       Navigator.pop(navigatorKey.currentContext!);
       if (value != null) {
         Utils.successSnackBar(value['message'], navigatorKey.currentContext!);
-        acceptDialogBox();
+        acceptDialogBox(id);
         // notifyListeners();
       }
     });
@@ -93,7 +98,7 @@ class HomeProvider extends ChangeNotifier {
       Navigator.pop(navigatorKey.currentContext!);
       if (value != null) {
         Utils.successSnackBar(value['message'], navigatorKey.currentContext!);
-        bookingApiFunction();
+        bookingApiFunction(true);
         // notifyListeners();
       }
     });
@@ -103,7 +108,8 @@ class HomeProvider extends ChangeNotifier {
     String id,
   ) {
     showCircleProgressDialog(navigatorKey.currentContext!);
-    var data = {'booking_id': '20', 'message': commentController.text};
+    var data = {'booking_id': id, 'message': commentController.text};
+    print(data);
     String body = Uri(queryParameters: data).query;
     ApiService.apiMethod(
       url: ApiUrl.sendMessageUrl,
@@ -113,7 +119,7 @@ class HomeProvider extends ChangeNotifier {
     ).then((value) {
       Navigator.pop(navigatorKey.currentContext!);
       if (value != null) {
-        bookingApiFunction();
+        bookingApiFunction(true);
         Navigator.pop(navigatorKey.currentContext!);
         Utils.successSnackBar(value['data'], navigatorKey.currentContext!);
         commentController.clear();
@@ -122,7 +128,7 @@ class HomeProvider extends ChangeNotifier {
     });
   }
 
-  acceptDialogBox() {
+  acceptDialogBox(id) {
     showGeneralDialog(
       context: navigatorKey.currentContext!,
       barrierLabel: "Barrier",
@@ -184,7 +190,9 @@ class HomeProvider extends ChangeNotifier {
                             buttonColor: AppColor.appTheme,
                             onTap: () {
                               if (formKey.currentState!.validate()) {
-                                sendMessageApiFunction('20');
+                                sendMessageApiFunction(
+                                  id,
+                                );
                               }
                             }),
                       )

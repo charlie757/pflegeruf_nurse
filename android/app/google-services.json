@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1017731394468",
+    "project_id": "caring-12e28",
+    "storage_bucket": "caring-12e28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017731394468:android:9818920107ecda0d096f31",
+        "android_client_info": {
+          "package_name": "com.pflegeruf.pflegerin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS5Naamd9gG5SEePQ3RbYdR_eNKxTj2mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

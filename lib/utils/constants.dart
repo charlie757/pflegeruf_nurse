@@ -8,4 +8,5 @@ class Constants {
   static String PASSWORD = 'PASSWORD';
   static String LAT = "LAT";
   static String LNG = 'LNG';
+  static String FCM_TOKEN = 'FCM_TOKEN';
 }

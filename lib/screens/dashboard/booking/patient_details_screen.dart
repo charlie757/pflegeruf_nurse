@@ -46,6 +46,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
   Widget build(BuildContext context) {
     return Consumer<PatientDetailsProvider>(
         builder: (context, myProider, child) {
+      // myProider.getRatingApiFunction(widget.bookingId.toString());
       return Scaffold(
           backgroundColor: AppColor.whiteColor,
           appBar: appBar(title: StringKey.patientDetails.tr, showLeading: true),

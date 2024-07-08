@@ -49,4 +49,10 @@ class SessionManager {
   static set setLng(String value) {
     sharedPrefs.setString(Constants.LNG, value);
   }
+
+  static String get fcmToken =>
+      sharedPrefs.getString(Constants.FCM_TOKEN) ?? "";
+  static set setFcmToken(String value) {
+    sharedPrefs.setString(Constants.FCM_TOKEN, value);
+  }
 }

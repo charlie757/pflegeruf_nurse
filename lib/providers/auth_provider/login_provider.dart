@@ -75,7 +75,8 @@ class LoginProvider extends ChangeNotifier {
       "password": passwordController.text,
       "device": Platform.isIOS ? 'ios' : 'android',
       'latitude': SessionManager.lat,
-      'longitude': SessionManager.lng
+      'longitude': SessionManager.lng,
+      'fcm_key': SessionManager.fcmToken
     };
     String body = Uri(queryParameters: data).query;
     print(body);

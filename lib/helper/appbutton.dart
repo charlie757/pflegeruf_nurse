@@ -31,7 +31,7 @@ class _AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          primary: widget.buttonColor,
+          backgroundColor: widget.buttonColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       onPressed: widget.onTap,

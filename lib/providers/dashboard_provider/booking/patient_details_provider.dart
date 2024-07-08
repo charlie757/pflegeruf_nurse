@@ -61,4 +61,19 @@ class PatientDetailsProvider extends ChangeNotifier {
       }
     });
   }
+
+  getRatingApiFunction(String id) {
+    var map = {
+      'booking_id': id,
+    };
+    ApiService.multiPartApiMethod(
+            url: ApiUrl.ratingUrl, body: map, isErrorMessageShow: true)
+        .then((value) {
+      updateLoading(false);
+      if (value != null) {
+        // Utils.successSnackBar(value['message'], navigatorKey.currentContext!);
+        // notifyListeners();
+      }
+    });
+  }
 }

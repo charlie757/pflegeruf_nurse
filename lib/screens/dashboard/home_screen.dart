@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   callInitFunction() {
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
     myProvider.homeApiFunction();
-    myProvider.bookingApiFunction();
+    myProvider.bookingApiFunction(false);
   }
 
   @override
@@ -334,6 +334,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.pop(context);
                               },
                               yesTap: () {
+                                print(
+                                  provider.bookingModel!.data!.myListing![index]
+                                      .bookingId
+                                      .toString(),
+                                );
                                 Navigator.pop(context);
                                 provider.acceptBookingApiFunction(
                                   provider.bookingModel!.data!.myListing![index]
