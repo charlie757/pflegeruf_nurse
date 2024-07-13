@@ -1,20 +1,15 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:nurse/api/apiservice.dart';
 import 'package:nurse/api/apiurl.dart';
-import 'package:http/http.dart' as http;
-import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/model/patient_booking_model.dart';
-import 'package:nurse/utils/session_manager.dart';
+import 'package:nurse/model/review_model.dart';
 import 'package:nurse/utils/showcircleprogressdialog.dart';
 import 'package:nurse/utils/utils.dart';
-import 'package:get/get.dart';
 
 class PatientDetailsProvider extends ChangeNotifier {
   bool isLoading = false;
   PatientBookingModel? model;
+  ReviewModel? reviewModel;
 
   updateLoading(value) {
     isLoading = value;
@@ -63,6 +58,8 @@ class PatientDetailsProvider extends ChangeNotifier {
   }
 
   getRatingApiFunction(String id) {
+    reviewModel = null;
+    notifyListeners();
     var map = {
       'booking_id': id,
     };
@@ -71,6 +68,8 @@ class PatientDetailsProvider extends ChangeNotifier {
         .then((value) {
       updateLoading(false);
       if (value != null) {
+        reviewModel = ReviewModel.fromJson(value);
+        notifyListeners();
         // Utils.successSnackBar(value['message'], navigatorKey.currentContext!);
         // notifyListeners();
       }

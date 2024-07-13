@@ -6,6 +6,7 @@ import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
+import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/booking/patient_details_provider.dart';
@@ -39,6 +40,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
         Provider.of<PatientDetailsProvider>(context, listen: false);
     Future.delayed(Duration.zero, () {
       provider.getBookingApiFunction(widget.bookingId, true);
+      provider.getRatingApiFunction(widget.bookingId.toString());
     });
   }
 
@@ -46,7 +48,6 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
   Widget build(BuildContext context) {
     return Consumer<PatientDetailsProvider>(
         builder: (context, myProider, child) {
-      // myProider.getRatingApiFunction(widget.bookingId.toString());
       return Scaffold(
           backgroundColor: AppColor.whiteColor,
           appBar: appBar(title: StringKey.patientDetails.tr, showLeading: true),
@@ -62,7 +63,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                           ScreenSize.height(5),
                           patientDetailsWidget(myProider),
                           ScreenSize.height(35),
-                          reviewsWidget(),
+                          reviewsWidget(myProider),
                           ScreenSize.height(50),
                           myProider.model!.data!.myListing!.bookingStatus ==
                                   BookingTypes.ACCEPTED.value
@@ -251,7 +252,15 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
     );
   }
 
-  Widget reviewsWidget() {
+  Widget reviewsWidget(PatientDetailsProvider provider) {
+    int iterations = 0;
+    if (provider.reviewModel != null &&
+        provider.reviewModel!.data != null &&
+        provider.reviewModel!.data!.ratings != null) {
+      iterations = provider.reviewModel!.data!.ratings!.length > 4
+          ? 4
+          : provider.reviewModel!.data!.ratings!.length;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -268,7 +277,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   fontWeight: FontWeight.w600),
               GestureDetector(
                 onTap: () {
-                  AppRoutes.pushCupertinoNavigation(const ReviewsScreen());
+                  AppRoutes.pushCupertinoNavigation(ReviewsScreen(
+                    model: provider.reviewModel,
+                  ));
                 },
                 child: getText(
                     title: StringKey.seeAll.tr,
@@ -281,21 +292,38 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
           ),
         ),
         ScreenSize.height(15),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          clipBehavior: Clip.none,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              children: [for (int i = 0; i < 4; i++) reviewsUI()],
-            ),
-          ),
-        )
+        provider.reviewModel != null && provider.reviewModel!.data != null
+            ? provider.reviewModel!.data!.ratings != null
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    clipBehavior: Clip.none,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Row(
+                        children: [
+                          for (int i = 0; i < iterations; i++)
+                            reviewsUI(provider, i)
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    child: const getText(
+                        title: 'No Reviews',
+                        size: 16,
+                        fontFamily: FontFamily.poppinsRegular,
+                        color: AppColor.redColor,
+                        fontWeight: FontWeight.w400),
+                  )
+            : Container()
       ],
     );
   }
 
-  Widget reviewsUI() {
+  Widget reviewsUI(PatientDetailsProvider provider, int index) {
+    var model = provider.reviewModel!.data!.ratings![index];
     return Container(
       width: 300,
       margin: const EdgeInsets.only(left: 7, right: 7),
@@ -315,10 +343,12 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                'assets/images/dummyProfile.png',
-                height: 46,
-                width: 46,
+              ClipOval(
+                child: NetworkImageHelper(
+                  img: model.byPatient!.displayProfileImage,
+                  height: 46.0,
+                  width: 46.0,
+                ),
               ),
               ScreenSize.width(12),
               Expanded(
@@ -326,7 +356,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Alexandra Will',
+                      model.byPatient != null &&
+                              model.byPatient!.pUserName != null
+                          ? "${model.byPatient!.pUserName != null ? model.byPatient!.pUserName.toString().substring(0).toUpperCase()[0] + model.byPatient!.pUserName.toString().substring(1) : ''} ${model.byPatient!.pUserSurname != null ? model.byPatient!.pUserSurname.toString().substring(0).toUpperCase()[0] + model.byPatient!.pUserSurname.toString().substring(1) : ''}"
+                          : '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -336,8 +369,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                           fontWeight: FontWeight.w600),
                     ),
                     ScreenSize.height(1),
-                    const getText(
-                        title: 'Yoga Class',
+                    getText(
+                        title: model.product != null
+                            ? model.product!.productTitle ?? ''
+                            : '',
                         size: 14,
                         fontFamily: FontFamily.poppinsRegular,
                         color: AppColor.lightTextColor,
@@ -345,8 +380,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   ],
                 ),
               ),
-              const getText(
-                  title: 'Oct 23, 22',
+              getText(
+                  title: model.ratingCreatedAt != null
+                      ? TimeFormat.convertReviewDate(model.ratingCreatedAt)
+                      : "",
                   size: 12,
                   fontFamily: FontFamily.poppinsRegular,
                   color: AppColor.lightTextColor,
@@ -354,22 +391,25 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
             ],
           ),
           ScreenSize.height(12),
+          model.ratingStar != null
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 52),
+                  child: ratingWidget(18,
+                      initalRating: double.parse(model.ratingStar.toString())),
+                )
+              : Container(),
           Padding(
-            padding: const EdgeInsets.only(left: 52),
-            child: ratingWidget(18),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 52, top: 12),
+            padding: const EdgeInsets.only(left: 52, top: 12),
             child: ReadMoreText(
-              'It is a long established fact that a reader will be distracted by the readable content of a page when looking',
+              model.ratingDesc ?? '',
               trimLines: 3,
               colorClickableText: Colors.pink,
-              lessStyle: TextStyle(
+              lessStyle: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w300,
                   color: AppColor.blueColor,
                   fontFamily: FontFamily.poppinsRegular),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w300,
                   color: AppColor.lightTextColor,
@@ -377,7 +417,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               trimMode: TrimMode.Line,
               trimCollapsedText: 'read more',
               trimExpandedText: ' read less',
-              moreStyle: TextStyle(
+              moreStyle: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w300,
                   color: AppColor.blueColor,

@@ -19,4 +19,5 @@ class ApiUrl {
   static String rejectBookingUrl = '${baseUrl}Mylisting/request-reject';
   static String bookingCompleteUrl = '${baseUrl}Mylisting/booking-complete';
   static String ratingUrl = '${baseUrl}rating/received';
+  static String notificationurl = '${baseUrl}notification';
 }

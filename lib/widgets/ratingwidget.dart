@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-ratingWidget(double size) {
+ratingWidget(double size, {double initalRating = 0}) {
   return RatingBar.builder(
-    initialRating: 3,
+    initialRating: initalRating,
     minRating: 1,
     ignoreGestures: true,
     direction: Axis.horizontal,

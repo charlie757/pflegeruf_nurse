@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/languages/languages.dart';
 import 'package:nurse/providers/auth_provider/change_password_provider.dart';
 import 'package:nurse/providers/auth_provider/forgot_password_provider.dart';
@@ -99,9 +100,9 @@ class _MyAppState extends State<MyApp> {
         locale: Locale(selectedLanguage),
         fallbackLocale: const Locale('en'),
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+            scaffoldBackgroundColor: AppColor.whiteColor),
         debugShowCheckedModeBanner: false,
         home: const SplashSCreen(),
         builder: EasyLoading.init(),
