@@ -11,11 +11,13 @@ import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/home_provider.dart';
+import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/screens/dashboard/booking/patient_details_screen.dart';
 import 'package:nurse/screens/dashboard/notification_screen.dart';
 import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/utils/utils.dart';
+import 'package:nurse/widgets/confirmation_dialog_box.dart';
 import 'package:nurse/widgets/no_data_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
@@ -45,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-
+    final notificationProvider = Provider.of<NotificationProvider>(context);
     return MediaQuery(
       data: mediaQuery,
       child: Consumer<HomeProvider>(builder: (context, myProvider, child) {
@@ -98,7 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: GestureDetector(
                     onTap: () {
                       AppRoutes.pushCupertinoNavigation(
-                          const NotificationScreen());
+                              const NotificationScreen())
+                          .then((value) {
+                        myProvider.bookingApiFunction(false);
+                      });
                     },
                     child: SizedBox(
                       height: 32,
@@ -124,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: AppColor.appTheme,
                                   borderRadius: BorderRadius.circular(8)),
                               child: getText(
-                                  title: '2',
+                                  title: '',
                                   size: 9,
                                   fontFamily: FontFamily.poppinsBold,
                                   color: AppColor.whiteColor,
@@ -346,7 +351,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       .toString(),
                                 );
                               });
-                          // acceptDialogBox();
                         }),
                   ),
                   ScreenSize.width(20),
@@ -422,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         autoPlay: true,
                         scrollDirection: Axis.horizontal,
                         // enlargeCenterPage: true,
-                        viewportFraction: .9,
+                        viewportFraction: 1,
                         aspectRatio: 2.0,
                         initialPage: 0,
                         autoPlayCurve: Curves.ease,
@@ -468,87 +472,6 @@ class _HomeScreenState extends State<HomeScreen> {
               : AppColor.whiteColor.withOpacity(.5),
         ),
       ),
-    );
-  }
-
-  confirmationDialogBox(
-      {required String title,
-      required String subTitle,
-      required Function() noTap,
-      required Function() yesTap}) {
-    showGeneralDialog(
-      context: context,
-      barrierLabel: "Barrier",
-      barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (_, __, ___) {
-        return Center(
-          child: Container(
-            // height: 394,
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(20)),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 35, left: 20, right: 20, bottom: 33),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  getText(
-                      title: subTitle,
-                      size: 14,
-                      textAlign: TextAlign.center,
-                      fontFamily: FontFamily.poppinsMedium,
-                      color: AppColor.textBlackColor,
-                      fontWeight: FontWeight.w600),
-                  ScreenSize.height(31),
-                  Padding(
-                      padding: const EdgeInsets.only(left: 7, right: 7),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: AppButton(
-                                title: StringKey.no.tr,
-                                height: 50,
-                                width: double.infinity,
-                                buttonColor: AppColor.redColor,
-                                onTap: noTap),
-                          ),
-                          ScreenSize.width(15),
-                          Flexible(
-                            child: AppButton(
-                                title: StringKey.yes.tr,
-                                height: 50,
-                                width: double.infinity,
-                                buttonColor: AppColor.appTheme,
-                                onTap: yesTap),
-                          ),
-                        ],
-                      ))
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (_, anim, __, child) {
-        Tween<Offset> tween;
-        if (anim.status == AnimationStatus.reverse) {
-          tween = Tween(begin: const Offset(0, 1), end: Offset.zero);
-        } else {
-          tween = Tween(begin: const Offset(0, 1), end: Offset.zero);
-        }
-
-        return SlideTransition(
-          position: tween.animate(anim),
-          child: FadeTransition(
-            opacity: anim,
-            child: child,
-          ),
-        );
-      },
     );
   }
 }

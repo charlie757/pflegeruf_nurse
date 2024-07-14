@@ -12,7 +12,8 @@ import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final int index;
+  const DashboardScreen({this.index = 0});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -27,7 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   callInitFunction() {
     final myProvider = Provider.of<DashboardProvider>(context, listen: false);
-    myProvider.selectedIndex = 0;
+    myProvider.selectedIndex = widget.index;
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
     Future.delayed(Duration.zero, () {

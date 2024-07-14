@@ -244,8 +244,26 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   width: double.infinity,
                   buttonColor: AppColor.rejectColor,
                   onTap: () {
-                    AppRoutes.pushCupertinoNavigation(
-                        const ShowNavigationScreen());
+                    String address =
+                        "${provider.model!.data!.myListing!.patient!.address ?? ""}, ${provider.model!.data!.myListing!.patient!.street ?? ""},${provider.model!.data!.myListing!.patient!.city ?? ""}, ${provider.model!.data!.myListing!.patient!.postalCode ?? ""}";
+                    AppRoutes.pushCupertinoNavigation(ShowNavigationScreen(
+                      lat: provider.model!.data!.myListing!.patient!.lat
+                          .toString(),
+                      lng: provider.model!.data!.myListing!.patient!.lng
+                          .toString(),
+                      city:
+                          provider.model!.data!.myListing!.patient!.city ?? '',
+                      address:
+                          provider.model!.data!.myListing!.patient!.address ??
+                              "",
+                      street:
+                          provider.model!.data!.myListing!.patient!.street ??
+                              "",
+                      postalCode: provider
+                              .model!.data!.myListing!.patient!.postalCode ??
+                          "",
+                      fullAddress: address,
+                    ));
                   })
         ],
       ),

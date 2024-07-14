@@ -6,7 +6,12 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
+import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/widgets/appBar.dart';
+import 'package:nurse/widgets/confirmation_dialog_box.dart';
+import 'package:nurse/widgets/no_data_widget.dart';
+import 'package:provider/provider.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -17,23 +22,44 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
+  void initState() {
+    callInitFunction();
+    super.initState();
+  }
+
+  callInitFunction() async {
+    final provider = Provider.of<NotificationProvider>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      provider.getNotificationApiFunction(true);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: StringKey.notification.tr, showLeading: true),
-      body: ListView.separated(
-          separatorBuilder: (context, sp) {
-            return ScreenSize.height(25);
-          },
-          padding: const EdgeInsets.only(top: 15, bottom: 30),
-          itemCount: 5,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return notificationWidget();
-          }),
+      body:
+          Consumer<NotificationProvider>(builder: (context, myProvider, child) {
+        return myProvider.model != null
+            ? myProvider.model!.data!.isEmpty
+                ? Align(alignment: Alignment.center, child: noDataWidget())
+                : ListView.separated(
+                    separatorBuilder: (context, sp) {
+                      return ScreenSize.height(25);
+                    },
+                    padding: const EdgeInsets.only(top: 15, bottom: 30),
+                    itemCount: myProvider.model!.data!.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return notificationWidget(index, myProvider);
+                    })
+            : Container();
+      }),
     );
   }
 
-  notificationWidget() {
+  notificationWidget(int index, NotificationProvider provider) {
+    var model = provider.model!.data![index];
     return Column(
       children: [
         Container(
@@ -67,18 +93,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     getText(
-                        title:
-                            'Your booking from Alexandra for wound care service',
+                        title: model.msg ?? "",
                         size: 15,
                         fontFamily: FontFamily.poppinsSemiBold,
                         color: AppColor.textBlackColor,
                         fontWeight: FontWeight.w600),
                     ScreenSize.height(10),
-                    const getText(
-                        title: '23 July 22 at 09:15 AM',
+                    getText(
+                        title: model.notificationCreatedAt != null
+                            ? TimeFormat.convertNotificationDate(
+                                model.notificationCreatedAt)
+                            : "",
                         size: 14,
                         fontFamily: FontFamily.poppinsRegular,
-                        color: Color(0xff606573),
+                        color: const Color(0xff606573),
                         fontWeight: FontWeight.w400)
                   ],
                 ),
@@ -86,19 +114,49 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ],
           ),
         ),
-        ScreenSize.height(25),
-        Padding(
-          padding: const EdgeInsets.only(left: 100, right: 20),
-          child: Row(
-            children: [
-              Flexible(
-                  child: customBtn(AppColor.appTheme, StringKey.accept.tr)),
-              ScreenSize.width(20),
-              Flexible(
-                  child: customBtn(AppColor.rejectColor, StringKey.reject.tr)),
-            ],
-          ),
-        ),
+        ScreenSize.height(model.currentStatus == 'NEW' ? 25 : 0),
+        model.currentStatus == 'NEW'
+            ? Padding(
+                padding: const EdgeInsets.only(left: 100, right: 20),
+                child: Row(
+                  children: [
+                    Flexible(
+                        child: customBtn(AppColor.appTheme, StringKey.accept.tr,
+                            () {
+                      confirmationDialogBox(
+                          title: StringKey.accept.tr,
+                          subTitle: StringKey.confirmationToAcceptRequest.tr,
+                          noTap: () {
+                            Navigator.pop(context);
+                          },
+                          yesTap: () {
+                            Navigator.pop(context);
+                            provider.acceptBookingApiFunction(
+                              model.bookingId.toString(),
+                            );
+                          });
+                    })),
+                    ScreenSize.width(20),
+                    Flexible(
+                        child: customBtn(
+                            AppColor.rejectColor, StringKey.reject.tr, () {
+                      confirmationDialogBox(
+                          title: StringKey.reject.tr,
+                          subTitle: StringKey.confirmationToRejectRequest.tr,
+                          noTap: () {
+                            Navigator.pop(context);
+                          },
+                          yesTap: () {
+                            Navigator.pop(context);
+                            provider.rejectBookingApiFunction(
+                              model.bookingId.toString(),
+                            );
+                          });
+                    })),
+                  ],
+                ),
+              )
+            : Container(),
         ScreenSize.height(30),
         Container(
           height: 1,
@@ -108,20 +166,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  customBtn(Color color, String title) {
-    return Container(
-      height: 37,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
-      width: double.infinity,
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
-      child: getText(
-          title: title,
-          size: 14,
-          fontFamily: FontFamily.poppinsSemiBold,
-          color: AppColor.whiteColor,
-          fontWeight: FontWeight.w600),
+  customBtn(Color color, String title, Function() onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 37,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+        width: double.infinity,
+        decoration:
+            BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
+        child: getText(
+            title: title,
+            size: 14,
+            fontFamily: FontFamily.poppinsSemiBold,
+            color: AppColor.whiteColor,
+            fontWeight: FontWeight.w600),
+      ),
     );
   }
 }

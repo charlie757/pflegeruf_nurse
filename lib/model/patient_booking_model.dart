@@ -104,6 +104,8 @@ class Patient {
   dynamic postalCode;
   dynamic city;
   dynamic rating;
+  dynamic lat;
+  dynamic lng;
 
   Patient(
       {this.id,
@@ -116,7 +118,9 @@ class Patient {
       this.street,
       this.postalCode,
       this.city,
-      this.rating});
+      this.rating,
+      this.lat,
+      this.lng});
 
   Patient.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -130,6 +134,8 @@ class Patient {
     postalCode = json['postal-code'];
     city = json['city'];
     rating = json['rating'];
+    lat = json['lat'];
+    lng = json['lng'];
   }
 
   Map<String, dynamic> toJson() {
@@ -145,6 +151,8 @@ class Patient {
     data['postal-code'] = postalCode;
     data['city'] = city;
     data['rating'] = rating;
+    data['lat'] = lat;
+    data['lng'] = lng;
     return data;
   }
 }

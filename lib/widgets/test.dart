@@ -1,12 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
-// import 'package:cn_delivery/utils/session_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
-import 'package:nurse/utils/session_manager.dart';
-import 'package:nurse/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
@@ -50,16 +47,10 @@ class NotificationService {
         .setForegroundNotificationPresentationOptions(
             alert: true, badge: true, sound: true);
     configLocalNotification();
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // if (SessionManager.token.isNotEmpty) {
-      //   Provider.of<NotificationProvider>(navigatorKey.currentContext!,
-      //           listen: false)
-      //       .getNotificationApiFunction(false);
-      // }
       print("data...${message.messageType}");
       print("data...${message.data}");
-      print("data...${message.notification!.body}");
+      print("data...${message.category}");
 
       RemoteNotification? notification = message.notification;
       AndroidNotification? androidNotification = message.notification?.android;
@@ -69,10 +60,16 @@ class NotificationService {
             notification.hashCode,
             notification!.title,
             notification.body,
+            payload: notification!.title,
             NotificationDetails(
                 android: AndroidNotificationDetails(channel.id, channel.name,
                     color: const Color.fromRGBO(71, 79, 156, 1),
                     playSound: true,
+                    // actions: [
+                    //  const AndroidNotificationAction(
+                    //      'id', 'Okay',titleColor: Color(0xff000000),cancelNotification: true,showsUserInterface: true)
+                    // ],
+                    // fullScreenIntent: true,
                     enableLights: true,
                     icon: '@mipmap/ic_launcher',
                     styleInformation: const BigTextStyleInformation(''),
@@ -85,6 +82,7 @@ class NotificationService {
             notification.hashCode,
             notification!.title,
             notification.body,
+            payload: notification.title,
             const NotificationDetails(
                 iOS: DarwinNotificationDetails(
                     presentAlert: true, presentSound: true, presentBadge: true)
@@ -92,10 +90,11 @@ class NotificationService {
                 //   presentAlert: true,
                 //   presentBadge: true,
                 // )
+
                 ));
       }
     });
-    await getToken();
+    // await getToken();
   }
 
   void configLocalNotification() {
@@ -107,36 +106,45 @@ class NotificationService {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse:
             (NotificationResponse notificationResponse) async {
-      print("gdfgdg...${notificationResponse.payload}");
-      // if (SessionManager.token.isNotEmpty) {
-      //   Provider.of<NotificationProvider>(navigatorKey.currentContext!,
-      //           listen: false)
-      //       .getNotificationApiFunction(false);
+      print("sdfsdsf...${notificationResponse.payload}");
+      // if (Utils.extractBeforeColon(
+      //         notificationResponse.payload.toString().toLowerCase()) ==
+      //     'location') {
+      //   viloationsFunction();
+      // } else if (Utils.extractBeforeColon(
+      //         notificationResponse.payload.toString().toLowerCase()) ==
+      //     'tampering') {
+      //   deviceTamperingFunction();
+      // } else if (Utils.extractBeforeColon(
+      //         notificationResponse.payload.toString().toLowerCase()) ==
+      //     'stealth') {
+      //   stealthModeFunction();
+      // } else if (Utils.extractBeforeColon(
+      //         notificationResponse.payload.toString().toLowerCase()) ==
+      //     'milestone') {
+      //   milestonesFunction();
       // }
     }, onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("gdfgdgacvssdvbdfkb...${message.notification!.title}");
-      // if (SessionManager.token.isNotEmpty) {
-      //   Provider.of<NotificationProvider>(navigatorKey.currentContext!,
-      //           listen: false)
-      //       .getNotificationApiFunction(false);
+      print(message.notification!.title);
+      // if (Utils.extractBeforeColon(
+      //         message.notification!.title.toString().toLowerCase()) ==
+      //     'location') {
+      //   viloationsFunction();
+      // } else if (Utils.extractBeforeColon(
+      //         message.notification!.title.toString().toLowerCase()) ==
+      //     'tampering') {
+      //   deviceTamperingFunction();
+      // } else if (Utils.extractBeforeColon(
+      //         message.notification!.title.toString().toLowerCase()) ==
+      //     'stealth') {
+      //   stealthModeFunction();
+      // } else if (Utils.extractBeforeColon(
+      //         message.notification!.title.toString().toLowerCase()) ==
+      //     'milestone') {
+      //   milestonesFunction();
       // }
+      // handleNotificationTapFromMessage(message, context);
     });
-  }
-
-  Future<String?> getToken() async {
-    String? token = await fcm.getToken();
-    print('Token: $token');
-    FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging.instance.getAPNSToken();
-    FirebaseMessaging.instance.getToken().then((token) async {
-      print('fcm-token-----$token');
-      SessionManager.setFcmToken = token!;
-    });
-    return token;
-  }
-
-  Future<void> backgroundHandler(RemoteMessage message) async {
-    print('Handling a background message ${message.messageId}');
   }
 }
