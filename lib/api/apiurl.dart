@@ -18,6 +18,12 @@ class ApiUrl {
   static String bookingListUrl = '${baseUrl}Mylisting/booking-list-accepted';
   static String rejectBookingUrl = '${baseUrl}Mylisting/request-reject';
   static String bookingCompleteUrl = '${baseUrl}Mylisting/booking-complete';
+  static String completedBookingListUrl =
+      '${baseUrl}Mylisting/booking-list-completed-nurse';
   static String ratingUrl = '${baseUrl}rating/received';
   static String notificationurl = '${baseUrl}notification';
+  static String readNotificationurl =
+      '${baseUrl}Notification/read-notification';
+  static String unreadNotificationCountUrl =
+      '${baseUrl}notification/notification-unread-count';
 }

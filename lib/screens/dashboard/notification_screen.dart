@@ -31,6 +31,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     final provider = Provider.of<NotificationProvider>(context, listen: false);
     Future.delayed(Duration.zero, () {
       provider.getNotificationApiFunction(true);
+      provider.readNotificationApiFunction();
     });
   }
 

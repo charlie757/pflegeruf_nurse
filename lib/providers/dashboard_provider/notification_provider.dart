@@ -13,6 +13,7 @@ class NotificationProvider extends ChangeNotifier {
   final commentController = TextEditingController();
   List newNotificationList = [];
 
+  int unreadNotificationCount = 0;
   getNotificationApiFunction(bool showLoading) async {
     model = null;
     showLoading ? showCircleProgressDialog(navigatorKey.currentContext!) : null;
@@ -31,6 +32,41 @@ class NotificationProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         newNotificationList.clear();
+      }
+    });
+  }
+
+  unreadNotificationApiFunction() async {
+    var data = {'': ''};
+    String body = Uri(queryParameters: data).query;
+    ApiService.apiMethod(
+            url: ApiUrl.unreadNotificationCountUrl,
+            body: body,
+            method: checkApiMethod(httpMethod.post),
+            isErrorMessageShow: false,
+            isBodyNotRequired: true)
+        .then((value) {
+      if (value != null) {
+        unreadNotificationCount =
+            int.parse(value['data']['unread_count'].toString());
+        notifyListeners();
+      }
+    });
+  }
+
+  readNotificationApiFunction() async {
+    var data = {'': ''};
+    String body = Uri(queryParameters: data).query;
+    ApiService.apiMethod(
+            url: ApiUrl.readNotificationurl,
+            body: body,
+            method: checkApiMethod(httpMethod.post),
+            isErrorMessageShow: false,
+            isBodyNotRequired: true)
+        .then((value) {
+      if (value != null) {
+        unreadNotificationApiFunction();
+        notifyListeners();
       }
     });
   }

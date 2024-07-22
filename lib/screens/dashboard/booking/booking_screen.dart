@@ -7,6 +7,7 @@ import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/model/booking_list_model.dart';
 import 'package:nurse/providers/dashboard_provider/booking/bookings_provider.dart';
 import 'package:nurse/screens/dashboard/booking/patient_details_screen.dart';
 import 'package:nurse/utils/timeformat.dart';
@@ -30,8 +31,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   callInitFunction() {
     final provider = Provider.of<BookingsProvider>(context, listen: false);
+    provider.isSelectedTabBar = 0;
     Future.delayed(Duration.zero, () {
       provider.bookingApiFunction(true);
+      provider.completedBookingApiFunction(false);
     });
   }
 
@@ -40,36 +43,78 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Scaffold(
         appBar: appBar(title: StringKey.bookings.tr),
         body: Consumer<BookingsProvider>(builder: (context, myProvider, child) {
-          return myProvider.model != null &&
-                  myProvider.model!.data != null &&
-                  myProvider.model!.data!.myListing!.isNotEmpty
-              ? ListView.separated(
-                  padding:
-                      const EdgeInsets.only(left: 10, right: 10, bottom: 40),
-                  separatorBuilder: (context, sp) {
-                    return ScreenSize.height(10);
-                  },
-                  itemCount: myProvider.model!.data!.myListing!.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return bookingsWidget(myProvider, index);
-                  })
-              : Center(
-                  child: noDataWidget(),
-                );
+          return Column(
+            children: [
+              customTabBar(myProvider),
+              Expanded(
+                  child: myProvider.isSelectedTabBar == 0
+                      ? activeBookingsWidget(myProvider)
+                      : completeBookingWidet(myProvider))
+            ],
+          );
         }));
   }
 
-  Widget bookingsWidget(BookingsProvider provider, int index) {
+  activeBookingsWidget(BookingsProvider myProvider) {
+    return myProvider.model != null &&
+            myProvider.model!.data != null &&
+            myProvider.model!.data!.myListing!.isNotEmpty
+        ? ListView.separated(
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 40),
+            separatorBuilder: (context, sp) {
+              return ScreenSize.height(10);
+            },
+            itemCount: myProvider.model!.data!.myListing!.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return bookingsWidget(myProvider.model!, index, () {
+                AppRoutes.pushCupertinoNavigation(PatientDetailSreen(
+                  bookingId: myProvider.model!.data!.myListing![index].bookingId
+                      .toString(),
+                )).then((value) {
+                  myProvider.bookingApiFunction(false);
+                });
+              });
+            })
+        : Center(
+            child: noDataWidget(),
+          );
+  }
+
+  completeBookingWidet(BookingsProvider myProvider) {
+    return myProvider.completedBookingModel != null &&
+            myProvider.completedBookingModel!.data != null &&
+            myProvider.completedBookingModel!.data!.myListing!.isNotEmpty
+        ? ListView.separated(
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 40),
+            separatorBuilder: (context, sp) {
+              return ScreenSize.height(10);
+            },
+            itemCount:
+                myProvider.completedBookingModel!.data!.myListing!.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return bookingsWidget(myProvider.completedBookingModel!, index,
+                  () {
+                AppRoutes.pushCupertinoNavigation(PatientDetailSreen(
+                  bookingId: myProvider
+                      .completedBookingModel!.data!.myListing![index].bookingId
+                      .toString(),
+                )).then((value) {
+                  myProvider.completedBookingApiFunction(false);
+                });
+              });
+            })
+        : Center(
+            child: noDataWidget(),
+          );
+  }
+
+  Widget bookingsWidget(BookingListModel model, int index, Function() onTap) {
     return GestureDetector(
-      onTap: () {
-        AppRoutes.pushCupertinoNavigation(PatientDetailSreen(
-          bookingId:
-              provider.model!.data!.myListing![index].bookingId.toString(),
-        )).then((value) {
-          provider.bookingApiFunction(false);
-        });
-      },
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
             color: AppColor.whiteColor,
@@ -89,12 +134,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: provider.model!.data!.myListing![index].user != null &&
-                          provider.model!.data!.myListing![index].user!
+                  child: model.data!.myListing![index].user != null &&
+                          model.data!.myListing![index].user!
                                   .displayProfileImage !=
                               null
                       ? NetworkImageHelper(
-                          img: provider.model!.data!.myListing![index].user!
+                          img: model.data!.myListing![index].user!
                               .displayProfileImage,
                           height: 70.0,
                           width: 70.0,
@@ -107,9 +152,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 ScreenSize.width(20),
                 Flexible(
                   child: getText(
-                      title: provider.model!.data!.myListing![index].user !=
-                              null
-                          ? "${provider.model!.data!.myListing![index].user!.pUserName != null ? provider.model!.data!.myListing![index].user!.pUserName.toString().substring(0).toUpperCase()[0] + provider.model!.data!.myListing![index].user!.pUserName.toString().substring(1) : ''} ${provider.model!.data!.myListing![index].user!.pUserSurname != null ? provider.model!.data!.myListing![index].user!.pUserSurname.toString().substring(0).toUpperCase()[0] + provider.model!.data!.myListing![index].user!.pUserSurname.toString().substring(1) : ''}"
+                      title: model.data!.myListing![index].user != null
+                          ? "${model.data!.myListing![index].user!.pUserName != null ? model.data!.myListing![index].user!.pUserName.toString().substring(0).toUpperCase()[0] + model.data!.myListing![index].user!.pUserName.toString().substring(1) : ''} ${model.data!.myListing![index].user!.pUserSurname != null ? model.data!.myListing![index].user!.pUserSurname.toString().substring(0).toUpperCase()[0] + model.data!.myListing![index].user!.pUserSurname.toString().substring(1) : ''}"
                           : '',
                       size: 20,
                       fontFamily: FontFamily.poppinsMedium,
@@ -129,12 +173,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w500),
                 getText(
-                    title: provider.model!.data!.myListing![index]
-                                .productCreatedAt !=
-                            null
-                        ? TimeFormat.convertBookingDate(provider
-                            .model!.data!.myListing![index].productCreatedAt)
-                        : '',
+                    title:
+                        model.data!.myListing![index].productCreatedAt != null
+                            ? TimeFormat.convertBookingDate(
+                                model.data!.myListing![index].productCreatedAt)
+                            : '',
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.lightTextColor,
@@ -151,15 +194,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w500),
+                ScreenSize.width(7),
                 Flexible(
                   child: getText(
-                      title: provider.model!.data!.myListing![index].category !=
-                              null
-                          ? provider.model!.data!.myListing![index].category!
+                      title: model.data!.myListing![index].category != null
+                          ? model.data!.myListing![index].category!
                                   .categoryName ??
                               ""
                           : "",
                       size: 14,
+                      textAlign: TextAlign.right,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.lightTextColor,
                       fontWeight: FontWeight.w500),
@@ -168,6 +212,74 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  customTabBar(BookingsProvider provier) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30),
+      child: Row(
+        children: [
+          Flexible(
+            child: GestureDetector(
+              onTap: () {
+                if (provier.isSelectedTabBar != 0) {
+                  provier.bookingApiFunction(false);
+                  provier.updateSelectedTabBar(0);
+                }
+              },
+              child: Column(
+                children: [
+                  getText(
+                      title: StringKey.active.tr,
+                      size: 14,
+                      fontFamily: FontFamily.poppinsMedium,
+                      color: provier.isSelectedTabBar == 0
+                          ? AppColor.textBlackColor
+                          : AppColor.textBlackColor.withOpacity(.6),
+                      fontWeight: FontWeight.w500),
+                  ScreenSize.height(10),
+                  Container(
+                    height: 1,
+                    color: provier.isSelectedTabBar == 0
+                        ? AppColor.textBlackColor
+                        : AppColor.borderD9Color,
+                  )
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            child: GestureDetector(
+              onTap: () {
+                if (provier.isSelectedTabBar != 1) {
+                  provier.completedBookingApiFunction(false);
+                  provier.updateSelectedTabBar(1);
+                }
+              },
+              child: Column(
+                children: [
+                  getText(
+                      title: StringKey.completed.tr,
+                      size: 14,
+                      fontFamily: FontFamily.poppinsMedium,
+                      color: provier.isSelectedTabBar == 1
+                          ? AppColor.textBlackColor
+                          : AppColor.textBlackColor.withOpacity(.6),
+                      fontWeight: FontWeight.w500),
+                  ScreenSize.height(10),
+                  Container(
+                    height: 1,
+                    color: provier.isSelectedTabBar == 1
+                        ? AppColor.textBlackColor
+                        : AppColor.borderD9Color,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

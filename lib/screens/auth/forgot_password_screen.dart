@@ -83,7 +83,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       buttonColor: AppColor.appTheme,
                       isLoading: myProvider.isLoading,
                       onTap: () {
-                        myProvider.checkValidation();
+                        myProvider.isLoading
+                            ? null
+                            : myProvider.checkValidation();
                         // AppRoutes.pushCupertinoNavigation(
                         //     const EmailVerificationScreen());
                       }),

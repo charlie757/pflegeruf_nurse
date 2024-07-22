@@ -17,7 +17,6 @@ class SplashSCreen extends StatefulWidget {
 class _SplashSCreenState extends State<SplashSCreen> {
   @override
   void initState() {
-    getLocationPermission();
     callNavigate();
     super.initState();
   }
@@ -34,34 +33,6 @@ class _SplashSCreenState extends State<SplashSCreen> {
         AppRoutes.pushReplacementNavigation(const OnboardingScreen());
       }
     });
-  }
-
-  Future getLocationPermission() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Handle case when user denies permission
-      print('User denied permission to access location');
-    } else if (permission == LocationPermission.deniedForever) {
-      // Handle case when user permanently denies permission
-      print('User permanently denied permission to access location');
-    } else {
-      // Permission granted, get current location
-      final position = getCurrentLocation();
-      return position;
-    }
-  }
-
-  Future getCurrentLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      print(position);
-      SessionManager.setLat = position.latitude.toString();
-      SessionManager.setLng = position.longitude.toString();
-      return position;
-    } catch (e) {
-      print('Error: $e');
-    }
   }
 
   @override

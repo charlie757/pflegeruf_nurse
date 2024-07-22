@@ -13,6 +13,7 @@ import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/utils/app_validation.dart';
+import 'package:nurse/utils/location_service.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
+    getLocationPermission();
     callInitFunction();
     super.initState();
   }
@@ -355,43 +357,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 ScreenSize.height(13),
-                Container(
-                  height: 1,
-                  color: const Color(0xffDDE0E4),
-                ),
-                ScreenSize.height(13),
-                GestureDetector(
-                  onTap: () {
-                    openDialogBox(
-                        isLogout: false,
-                        title: StringKey.youWantToDeleteAccount.tr,
-                        noTap: () {
-                          Navigator.pop(context);
-                        },
-                        yesTap: () {
-                          Navigator.pop(context);
-                        });
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        getText(
-                            title: StringKey.deleteAccount.tr,
-                            size: 16,
-                            fontFamily: FontFamily.poppinsMedium,
-                            color: AppColor.textBlackColor,
-                            fontWeight: FontWeight.w400),
-                        Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          color: AppColor.appTheme,
-                          size: 20,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                // Container(
+                //   height: 1,
+                //   color: const Color(0xffDDE0E4),
+                // ),
+                // ScreenSize.height(13),
+                // GestureDetector(
+                //   onTap: () {
+                //     openDialogBox(
+                //         isLogout: false,
+                //         title: StringKey.youWantToDeleteAccount.tr,
+                //         noTap: () {
+                //           Navigator.pop(context);
+                //         },
+                //         yesTap: () {
+                //           Provider.of<ProfileProvider>(context,listen: false).deleteAccountApiFunction();
+                //         });
+                //   },
+                //   child: Container(
+                //     color: Colors.transparent,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         getText(
+                //             title: StringKey.deleteAccount.tr,
+                //             size: 16,
+                //             fontFamily: FontFamily.poppinsMedium,
+                //             color: AppColor.textBlackColor,
+                //             fontWeight: FontWeight.w400),
+                //         Icon(
+                //           Icons.arrow_forward_ios_outlined,
+                //           color: AppColor.appTheme,
+                //           size: 20,
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );

@@ -9,6 +9,7 @@ import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/model/review_model.dart';
 import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/widgets/appBar.dart';
+import 'package:nurse/widgets/no_data_widget.dart';
 import 'package:nurse/widgets/ratingwidget.dart';
 import 'package:readmore/readmore.dart';
 
@@ -23,10 +24,11 @@ class ReviewsScreen extends StatefulWidget {
 class _ReviewsScreenState extends State<ReviewsScreen> {
   @override
   Widget build(BuildContext context) {
+    print(widget.model!.data!.ratings);
     return Scaffold(
       appBar: appBar(title: StringKey.reviews.tr, showLeading: true),
       body: widget.model != null && widget.model!.data != null
-          ? widget.model!.data!.ratings != null
+          ? widget.model!.data!.ratings!.isNotEmpty
               ? ListView.separated(
                   separatorBuilder: (context, sp) {
                     return Column(
@@ -46,15 +48,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   itemBuilder: (context, index) {
                     return reviewsUI(index);
                   })
-              : const Align(
-                  alignment: Alignment.center,
-                  child: getText(
-                      title: 'No Reviews',
-                      size: 16,
-                      fontFamily: FontFamily.poppinsRegular,
-                      color: AppColor.redColor,
-                      fontWeight: FontWeight.w400),
-                )
+              : Align(alignment: Alignment.center, child: noDataWidget())
           : Container(),
     );
   }

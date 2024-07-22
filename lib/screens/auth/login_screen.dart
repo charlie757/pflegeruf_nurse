@@ -10,6 +10,7 @@ import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/login_provider.dart';
 import 'package:nurse/screens/auth/forgot_password_screen.dart';
 import 'package:nurse/utils/app_validation.dart';
+import 'package:nurse/utils/location_service.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:nurse/widgets/appBar.dart';
@@ -33,6 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   callInitFunction() {
     final myProvider = Provider.of<LoginProvider>(context, listen: false);
+
+    getLocationPermission();
     myProvider.clearValues();
     if (SessionManager.keepMySignedIn) {
       myProvider.emailController.text = SessionManager.userEmail;
@@ -148,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       buttonColor: AppColor.appTheme,
                       isLoading: myProvider.isLoading,
                       onTap: () {
+                        getLocationPermission();
                         myProvider.isLoading
                             ? null
                             : myProvider.checkValidation();

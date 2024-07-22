@@ -52,11 +52,11 @@ class NotificationService {
     configLocalNotification();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // if (SessionManager.token.isNotEmpty) {
-      //   Provider.of<NotificationProvider>(navigatorKey.currentContext!,
-      //           listen: false)
-      //       .getNotificationApiFunction(false);
-      // }
+      if (SessionManager.token.isNotEmpty) {
+        Provider.of<NotificationProvider>(navigatorKey.currentContext!,
+                listen: false)
+            .unreadNotificationApiFunction();
+      }
       print("data...${message.messageType}");
       print("data...${message.data}");
       print("data...${message.notification!.body}");

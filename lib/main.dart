@@ -19,6 +19,7 @@ import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/providers/onboarding_provider.dart';
 import 'package:nurse/screens/splash_screen.dart';
+import 'package:nurse/utils/location_service.dart';
 import 'package:nurse/utils/notifiaction_service.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
@@ -47,6 +48,7 @@ String selectedLanguage = 'en';
 getFCMToken() async {
   FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.instance.getAPNSToken();
+  getLocationPermission();
   FirebaseMessaging.instance.getToken().then((token) async {
     SessionManager.setFcmToken = token!;
   });

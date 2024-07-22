@@ -47,12 +47,14 @@ class AppValidation {
   }
 
   static String? passwordValidator(val) {
-    RegExp regExp = RegExp(Utils.passwordPattern.trim());
+    // RegExp regExp = RegExp(Utils.passwordPattern.trim());
     if (val.isEmpty) {
       return 'Enter your password';
-    } else if (!regExp.hasMatch(val)) {
-      return 'Password should contain at least one upper case, one lower case, one digit, one Special character';
-    } else {
+    }
+    //  else if (!regExp.hasMatch(val)) {
+    //   return 'Password should contain at least one upper case, one lower case, one digit, one Special character';
+    // }
+    else {
       return null;
 
       /// should be return "null" value here in else condition
@@ -60,12 +62,14 @@ class AppValidation {
   }
 
   static String? reEnterpasswordValidator(currentValue, previousValue) {
-    RegExp regExp = RegExp(Utils.passwordPattern.trim());
+    // RegExp regExp = RegExp(Utils.passwordPattern.trim());
     if (currentValue.isEmpty) {
       return 'Enter your password';
-    } else if (!regExp.hasMatch(currentValue)) {
-      return 'Password should contain at least one upper case, one lower case, one digit, one Special character';
-    } else if (previousValue.isNotEmpty) {
+    }
+    //  else if (!regExp.hasMatch(currentValue)) {
+    //   return 'Password should contain at least one upper case, one lower case, one digit, one Special character';
+    // }
+    else if (previousValue.isNotEmpty) {
       if (currentValue != previousValue) {
         return 'Password should be same';
       }

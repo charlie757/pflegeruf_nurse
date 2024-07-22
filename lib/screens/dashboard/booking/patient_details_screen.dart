@@ -46,6 +46,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.bookingId);
     return Consumer<PatientDetailsProvider>(
         builder: (context, myProider, child) {
       return Scaffold(
@@ -136,7 +137,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       : provider.model!.data!.myListing!.bookingStatus ==
                               BookingTypes.ACCEPTED.value
                           ? "(${StringKey.accepted.tr})"
-                          : "(${StringKey.completed.tr})",
+                          : provider.model!.data!.myListing!.bookingStatus ==
+                                  BookingTypes.REJECTED.value
+                              ? ''
+                              : "(${StringKey.completed.tr})",
                   size: 12,
                   fontFamily: FontFamily.poppinsSemiBold,
                   color: provider.model!.data!.myListing!.bookingStatus ==

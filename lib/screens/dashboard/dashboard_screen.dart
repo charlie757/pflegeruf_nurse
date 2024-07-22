@@ -4,10 +4,12 @@ import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/providers/dashboard_provider/dashboard_provider.dart';
+import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/screens/dashboard/booking/booking_screen.dart';
 import 'package:nurse/screens/dashboard/home_screen.dart';
 import 'package:nurse/screens/dashboard/profile_screen.dart';
+import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -19,11 +21,44 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends State<DashboardScreen>
+    with WidgetsBindingObserver {
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     callInitFunction();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        print('App is inactive');
+        break;
+      case AppLifecycleState.paused:
+        print('App is paused');
+        break;
+      case AppLifecycleState.resumed:
+        if (SessionManager.token.isNotEmpty) {
+          Provider.of<NotificationProvider>(navigatorKey.currentContext!,
+                  listen: false)
+              .unreadNotificationApiFunction();
+        }
+        break;
+      case AppLifecycleState.detached:
+        print('App is detached');
+        break;
+      case AppLifecycleState.hidden:
+      // TODO: Handle this case.
+    }
   }
 
   callInitFunction() {

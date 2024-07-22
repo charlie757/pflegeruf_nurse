@@ -8,6 +8,13 @@ import 'package:nurse/utils/utils.dart';
 class BookingsProvider extends ChangeNotifier {
   bool isLoading = false;
   BookingListModel? model;
+  BookingListModel? completedBookingModel;
+
+  int isSelectedTabBar = 0;
+  updateSelectedTabBar(value) {
+    isSelectedTabBar = value;
+    notifyListeners();
+  }
 
   updateLoading(value) {
     isLoading = value;
@@ -33,6 +40,30 @@ class BookingsProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         model = null;
+        notifyListeners();
+      }
+    });
+  }
+
+  completedBookingApiFunction(isLoading) async {
+    var data = {'': ''};
+    isLoading ? showCircleProgressDialog(navigatorKey.currentContext!) : null;
+    updateLoading(isLoading);
+    String body = Uri(queryParameters: data).query;
+    ApiService.apiMethod(
+            url: ApiUrl.completedBookingListUrl,
+            body: body,
+            method: checkApiMethod(httpMethod.post),
+            isErrorMessageShow: false,
+            isBodyNotRequired: true)
+        .then((value) {
+      updateLoading(false);
+      isLoading ? Navigator.pop(navigatorKey.currentContext!) : null;
+      if (value != null) {
+        completedBookingModel = BookingListModel.fromJson(value);
+        notifyListeners();
+      } else {
+        completedBookingModel = null;
         notifyListeners();
       }
     });

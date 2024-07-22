@@ -10,6 +10,7 @@ import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/providers/dashboard_provider/dashboard_provider.dart';
 import 'package:nurse/providers/dashboard_provider/home_provider.dart';
 import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
@@ -42,12 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
     myProvider.homeApiFunction();
     myProvider.bookingApiFunction(false);
+    Provider.of<NotificationProvider>(context).unreadNotificationApiFunction();
   }
 
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final notificationProvider = Provider.of<NotificationProvider>(context);
+    final dashboardProvider = Provider.of<DashboardProvider>(context);
     return MediaQuery(
       data: mediaQuery,
       child: Consumer<HomeProvider>(builder: (context, myProvider, child) {
@@ -66,15 +69,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                 null &&
                             profileProvider.profileModel!.data!.details!
                                 .displayProfileImage.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: NetworkImageHelper(
-                              img: profileProvider.profileModel!.data!.details!
-                                  .displayProfileImage,
-                              height: 40.0,
-                              width: 40.0,
-                              isAnotherColorOfLodingIndicator: true,
-                            ))
+                        ? GestureDetector(
+                            onTap: () {
+                              dashboardProvider.updateSelectedIndex(2);
+                            },
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: NetworkImageHelper(
+                                  img: profileProvider.profileModel!.data!
+                                      .details!.displayProfileImage,
+                                  height: 40.0,
+                                  width: 40.0,
+                                  isAnotherColorOfLodingIndicator: true,
+                                )),
+                          )
                         : Image.asset(
                             'assets/images/dummyProfile.png',
                             height: 40,
@@ -118,24 +126,43 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 26,
                             ),
                           ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              height: 16,
-                              width: 16,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: AppColor.appTheme,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: getText(
-                                  title: '',
-                                  size: 9,
-                                  fontFamily: FontFamily.poppinsBold,
-                                  color: AppColor.whiteColor,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          )
+                          Provider.of<NotificationProvider>(context)
+                                      .unreadNotificationCount ==
+                                  0
+                              ? Container()
+                              : Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: Container(
+                                    height: 16,
+                                    width: 16,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              offset: const Offset(0, -2),
+                                              color: AppColor.blackColor
+                                                  .withOpacity(.2),
+                                              blurRadius: 10)
+                                        ],
+                                        color: AppColor.appTheme,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: getText(
+                                        title: Provider.of<NotificationProvider>(
+                                                        context)
+                                                    .unreadNotificationCount >
+                                                99
+                                            ? "+99"
+                                            : Provider.of<NotificationProvider>(
+                                                    context)
+                                                .unreadNotificationCount
+                                                .toString(),
+                                        size: 9,
+                                        fontFamily: FontFamily.poppinsBold,
+                                        color: AppColor.whiteColor,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                )
                         ],
                       ),
                     ),

@@ -17,6 +17,7 @@ class PatientDetailsProvider extends ChangeNotifier {
   }
 
   getBookingApiFunction(String id, bool isLoading) async {
+    print("id....$id");
     if (isLoading) {
       model = null;
     }

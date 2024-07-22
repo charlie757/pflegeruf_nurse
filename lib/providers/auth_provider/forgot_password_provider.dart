@@ -33,9 +33,7 @@ class ForgotPasswordProvider extends ChangeNotifier {
 
   callApiFunction() {
     updateLoading(true);
-    var data = {
-      "username": emailController.text,
-    };
+    var data = {"username": emailController.text, 'appType': '2'};
     String body = Uri(queryParameters: data).query;
     print(body);
     ApiService.apiMethod(
