@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nurse/config/approutes.dart';
 import 'package:nurse/helper/appcolor.dart';
@@ -83,6 +84,10 @@ class Utils {
 
   static logOut() {
     SessionManager.setToken = '';
-    AppRoutes.pushReplacementNavigation(const LoginScreen());
+    Navigator.pushAndRemoveUntil(
+        navigatorKey.currentContext!,
+        CupertinoPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false);
+    // AppRoutes.pushReplacementNavigation(const LoginScreen());
   }
 }

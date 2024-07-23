@@ -179,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     textInputType: TextInputType.phone,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(10)
+                      LengthLimitingTextInputFormatter(12)
                     ],
                     errorMsg: myProvider.phoneValidationMsg,
                     onChanged: (val) {
@@ -332,7 +332,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Navigator.pop(context);
                         },
                         yesTap: () {
-                          Utils.logOut();
+                          Provider.of<ProfileProvider>(context, listen: false)
+                              .logoutApiFunction();
+                          // Utils.logOut();
                         });
                   },
                   child: Container(
