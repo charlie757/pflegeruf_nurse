@@ -189,6 +189,29 @@ class _BookingsScreenState extends State<BookingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
+                    title: "${StringKey.bookingTime.tr}:",
+                    size: 14,
+                    fontFamily: FontFamily.poppinsMedium,
+                    color: AppColor.blackColor,
+                    fontWeight: FontWeight.w500),
+                getText(
+                    title:
+                        model.data!.myListing![index].productCreatedAt != null
+                            ? TimeFormat.convertBookingTime(
+                                model.data!.myListing![index].productCreatedAt)
+                            : '',
+                    size: 14,
+                    fontFamily: FontFamily.poppinsRegular,
+                    color: AppColor.lightTextColor,
+                    fontWeight: FontWeight.w500),
+              ],
+            ),
+            ScreenSize.height(9),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                getText(
                     title: "${StringKey.serviceName.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsMedium,

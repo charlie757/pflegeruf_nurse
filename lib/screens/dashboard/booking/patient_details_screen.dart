@@ -205,6 +205,29 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
+                    title: "${StringKey.bookingTime.tr}:",
+                    size: 14,
+                    fontFamily: FontFamily.poppinsSemiBold,
+                    color: AppColor.blackColor,
+                    fontWeight: FontWeight.w600),
+                getText(
+                    title: provider.model!.data!.myListing!.bookingDate != null
+                        ? TimeFormat.convertBookingTime(
+                            provider.model!.data!.myListing!.bookingDate)
+                        : "",
+                    size: 15,
+                    fontFamily: FontFamily.poppinsMedium,
+                    color: AppColor.blackColor,
+                    fontWeight: FontWeight.w500),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 35, top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                getText(
                     title: "${StringKey.serviceName.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsSemiBold,

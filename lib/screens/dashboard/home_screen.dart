@@ -320,6 +320,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   getText(
+                      title: "${StringKey.bookingTime.tr}:",
+                      size: 14,
+                      fontFamily: FontFamily.poppinsSemiBold,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.w600),
+                  getText(
+                      title: provider.bookingModel!.data!.myListing![index]
+                                  .productCreatedAt !=
+                              null
+                          ? TimeFormat.convertBookingTime(provider.bookingModel!
+                              .data!.myListing![index].productCreatedAt)
+                          : '',
+                      size: 15,
+                      fontFamily: FontFamily.poppinsMedium,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.w500),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 45, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  getText(
                       title: "${StringKey.serviceName.tr}:",
                       size: 14,
                       fontFamily: FontFamily.poppinsSemiBold,

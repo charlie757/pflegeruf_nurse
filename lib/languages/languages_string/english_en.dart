@@ -83,6 +83,7 @@ const englishEN = {
   StringKey.active: "Active",
   StringKey.pending: "Pending",
   StringKey.bookingDate: "Booking Date",
+  StringKey.bookingTime: "Booking Time",
   StringKey.serviceName: "Service Name",
   StringKey.bookedFor: "Booked For",
   StringKey.patientName: "Patient Name",

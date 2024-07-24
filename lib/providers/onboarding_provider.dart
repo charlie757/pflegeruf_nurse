@@ -11,19 +11,19 @@ class OnboardingProvider extends ChangeNotifier {
       'img': AppImages.onboarding1Image,
       'title': StringKey.findYourNurse.tr,
       'subTitle':
-          'Lorem Ipsum is simply dummy text of the printing and for typesetting industry. '
+          'Simply book your personal caregiver at any location and at any time. as flexible as you daily life. '
     },
     {
       'img': AppImages.onboarding2Image,
       'title': StringKey.chooseBestNurse.tr,
       'subTitle':
-          'Lorem Ipsum is simply dummy text of the printing and for typesetting industry. '
+          'Your opinion matters!\nWe aim to provide you with the best possible care. Help us by sharing your experiences and feedback'
     },
     {
       'img': AppImages.onboarding3Image,
       'title': StringKey.smartBookingSystem.tr,
       'subTitle':
-          'Lorem Ipsum is simply dummy text of the printing and for typesetting industry. '
+          'When you make a request, the nearest caregiver is notified. You are helping to protect the environment through reduced travel distances.'
     },
   ];
 
