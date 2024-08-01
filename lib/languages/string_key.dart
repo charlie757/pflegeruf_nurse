@@ -99,6 +99,8 @@ class StringKey {
   static const confirmationToRejectRequest = "confirmationToRejectRequest";
   static const messgeForPatient = "messgeForPatient";
   static const messageForPatientExample = "messageForPatientExample";
+  static const messageForCompleteBookingHintText =
+      'messageForCompleteBookingHintText';
 
   /// patient
   static const patientDetails = "patientDetails";
@@ -110,6 +112,10 @@ class StringKey {
   static const endBooking = "endBooking";
   static const deliveryYourOrder = "deliveryYourOrder";
   static const openMap = "openMap";
+  static const shareDocumentOptional = 'shareDocumentOptional';
+  static const finalMessageForPatient = 'finalMessageForPatient';
+  static const bookingCompleted = 'bookingCompleted';
+  static const uploadDocument = 'uploadDocument';
 
   /// notification
   static const notification = "notification";

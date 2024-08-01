@@ -43,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
     myProvider.homeApiFunction();
     myProvider.bookingApiFunction(false);
-    Provider.of<NotificationProvider>(context).unreadNotificationApiFunction();
+    Provider.of<NotificationProvider>(context, listen: false)
+        .unreadNotificationApiFunction();
   }
 
   @override

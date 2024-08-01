@@ -15,4 +15,5 @@ class AppImages {
   static const noDataIcon = 'assets/icons/nodataicon.png';
   static const locationIcon = 'assets/icons/locationIcon.png';
   static const mapLocationIcon = 'assets/icons/map_location.png';
+  static const uploadIcon = 'assets/icons/upload.png';
 }

@@ -27,4 +27,5 @@ class ApiUrl {
   static String unreadNotificationCountUrl =
       '${baseUrl}notification/notification-unread-count';
   static String logoutUrl = '${baseUrl}User/logout';
+  static String updateNurseDocUrl = '${baseUrl}Mylisting/update-nurse-doc';
 }

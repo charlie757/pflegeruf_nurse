@@ -114,5 +114,11 @@ const englishEN = {
   StringKey.seeAll: "See All",
   StringKey.endBooking: "End Booking",
   StringKey.deliveryYourOrder: "Deliver your Order",
-  StringKey.openMap: "Open Map"
+  StringKey.openMap: "Open Map",
+  StringKey.shareDocumentOptional: "You can share any document & it’s optional",
+  StringKey.finalMessageForPatient: "Final message for patient",
+  StringKey.bookingCompleted: "Booking Completed",
+  StringKey.uploadDocument: 'Upload Document',
+  StringKey.messageForCompleteBookingHintText:
+      "ex. It’s my pleasure to work with you"
 };

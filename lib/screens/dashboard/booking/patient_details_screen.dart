@@ -38,6 +38,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
   callInitFunction() async {
     final provider =
         Provider.of<PatientDetailsProvider>(context, listen: false);
+    provider.resetValues();
     Future.delayed(Duration.zero, () {
       provider.getBookingApiFunction(widget.bookingId, true);
       provider.getRatingApiFunction(widget.bookingId.toString());
@@ -77,8 +78,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                                       width: double.infinity,
                                       buttonColor: AppColor.appTheme,
                                       onTap: () {
-                                        myProider.completeBookingApiFunction(
-                                            widget.bookingId);
+                                        endBookingDialogBox();
+                                        // myProider.completeBookingApiFunction(
+                                        //     widget.bookingId);
                                       }),
                                 )
                               : Container(),
@@ -544,6 +546,183 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
           ),
         ),
       ],
+    );
+  }
+
+  endBookingDialogBox() {
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Barrier",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (_, __, ___) {
+        return StatefulBuilder(builder: (context, state) {
+          return Center(
+            child: Container(
+              // height: 394,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              child: Form(
+                key: context.watch<PatientDetailsProvider>().formKey,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 35, left: 20, right: 20, bottom: 33),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          AppImages.checkImage,
+                          height: 90,
+                          width: 90,
+                        ),
+                      ),
+                      ScreenSize.height(32),
+                      Align(
+                        alignment: Alignment.center,
+                        child: getText(
+                            title: StringKey.bookingCompleted.tr,
+                            size: 16,
+                            fontFamily: FontFamily.poppinsSemiBold,
+                            color: AppColor.textBlackColor,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      ScreenSize.height(31),
+                      getText(
+                          title: StringKey.finalMessageForPatient.tr,
+                          size: 12,
+                          fontFamily: FontFamily.poppinsSemiBold,
+                          color: AppColor.appTheme,
+                          fontWeight: FontWeight.w600),
+                      ScreenSize.height(10),
+                      commentTextField(context
+                          .watch<PatientDetailsProvider>()
+                          .commentController),
+                      ScreenSize.height(37),
+                      getText(
+                          title: StringKey.shareDocumentOptional.tr,
+                          size: 12,
+                          fontFamily: FontFamily.poppinsSemiBold,
+                          color: AppColor.appTheme,
+                          fontWeight: FontWeight.w600),
+                      ScreenSize.height(35),
+                      GestureDetector(
+                        onTap: () {
+                          Provider.of<PatientDetailsProvider>(context,
+                                  listen: false)
+                              .documentPicker(state);
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            context
+                                    .watch<PatientDetailsProvider>()
+                                    .documentName
+                                    .isNotEmpty
+                                ? Container()
+                                : Image.asset(AppImages.uploadIcon,
+                                    height: 30, width: 30),
+                            ScreenSize.width(10),
+                            Flexible(
+                              child: Text(
+                                context
+                                        .watch<PatientDetailsProvider>()
+                                        .documentName
+                                        .isNotEmpty
+                                    ? context
+                                        .watch<PatientDetailsProvider>()
+                                        .documentName
+                                    : StringKey.uploadDocument.tr,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: FontFamily.poppinsMedium,
+                                  color: const Color(0xff070822),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ScreenSize.height(37),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7, right: 7),
+                        child: AppButton(
+                            title: StringKey.send.tr,
+                            height: 50,
+                            width: double.infinity,
+                            buttonColor: AppColor.appTheme,
+                            onTap: () {
+                              Provider.of<PatientDetailsProvider>(context,
+                                      listen: false)
+                                  .checkEndBookingValidation(
+                                      widget.bookingId.toString());
+                            }),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+      },
+      transitionBuilder: (_, anim, __, child) {
+        Tween<Offset> tween;
+        if (anim.status == AnimationStatus.reverse) {
+          tween = Tween(begin: const Offset(0, 1), end: Offset.zero);
+        } else {
+          tween = Tween(begin: const Offset(0, 1), end: Offset.zero);
+        }
+
+        return SlideTransition(
+          position: tween.animate(anim),
+          child: FadeTransition(
+            opacity: anim,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
+  commentTextField(TextEditingController commentController) {
+    return TextFormField(
+      maxLines: 5,
+      controller: commentController,
+      textInputAction: TextInputAction.done,
+      decoration: InputDecoration(
+        hintText: StringKey.messageForCompleteBookingHintText.tr,
+        hintStyle: TextStyle(
+            color: AppColor.lightTextColor.withOpacity(.6),
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            fontFamily: FontFamily.poppinsRegular),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: AppColor.dcColor)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: AppColor.dcColor)),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: AppColor.redColor)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: AppColor.redColor)),
+      ),
+      validator: (val) {
+        if (val!.isEmpty) {
+          return 'Enter your message';
+        }
+      },
     );
   }
 }
