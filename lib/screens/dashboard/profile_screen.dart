@@ -10,7 +10,7 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/providers/dashboard_provider/profile_provider.dart';
 import 'package:nurse/utils/app_validation.dart';
 import 'package:nurse/utils/location_service.dart';
@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           scrolledUnderElevation: 0.0,
           centerTitle: true,
           title: getText(
-              title: StringKey.profile.tr,
+              title: getTranslated('profile', context)!.tr,
               size: 20,
               fontFamily: FontFamily.poppinsSemiBold,
               color: AppColor.textBlackColor,
@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   profileImageWidget(myProvider),
                   ScreenSize.height(27),
                   getText(
-                      title: StringKey.firstName.tr,
+                      title: getTranslated('firstName', context)!.tr,
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.textBlackColor.withOpacity(.6),
@@ -96,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ScreenSize.height(5),
                   CustomTextfield(
                     controller: myProvider.firstNameController,
-                    hintText: StringKey.enterFirstName.tr,
+                    hintText: getTranslated('enterFirstName', context)!.tr,
                     errorMsg: myProvider.firstNamevalidationMsg,
                     onChanged: (val) {
                       myProvider.firstNamevalidationMsg =
@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ScreenSize.height(20),
                   getText(
-                      title: StringKey.lastName.tr,
+                      title: getTranslated('lastName', context)!.tr,
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.textBlackColor.withOpacity(.6),
@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ScreenSize.height(5),
                   CustomTextfield(
                     controller: myProvider.lastNameController,
-                    hintText: StringKey.enterLastName.tr,
+                    hintText: getTranslated('enterLastName', context)!.tr,
                     errorMsg: myProvider.lastNamevalidationMsg,
                     onChanged: (val) {
                       myProvider.lastNamevalidationMsg =
@@ -140,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ScreenSize.height(20),
                   getText(
-                      title: StringKey.email.tr,
+                      title: getTranslated('email', context)!.tr,
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.textBlackColor.withOpacity(.6),
@@ -148,17 +148,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ScreenSize.height(5),
                   CustomTextfield(
                     controller: myProvider.emailController,
-                    hintText: StringKey.enterYourEmail.tr,
+                    hintText: getTranslated('enterYourEmail', context)!.tr,
                     isReadOnly: true,
                     errorMsg: myProvider.emailValidationMsg,
                     onChanged: (val) {
                       myProvider.emailValidationMsg =
                           AppValidation.emailValidator(val);
                       setState(() {});
-                    },),
+                    },
+                  ),
                   ScreenSize.height(20),
                   getText(
-                      title: StringKey.phoneNumber.tr,
+                      title: getTranslated('phoneNumber', context)!.tr,
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.textBlackColor.withOpacity(.6),
@@ -166,7 +167,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ScreenSize.height(5),
                   CustomTextfield(
                     controller: myProvider.phoneController,
-                    hintText: StringKey.enterYourPhonenUmber.tr,
+                    hintText:
+                        getTranslated('enterYourPhonenUmber', context)!.tr,
                     textInputType: TextInputType.phone,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -189,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ScreenSize.height(20),
                   getText(
-                      title: StringKey.password.tr,
+                      title: getTranslated('password', context)!.tr,
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.textBlackColor.withOpacity(.6),
@@ -197,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ScreenSize.height(5),
                   CustomTextfield(
                     controller: myProvider.passwordController,
-                    hintText: StringKey.enterYourPasword.tr,
+                    hintText: getTranslated('enterYourPasword', context)!.tr,
                     isObscureText: myProvider.isVisiblePassword,
                     isReadOnly: true,
                     errorMsg: myProvider.passwordValidationMsg,
@@ -228,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 17, right: 17),
                     child: AppButton(
-                        title: StringKey.saveChanges.tr,
+                        title: getTranslated('saveChanges', context)!.tr,
                         height: 54,
                         width: double.infinity,
                         buttonColor: AppColor.appTheme,
@@ -250,8 +252,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       alignment: Alignment.center,
       child: Stack(
         children: [
-          provider.profileModel!=null&&provider.profileModel!.data!=null&&
-          provider.profileModel!.data!.details!.displayProfileImage.isNotEmpty
+          provider.profileModel != null &&
+                  provider.profileModel!.data != null &&
+                  provider.profileModel!.data!.details!.displayProfileImage
+                      .isNotEmpty
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: NetworkImageHelper(
@@ -319,7 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {
                     openDialogBox(
                         isLogout: true,
-                        title: StringKey.youWantToLogout.tr,
+                        title: getTranslated('youWantToLogout', context)!.tr,
                         noTap: () {
                           Navigator.pop(context);
                         },
@@ -336,7 +340,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         getText(
-                            title: StringKey.logout.tr,
+                            title: getTranslated('logout', context)!.tr,
                             size: 16,
                             fontFamily: FontFamily.poppinsMedium,
                             color: AppColor.textBlackColor,
@@ -436,7 +440,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Flexible(
                             child: AppButton(
-                                title: StringKey.no.tr,
+                                title: getTranslated('no', context)!.tr,
                                 height: 50,
                                 width: double.infinity,
                                 buttonColor: AppColor.whiteColor,
@@ -446,7 +450,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ScreenSize.width(20),
                           Flexible(
                             child: AppButton(
-                                title: StringKey.yes.tr,
+                                title: getTranslated('yes', context)!.tr,
                                 height: 50,
                                 width: double.infinity,
                                 buttonColor: AppColor.appTheme,

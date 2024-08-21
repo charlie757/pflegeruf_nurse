@@ -6,7 +6,7 @@ import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/utils/utils.dart';
 
 acceptDialogBox(id, GlobalKey formKey, TextEditingController commentController,
@@ -47,7 +47,9 @@ acceptDialogBox(id, GlobalKey formKey, TextEditingController commentController,
                     Align(
                       alignment: Alignment.center,
                       child: getText(
-                          title: StringKey.requestAccepted.tr,
+                          title: getTranslated('requestAccepted',
+                                  navigatorKey.currentContext!)!
+                              .tr,
                           size: 16,
                           fontFamily: FontFamily.poppinsSemiBold,
                           color: AppColor.textBlackColor,
@@ -55,7 +57,9 @@ acceptDialogBox(id, GlobalKey formKey, TextEditingController commentController,
                     ),
                     ScreenSize.height(31),
                     getText(
-                        title: StringKey.messgeForPatient.tr,
+                        title: getTranslated('messgeForPatient',
+                                navigatorKey.currentContext!)!
+                            .tr,
                         size: 12,
                         fontFamily: FontFamily.poppinsSemiBold,
                         color: AppColor.appTheme,
@@ -66,7 +70,9 @@ acceptDialogBox(id, GlobalKey formKey, TextEditingController commentController,
                     Padding(
                       padding: const EdgeInsets.only(left: 7, right: 7),
                       child: AppButton(
-                          title: StringKey.send.tr,
+                          title: getTranslated(
+                                  'send', navigatorKey.currentContext!)!
+                              .tr,
                           height: 50,
                           width: double.infinity,
                           buttonColor: AppColor.appTheme,
@@ -113,7 +119,9 @@ commentTextField(TextEditingController commentController) {
     controller: commentController,
     textInputAction: TextInputAction.done,
     decoration: InputDecoration(
-      hintText: StringKey.messageForPatientExample.tr,
+      hintText: getTranslated(
+              'messageForPatientExample', navigatorKey.currentContext!)!
+          .tr,
       hintStyle: TextStyle(
           color: AppColor.lightTextColor.withOpacity(.6),
           fontSize: 12,

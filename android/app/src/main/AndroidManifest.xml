@@ -27,7 +27,7 @@
 </intent>
 </queries>
     <application
-        android:label="Pflegeruf PflegerIn"
+        android:label="Pflegeruf Nurse"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

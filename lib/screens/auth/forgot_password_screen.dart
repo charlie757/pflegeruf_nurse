@@ -5,6 +5,7 @@ import 'package:nurse/helper/customtextfield.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/forgot_password_provider.dart';
 import 'package:nurse/utils/app_validation.dart';
@@ -41,7 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColor.whiteColor,
         appBar: appBar(
-          title: StringKey.forgotPassword.tr,
+          title: getTranslated('forgotPassword', context)!.tr,
         ),
         body: Consumer<ForgotPasswordProvider>(
             builder: (context, myProvider, child) {
@@ -53,7 +54,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: getText(
-                    title: StringKey.enterEmailToCreateNewPassword.tr,
+                    title:
+                        getTranslated('enterEmailToCreateNewPassword', context)!
+                            .tr,
                     size: 12,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.textBlackColor.withOpacity(.7),
@@ -64,7 +67,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ScreenSize.height(50),
                 CustomTextfield(
                   controller: myProvider.emailController,
-                  hintText: StringKey.enterEmailAddress.tr,
+                  hintText: getTranslated('enterEmailAddress', context)!.tr,
                   errorMsg: myProvider.emailValidationMsg,
                   isReadOnly: myProvider.isLoading,
                   onChanged: (val) {
@@ -77,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 17, right: 17),
                   child: AppButton(
-                      title: StringKey.send.tr,
+                      title: getTranslated('send', context)!.tr,
                       height: 54,
                       width: double.infinity,
                       buttonColor: AppColor.appTheme,

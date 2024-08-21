@@ -5,6 +5,7 @@ import 'package:nurse/helper/customtextfield.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/change_password_provider.dart';
 import 'package:nurse/utils/app_validation.dart';
@@ -44,7 +45,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         child: Scaffold(
           backgroundColor: AppColor.whiteColor,
           resizeToAvoidBottomInset: false,
-          appBar: appBar(title: StringKey.changePassword.tr),
+          appBar: appBar(title: getTranslated('changePassword', context)!.tr),
           body: Consumer<ChangePasswordProvider>(
               builder: (context, myProvider, child) {
             return Padding(
@@ -54,7 +55,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     Align(
                       alignment: Alignment.center,
                       child: getText(
-                        title: StringKey.setNewPassword.tr,
+                        title: getTranslated('setNewPassword', context)!.tr,
                         size: 12,
                         fontFamily: FontFamily.poppinsRegular,
                         color: AppColor.textBlackColor.withOpacity(.7),
@@ -65,7 +66,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ScreenSize.height(50),
                     CustomTextfield(
                       controller: myProvider.enterNewPassword,
-                      hintText: StringKey.enterNewPassword.tr,
+                      hintText: getTranslated('enterNewPassword', context)!.tr,
                       isReadOnly: myProvider.isLoading,
                       isObscureText: myProvider.isVisibleNewPassword,
                       errorMsg: myProvider.passwordValidationMsg,
@@ -94,7 +95,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ScreenSize.height(20),
                     CustomTextfield(
                       controller: myProvider.reEnterNewPassword,
-                      hintText: StringKey.reenternewPassword.tr,
+                      hintText:
+                          getTranslated('reenternewPassword', context)!.tr,
                       isReadOnly: myProvider.isLoading,
                       isObscureText: myProvider.isVisibleReEnterPassword,
                       errorMsg: myProvider.reEnterPasswordValidationMsg,
@@ -124,7 +126,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 17, right: 17),
                       child: AppButton(
-                          title: StringKey.save.tr,
+                          title: getTranslated('save', context)!.tr,
                           height: 54,
                           width: double.infinity,
                           buttonColor: AppColor.appTheme,

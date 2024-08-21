@@ -6,6 +6,7 @@ import 'package:nurse/helper/customtextfield.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/login_provider.dart';
 import 'package:nurse/screens/auth/forgot_password_screen.dart';
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColor.whiteColor,
-        appBar: appBar(title: StringKey.logIn.tr),
+        appBar: appBar(title: getTranslated('logIn', context)!.tr),
         body: Consumer<LoginProvider>(builder: (context, myProvider, child) {
           return Padding(
             padding: const EdgeInsets.only(top: 71, left: 20, right: 20),
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   getText(
-                      title: StringKey.email.tr,
+                      title: getTranslated('email', context)!.tr,
                       size: 14,
                       fontFamily: FontFamily.poppinsSemiBold,
                       color: AppColor.textBlackColor,
@@ -72,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     /// if api is calling
                     controller: myProvider.emailController,
-                    hintText: StringKey.enterYourEmail.tr,
+                    hintText: getTranslated('enterYourEmail', context)!.tr,
                     errorMsg: myProvider.emailValidationMsg,
                     onChanged: (val) {
                       myProvider.emailValidationMsg =
@@ -82,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ScreenSize.height(25),
                   getText(
-                      title: StringKey.password.tr,
+                      title: getTranslated('password', context)!.tr,
                       size: 14,
                       fontFamily: FontFamily.poppinsSemiBold,
                       color: AppColor.textBlackColor,
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     isReadOnly: myProvider.isLoading,
 
                     /// if api is calling
-                    hintText: StringKey.enterYourPasword.tr,
+                    hintText: getTranslated('enterYourPasword', context)!.tr,
                     isObscureText: myProvider.isVisiblePassword,
                     errorMsg: myProvider.passwordValidationMsg,
                     onChanged: (val) {
@@ -123,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       customRadioButton(myProvider),
                       ScreenSize.width(9.5),
                       getText(
-                          title: StringKey.keepMeSignIn.tr,
+                          title: getTranslated('keepMeSignIn', context)!.tr,
                           size: 12,
                           fontFamily: FontFamily.poppinsSemiBold,
                           color: AppColor.textBlackColor.withOpacity(.7),
@@ -135,7 +136,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               const ForgotPasswordScreen());
                         },
                         child: getText(
-                            title: "${StringKey.forgotPassword.tr}?",
+                            title:
+                                "${getTranslated('forgotPassword', context)!.tr}?",
                             size: 14,
                             fontFamily: FontFamily.poppinsBold,
                             color: AppColor.appTheme,
@@ -145,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ScreenSize.height(49),
                   AppButton(
-                      title: StringKey.logIn.tr,
+                      title: getTranslated('logIn', context)!.tr,
                       height: 54,
                       width: double.infinity,
                       buttonColor: AppColor.appTheme,

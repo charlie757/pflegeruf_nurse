@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:nurse/config/approutes.dart';
 import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/screens/auth/login_screen.dart';
@@ -23,7 +22,6 @@ class _SplashSCreenState extends State<SplashSCreen> {
 
   callNavigate() {
     Future.delayed(const Duration(seconds: 3), () {
-
       if (SessionManager.firstTimeOpenApp) {
         if (SessionManager.token.isNotEmpty) {
           AppRoutes.pushReplacementNavigation(const DashboardScreen());
@@ -39,8 +37,11 @@ class _SplashSCreenState extends State<SplashSCreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Image.asset(AppImages.appLogo),
+      body: Image.asset(
+        AppImages.splashImage,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
       ),
     );
   }

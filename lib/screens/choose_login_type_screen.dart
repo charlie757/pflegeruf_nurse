@@ -6,7 +6,7 @@ import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/screens/auth/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:nurse/utils/session_manager.dart';
@@ -37,7 +37,7 @@ class _ChooseLoginTypeScreenState extends State<ChooseLoginTypeScreen> {
               ),
               ScreenSize.height(32),
               getText(
-                  title: StringKey.letsGetIn.tr,
+                  title: getTranslated('letsGetIn', context)!.tr,
                   size: 22,
                   fontFamily: FontFamily.poppinsSemiBold,
                   color: AppColor.whiteColor,
@@ -46,7 +46,7 @@ class _ChooseLoginTypeScreenState extends State<ChooseLoginTypeScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 37, right: 37),
                 child: AppButton(
-                    title: StringKey.logIn.tr,
+                    title: getTranslated('logIn', context)!.tr,
                     height: 54,
                     width: double.infinity,
                     buttonColor: AppColor.whiteColor,

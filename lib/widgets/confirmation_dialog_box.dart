@@ -5,7 +5,7 @@ import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/utils/utils.dart';
 
 confirmationDialogBox(
@@ -47,7 +47,9 @@ confirmationDialogBox(
                       children: [
                         Flexible(
                           child: AppButton(
-                              title: StringKey.no.tr,
+                              title: getTranslated(
+                                      'no', navigatorKey.currentContext!)!
+                                  .tr,
                               height: 50,
                               width: double.infinity,
                               buttonColor: AppColor.redColor,
@@ -56,7 +58,9 @@ confirmationDialogBox(
                         ScreenSize.width(15),
                         Flexible(
                           child: AppButton(
-                              title: StringKey.yes.tr,
+                              title: getTranslated(
+                                      'yes', navigatorKey.currentContext!)!
+                                  .tr,
                               height: 50,
                               width: double.infinity,
                               buttonColor: AppColor.appTheme,

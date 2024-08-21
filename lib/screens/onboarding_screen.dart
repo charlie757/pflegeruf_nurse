@@ -5,7 +5,7 @@ import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/providers/onboarding_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // color: Colors.red,
               duration: const Duration(milliseconds: 150),
               curve: Curves.easeInOut,
-              height: MediaQuery.of(context).size.height / 2.5,
+              height: MediaQuery.of(context).size.height / 2.7,
               child: Image.asset(
                   myProvier.onboardingList[myProvier.currentIndex]['img'])),
           Expanded(
@@ -41,17 +41,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30))),
                 padding: const EdgeInsets.only(
-                    left: 30, right: 30, top: 60, bottom: 40),
+                    left: 30, right: 30, top: 30, bottom: 20),
                 child: Column(
                   children: [
                     getText(
-                        title: myProvier.onboardingList[myProvier.currentIndex]
-                            ['title'],
-                        size: 23,
-                        fontFamily: FontFamily.poppinsMedium,
-                        color: AppColor.whiteColor,
-                        fontWeight: FontWeight.w700),
-                    const Spacer(),
+                      title: myProvier.onboardingList[myProvier.currentIndex]
+                          ['title'],
+                      size: 23,
+                      fontFamily: FontFamily.poppinsMedium,
+                      color: AppColor.whiteColor,
+                      fontWeight: FontWeight.w700,
+                      textAlign: TextAlign.center,
+                    ),
+                    ScreenSize.height(20),
                     getText(
                       title: myProvier.onboardingList[myProvier.currentIndex]
                           ['subTitle'],
@@ -70,11 +72,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               ? indicator(false)
                               : indicator(true);
                         })),
-                    const Spacer(),
+                    ScreenSize.height(20),
                     AppButton(
                         title: myProvier.currentIndex == 2
-                            ? StringKey.getStarted.tr
-                            : StringKey.next.tr,
+                            ? getTranslated('getStarted', context)!.tr
+                            : getTranslated('next', context)!.tr,
                         height: 54,
                         width: double.infinity,
                         buttonColor: AppColor.whiteColor,

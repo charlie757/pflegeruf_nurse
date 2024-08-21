@@ -6,7 +6,7 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/model/booking_list_model.dart';
 import 'package:nurse/providers/dashboard_provider/booking/bookings_provider.dart';
 import 'package:nurse/screens/dashboard/booking/patient_details_screen.dart';
@@ -41,7 +41,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(title: StringKey.bookings.tr),
+        appBar: appBar(title: getTranslated('bookings', context)!.tr),
         body: Consumer<BookingsProvider>(builder: (context, myProvider, child) {
           return Column(
             children: [
@@ -167,17 +167,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
-                    title: "${StringKey.bookingDate.tr}:",
+                    title: "${getTranslated('bookingDate', context)!.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w500),
                 getText(
-                    title:
-                        model.data!.myListing![index].statusCreatedAt != null
-                            ? TimeFormat.convertBookingDate(
-                                model.data!.myListing![index].statusCreatedAt)
-                            : '',
+                    title: model.data!.myListing![index].statusCreatedAt != null
+                        ? TimeFormat.convertBookingDate(
+                            model.data!.myListing![index].statusCreatedAt)
+                        : '',
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.lightTextColor,
@@ -189,17 +188,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
-                    title: "${StringKey.bookingTime.tr}:",
+                    title: "${getTranslated('bookingTime', context)!.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w500),
                 getText(
-                    title:
-                        model.data!.myListing![index].statusCreatedAt != null
-                            ? TimeFormat.convertBookingTime(
-                                model.data!.myListing![index].statusCreatedAt)
-                            : '',
+                    title: model.data!.myListing![index].statusCreatedAt != null
+                        ? TimeFormat.convertBookingTime(
+                            model.data!.myListing![index].statusCreatedAt)
+                        : '',
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.lightTextColor,
@@ -212,7 +210,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 getText(
-                    title: "${StringKey.serviceName.tr}:",
+                    title: "${getTranslated('serviceName', context)!.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
@@ -255,7 +253,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               child: Column(
                 children: [
                   getText(
-                      title: StringKey.active.tr,
+                      title: getTranslated('active', context)!.tr,
                       size: 14,
                       fontFamily: FontFamily.poppinsMedium,
                       color: provier.isSelectedTabBar == 0
@@ -284,7 +282,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               child: Column(
                 children: [
                   getText(
-                      title: StringKey.completed.tr,
+                      title: getTranslated('completed', context)!.tr,
                       size: 14,
                       fontFamily: FontFamily.poppinsMedium,
                       color: provier.isSelectedTabBar == 1

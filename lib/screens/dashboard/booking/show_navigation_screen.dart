@@ -10,7 +10,7 @@ import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/utils/map_utils.dart';
 
 class ShowNavigationScreen extends StatefulWidget {
@@ -108,7 +108,7 @@ class _ShowNavigationScreenState extends State<ShowNavigationScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           getText(
-              title: StringKey.deliveryYourOrder.tr,
+              title: getTranslated('deliveryYourOrder', context)!.tr,
               size: 17,
               fontFamily: FontFamily.poppinsMedium,
               color: AppColor.blackColor,
@@ -162,7 +162,7 @@ class _ShowNavigationScreenState extends State<ShowNavigationScreen> {
           Padding(
             padding: const EdgeInsets.only(left: 25, right: 25),
             child: AppButton(
-                title: StringKey.openMap.tr,
+                title: getTranslated('openMap', context)!.tr,
                 height: 54,
                 width: double.infinity,
                 buttonColor: AppColor.appTheme,

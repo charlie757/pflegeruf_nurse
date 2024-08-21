@@ -5,7 +5,7 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/model/review_model.dart';
 import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/widgets/appBar.dart';
@@ -26,7 +26,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   Widget build(BuildContext context) {
     print(widget.model!.data!.ratings);
     return Scaffold(
-      appBar: appBar(title: StringKey.reviews.tr, showLeading: true),
+      appBar: appBar(
+          title: getTranslated('reviews', context)!.tr, showLeading: true),
       body: widget.model != null && widget.model!.data != null
           ? widget.model!.data!.ratings!.isNotEmpty
               ? ListView.separated(

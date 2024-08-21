@@ -6,13 +6,13 @@ import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/forgot_verification_provider.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:nurse/widgets/appBar.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
-
 
 class ForgotVerificationScreen extends StatefulWidget {
   final email;
@@ -45,7 +45,7 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: appBar(
-          title: StringKey.forgotVerification.tr,
+          title: getTranslated('forgotVerification', context)!.tr,
         ),
         body: Consumer<ForgotVerificationProvider>(
             builder: (context, myProvider, child) {
@@ -58,7 +58,9 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
                   TextSpan(
                     children: <TextSpan>[
                       TextSpan(
-                          text: StringKey.enterOtpReceivedOnEmail.tr,
+                          text:
+                              getTranslated('enterOtpReceivedOnEmail', context)!
+                                  .tr,
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: FontFamily.poppinsRegular,
@@ -81,7 +83,7 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
                 customOtpTextfield(myProvider),
                 ScreenSize.height(70),
                 AppButton(
-                    title: StringKey.verify.tr,
+                    title: getTranslated('verify', context)!.tr,
                     height: 54,
                     width: double.infinity,
                     buttonColor: AppColor.appTheme,
@@ -102,7 +104,7 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
                                   ? null
                                   : myProvider.resendApiFunction(widget.email);
                             },
-                          text: StringKey.resendCode.tr,
+                          text: getTranslated('resendCode', context)!.tr,
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: FontFamily.poppinsSemiBold,
@@ -187,7 +189,8 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
                         .requestFocus(provider.controller1Focus);
                   }
                   if (val.isEmpty) {
-                    FocusScope.of(context).requestFocus(provider.controller1Focus);
+                    FocusScope.of(context)
+                        .requestFocus(provider.controller1Focus);
                   }
                   setState(() {});
                 }),

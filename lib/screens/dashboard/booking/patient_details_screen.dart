@@ -8,7 +8,7 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/providers/dashboard_provider/booking/patient_details_provider.dart';
 import 'package:nurse/screens/dashboard/booking/reviews_screen.dart';
 import 'package:nurse/screens/dashboard/booking/show_navigation_screen.dart';
@@ -54,7 +54,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
         builder: (context, myProider, child) {
       return Scaffold(
           backgroundColor: AppColor.whiteColor,
-          appBar: appBar(title: StringKey.patientDetails.tr, showLeading: true),
+          appBar: appBar(
+              title: getTranslated('patientDetails', context)!.tr,
+              showLeading: true),
           body: myProider.isLoading
               ? Center(child: noDataWidget())
               : myProider.model != null &&
@@ -75,7 +77,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                                   padding: const EdgeInsets.only(
                                       left: 37, right: 37),
                                   child: AppButton(
-                                      title: StringKey.endBooking.tr,
+                                      title:
+                                          getTranslated('endBooking', context)!
+                                              .tr,
                                       height: 54,
                                       width: double.infinity,
                                       buttonColor: AppColor.appTheme,
@@ -117,7 +121,8 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               Flexible(
                   child: Text(
                 provider.model!.data!.myListing!.patient != null &&
-                        provider.model!.data!.myListing!.patient!.profileName != null
+                        provider.model!.data!.myListing!.patient!.profileName !=
+                            null
                     ? provider.model!.data!.myListing!.patient!.profileName
                             .toString()
                             .substring(0)
@@ -137,14 +142,14 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               getText(
                   title: provider.model!.data!.myListing!.bookingStatus ==
                           BookingTypes.NEW.value
-                      ? "(${StringKey.pending.tr})"
+                      ? "(${getTranslated('pending', context)!.tr})"
                       : provider.model!.data!.myListing!.bookingStatus ==
                               BookingTypes.ACCEPTED.value
-                          ? "(${StringKey.accepted.tr})"
+                          ? "(${getTranslated('accepted', context)!.tr})"
                           : provider.model!.data!.myListing!.bookingStatus ==
                                   BookingTypes.REJECTED.value
                               ? ''
-                              : "(${StringKey.completed.tr})",
+                              : "(${getTranslated('completed', context)!.tr})",
                   size: 12,
                   fontFamily: FontFamily.poppinsSemiBold,
                   color: provider.model!.data!.myListing!.bookingStatus ==
@@ -186,7 +191,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
-                    title: "${StringKey.bookingDate.tr}:",
+                    title: "${getTranslated('bookingDate', context)!.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
@@ -210,7 +215,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
-                    title: "${StringKey.bookingTime.tr}:",
+                    title: "${getTranslated('bookingTime', context)!.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
@@ -234,7 +239,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
-                    title: "${StringKey.serviceName.tr}:",
+                    title: "${getTranslated('serviceName', context)!.tr}:",
                     size: 14,
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
@@ -261,7 +266,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
           ),
           ScreenSize.height(29),
           getText(
-              title: StringKey.details.tr,
+              title: getTranslated('details', context)!.tr,
               size: 15,
               fontFamily: FontFamily.poppinsMedium,
               color: AppColor.blackColor,
@@ -269,14 +274,16 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
           ScreenSize.height(10),
           detailsWidget(provider),
           ScreenSize.height(10),
-          provider.model!.data!.myListing!.bookingMessage2!.isNotEmpty&&provider.model!.data!.myListing!.bookingMessage2!=null?
-          completeBookingMsgWidget(provider):Container(),
+          provider.model!.data!.myListing!.bookingMessage2!.isNotEmpty &&
+                  provider.model!.data!.myListing!.bookingMessage2 != null
+              ? completeBookingMsgWidget(provider)
+              : Container(),
           ScreenSize.height(43),
           provider.model!.data!.myListing!.bookingStatus ==
                   BookingTypes.NEW.value
               ? Container()
               : AppButton(
-                  title: StringKey.showNavigation.tr,
+                  title: getTranslated('showNavigation', context)!.tr,
                   height: 54,
                   width: double.infinity,
                   buttonColor: AppColor.rejectColor,
@@ -306,80 +313,98 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
       ),
     );
   }
-  completeBookingMsgWidget(PatientDetailsProvider myProvider){
+
+  completeBookingMsgWidget(PatientDetailsProvider myProvider) {
     return Container(
-      padding: const EdgeInsets.only(top: 33,left: 0,right: 0),
+      padding: const EdgeInsets.only(top: 33, left: 0, right: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          getText(title: StringKey.nurseFinalMessage.tr,size: 14,
+          getText(
+              title: getTranslated('nurseFinalMessage', context)!.tr,
+              size: 14,
               fontFamily: FontFamily.poppinsSemiBold,
               color: AppColor.textBlackColor,
               fontWeight: FontWeight.w600),
           ScreenSize.height(20),
           Container(
             width: double.infinity,
-            padding:const EdgeInsets.symmetric(horizontal: 16,vertical: 18),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
             decoration: BoxDecoration(
                 color: AppColor.whiteColor,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                      offset:const Offset(0, -1),
+                      offset: const Offset(0, -1),
                       color: AppColor.blackColor.withOpacity(.2),
-                      blurRadius: 5
-                  )
-                ]
-            ),
-            child: getText(title:
-            myProvider.model!.data!.myListing!.bookingMessage2??"",
-                size: 12, fontFamily: FontFamily.poppinsRegular,
-                color: AppColor.lightTextColor, fontWeight: FontWeight.w400),
+                      blurRadius: 5)
+                ]),
+            child: getText(
+                title: myProvider.model!.data!.myListing!.bookingMessage2 ?? "",
+                size: 12,
+                fontFamily: FontFamily.poppinsRegular,
+                color: AppColor.lightTextColor,
+                fontWeight: FontWeight.w400),
           ),
           ScreenSize.height(20),
-          myProvider.model!.data!.myListing!.nurseDoc!=null&&myProvider.model!.data!.myListing!.nurseDoc.toString().isNotEmpty?
-          GestureDetector(
-            onTap: (){
-              Utils.openUrl(myProvider.model!.data!.myListing!.nurseDoc.toString());
-            },
-            child: Container(
-                width: double.infinity,
-                padding:const EdgeInsets.symmetric(horizontal: 16,vertical: 18),
-                decoration: BoxDecoration(
-                    color: AppColor.whiteColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          offset:const Offset(0, -1),
-                          color: AppColor.blackColor.withOpacity(.2),
-                          blurRadius: 5
-                      )]
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(AppImages.documentIcon,height: 20,width: 20,),
-                    ScreenSize.width(5),
-                    Expanded(
-                      child: Text(myProvider.model!.data!.myListing!.nurseDoc.toString().split('/').last,
-                          maxLines: 1,overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 12, fontFamily: FontFamily.poppinsMedium,
-                              color: AppColor.blackColor, fontWeight: FontWeight.w600
-                          )
-                      ),
-                    ),
-                    ScreenSize.width(5),
-                    Image.asset(AppImages.downloadIcon,height: 20,width: 20,),
-                  ],
+          myProvider.model!.data!.myListing!.nurseDoc != null &&
+                  myProvider.model!.data!.myListing!.nurseDoc
+                      .toString()
+                      .isNotEmpty
+              ? GestureDetector(
+                  onTap: () {
+                    Utils.openUrl(
+                        myProvider.model!.data!.myListing!.nurseDoc.toString());
+                  },
+                  child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 18),
+                      decoration: BoxDecoration(
+                          color: AppColor.whiteColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                                offset: const Offset(0, -1),
+                                color: AppColor.blackColor.withOpacity(.2),
+                                blurRadius: 5)
+                          ]),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            AppImages.documentIcon,
+                            height: 20,
+                            width: 20,
+                          ),
+                          ScreenSize.width(5),
+                          Expanded(
+                            child: Text(
+                                myProvider.model!.data!.myListing!.nurseDoc
+                                    .toString()
+                                    .split('/')
+                                    .last,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: FontFamily.poppinsMedium,
+                                    color: AppColor.blackColor,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                          ScreenSize.width(5),
+                          Image.asset(
+                            AppImages.downloadIcon,
+                            height: 20,
+                            width: 20,
+                          ),
+                        ],
+                      )),
                 )
-            ),
-          ):Container(),
-
+              : Container(),
         ],
       ),
     );
   }
-
 
   Widget reviewsWidget(PatientDetailsProvider provider) {
     int iterations = 0;
@@ -399,7 +424,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               getText(
-                  title: StringKey.reviews.tr,
+                  title: getTranslated('reviews', context)!.tr,
                   size: 16,
                   fontFamily: FontFamily.poppinsMedium,
                   color: AppColor.blackColor,
@@ -411,7 +436,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   ));
                 },
                 child: getText(
-                    title: StringKey.seeAll.tr,
+                    title: getTranslated('seeAll', context)!.tr,
                     size: 13,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blueColor,
@@ -439,8 +464,8 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                 : Container(
                     alignment: Alignment.center,
                     height: 100,
-                    child: const getText(
-                        title: 'No Reviews',
+                    child: getText(
+                        title: getTranslated('noReviews', context)!.tr,
                         size: 16,
                         fontFamily: FontFamily.poppinsRegular,
                         color: AppColor.redColor,
@@ -574,16 +599,21 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           customDetailsRow(
-              StringKey.patientName.tr,
+              getTranslated('patientName', context)!.tr,
               provider.model!.data!.myListing!.patient != null &&
-                  provider.model!.data!.myListing!.patient!.bookingName !=
-                      null
-                  ? provider.model!.data!.myListing!.patient!.bookingName.toString().substring(0).toUpperCase()[0]+
-                  provider.model!.data!.myListing!.patient!.bookingName.toString().substring(1)
+                      provider.model!.data!.myListing!.patient!.bookingName !=
+                          null
+                  ? provider.model!.data!.myListing!.patient!.bookingName
+                          .toString()
+                          .substring(0)
+                          .toUpperCase()[0] +
+                      provider.model!.data!.myListing!.patient!.bookingName
+                          .toString()
+                          .substring(1)
                   : ''),
           ScreenSize.height(10),
           customDetailsRow(
-              StringKey.insurance.tr,
+              getTranslated('insurance', context)!.tr,
               provider.model!.data!.myListing!.patient != null &&
                       provider.model!.data!.myListing!.patient!.insurance !=
                           null
@@ -591,7 +621,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   : ''),
           ScreenSize.height(10),
           customDetailsRow(
-              StringKey.insuranceNo.tr,
+              getTranslated('insuranceNo', context)!.tr,
               provider.model!.data!.myListing!.patient != null &&
                       provider.model!.data!.myListing!.patient!
                               .insuranceNumber !=
@@ -600,7 +630,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   : ''),
           ScreenSize.height(10),
           customDetailsRow(
-              StringKey.birthDate.tr,
+              getTranslated('birthDate', context)!.tr,
               provider.model!.data!.myListing!.patient != null &&
                       provider.model!.data!.myListing!.patient!.dob != null
                   ? TimeFormat.convertBookingDate(
@@ -676,7 +706,8 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       Align(
                         alignment: Alignment.center,
                         child: getText(
-                            title: StringKey.bookingCompleted.tr,
+                            title:
+                                getTranslated('bookingCompleted', context)!.tr,
                             size: 16,
                             fontFamily: FontFamily.poppinsSemiBold,
                             color: AppColor.textBlackColor,
@@ -684,7 +715,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       ),
                       ScreenSize.height(31),
                       getText(
-                          title: StringKey.finalMessageForPatient.tr,
+                          title:
+                              getTranslated('finalMessageForPatient', context)!
+                                  .tr,
                           size: 12,
                           fontFamily: FontFamily.poppinsSemiBold,
                           color: AppColor.appTheme,
@@ -695,7 +728,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                           .commentController),
                       ScreenSize.height(37),
                       getText(
-                          title: StringKey.shareDocumentOptional.tr,
+                          title:
+                              getTranslated('shareDocumentOptional', context)!
+                                  .tr,
                           size: 12,
                           fontFamily: FontFamily.poppinsSemiBold,
                           color: AppColor.appTheme,
@@ -728,7 +763,8 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                                     ? context
                                         .watch<PatientDetailsProvider>()
                                         .documentName
-                                    : StringKey.uploadDocument.tr,
+                                    : getTranslated('uploadDocument', context)!
+                                        .tr,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -746,7 +782,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 7, right: 7),
                         child: AppButton(
-                            title: StringKey.send.tr,
+                            title: getTranslated('send', context)!.tr,
                             height: 50,
                             width: double.infinity,
                             buttonColor: AppColor.appTheme,
@@ -790,7 +826,8 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
       controller: commentController,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-        hintText: StringKey.messageForCompleteBookingHintText.tr,
+        hintText:
+            getTranslated("messageForCompleteBookingHintText", context)!.tr,
         hintStyle: TextStyle(
             color: AppColor.lightTextColor.withOpacity(.6),
             fontSize: 12,
@@ -811,7 +848,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
       ),
       validator: (val) {
         if (val!.isEmpty) {
-          return 'Enter your message';
+          return getTranslated('enterYourMessage', context)!.tr;
         }
       },
     );

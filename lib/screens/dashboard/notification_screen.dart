@@ -5,7 +5,7 @@ import 'package:nurse/helper/appimages.dart';
 import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
 import 'package:nurse/utils/timeformat.dart';
 import 'package:nurse/widgets/appBar.dart';
@@ -38,11 +38,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(title: StringKey.notification.tr, showLeading: true),
+      appBar: appBar(
+          title: getTranslated('notification', context)!.tr, showLeading: true),
       body:
           Consumer<NotificationProvider>(builder: (context, myProvider, child) {
         return myProvider.model != null
-            ? myProvider.model!.data!.isEmpty||myProvider.model!.data!=null
+            ? myProvider.model!.data!.isEmpty || myProvider.model!.data != null
                 ? Align(alignment: Alignment.center, child: noDataWidget())
                 : ListView.separated(
                     separatorBuilder: (context, sp) {
@@ -122,11 +123,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 child: Row(
                   children: [
                     Flexible(
-                        child: customBtn(AppColor.appTheme, StringKey.accept.tr,
-                            () {
+                        child: customBtn(AppColor.appTheme,
+                            getTranslated('accept', context)!.tr, () {
                       confirmationDialogBox(
-                          title: StringKey.accept.tr,
-                          subTitle: StringKey.confirmationToAcceptRequest.tr,
+                          title: getTranslated('accept', context)!.tr,
+                          subTitle: getTranslated(
+                                  'confirmationToAcceptRequest', context)!
+                              .tr,
                           noTap: () {
                             Navigator.pop(context);
                           },
@@ -139,11 +142,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     })),
                     ScreenSize.width(20),
                     Flexible(
-                        child: customBtn(
-                            AppColor.rejectColor, StringKey.reject.tr, () {
+                        child: customBtn(AppColor.rejectColor,
+                            getTranslated('reject', context)!.tr, () {
                       confirmationDialogBox(
-                          title: StringKey.reject.tr,
-                          subTitle: StringKey.confirmationToRejectRequest.tr,
+                          title: getTranslated('reject', context)!.tr,
+                          subTitle: getTranslated(
+                                  'confirmationToRejectRequest', context)!
+                              .tr,
                           noTap: () {
                             Navigator.pop(context);
                           },

@@ -9,7 +9,7 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/network_imge_helper.dart';
 import 'package:nurse/helper/screensize.dart';
-import 'package:nurse/languages/string_key.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/providers/dashboard_provider/dashboard_provider.dart';
 import 'package:nurse/providers/dashboard_provider/home_provider.dart';
 import 'package:nurse/providers/dashboard_provider/notification_provider.dart';
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Flexible(
                       child: getText(
                           title:
-                              '${StringKey.welcome.tr}, ${profileProvider.profileModel != null && profileProvider.profileModel!.data != null && profileProvider.profileModel!.data!.details != null ? (profileProvider.profileModel!.data!.details!.firstName.toString().substring(0).toUpperCase()[0] + profileProvider.profileModel!.data!.details!.firstName.toString().substring(1)) : ''}',
+                              '${getTranslated('welcome', context)!.tr}, ${profileProvider.profileModel != null && profileProvider.profileModel!.data != null && profileProvider.profileModel!.data!.details != null ? (profileProvider.profileModel!.data!.details!.firstName.toString().substring(0).toUpperCase()[0] + profileProvider.profileModel!.data!.details!.firstName.toString().substring(1)) : ''}',
                           size: 16,
                           fontFamily: FontFamily.poppinsSemiBold,
                           color: AppColor.whiteColor,
@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.only(left: 20),
           child: getText(
-              title: StringKey.bookingsForYou.tr,
+              title: getTranslated('bookingsForYou', context)!.tr,
               size: 22,
               fontFamily: FontFamily.poppinsMedium,
               color: AppColor.blackColor,
@@ -260,8 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
                 getText(
-                    title: TimeFormat.convertBookingTime(provider.bookingModel!
-                        .data!.myListing![index].statusCreatedAt),
+                    title: TimeFormat.convertBookingTime(provider
+                        .bookingModel!.data!.myListing![index].statusCreatedAt),
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.rejectColor,
@@ -281,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Flexible(
                   child: getText(
                       title:
-                          "${provider.bookingModel!.data!.myListing![index].address.isEmpty||provider.bookingModel!.data!.myListing![index].address!=null?'':"${provider.bookingModel!.data!.myListing![index].address},"} ${provider.bookingModel!.data!.myListing![index].street ?? ''}, ${provider.bookingModel!.data!.myListing![index].city ?? ''}, ${provider.bookingModel!.data!.myListing![index].postalCode ?? ''}",
+                          "${provider.bookingModel!.data!.myListing![index].address.isEmpty || provider.bookingModel!.data!.myListing![index].address != null ? '' : "${provider.bookingModel!.data!.myListing![index].address},"} ${provider.bookingModel!.data!.myListing![index].street ?? ''}, ${provider.bookingModel!.data!.myListing![index].city ?? ''}, ${provider.bookingModel!.data!.myListing![index].postalCode ?? ''}",
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.lightTextColor,
@@ -296,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   getText(
-                      title: "${StringKey.bookingDate.tr}:",
+                      title: "${getTranslated('bookingDate', context)!.tr}:",
                       size: 14,
                       fontFamily: FontFamily.poppinsSemiBold,
                       color: AppColor.blackColor,
@@ -321,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   getText(
-                      title: "${StringKey.bookingTime.tr}:",
+                      title: "${getTranslated('bookingTime', context)!.tr}:",
                       size: 14,
                       fontFamily: FontFamily.poppinsSemiBold,
                       color: AppColor.blackColor,
@@ -346,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   getText(
-                      title: "${StringKey.serviceName.tr}:",
+                      title: "${getTranslated('serviceName', context)!.tr}:",
                       size: 14,
                       fontFamily: FontFamily.poppinsSemiBold,
                       color: AppColor.blackColor,
@@ -379,15 +379,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Flexible(
                     child: AppButton(
-                        title: StringKey.accept.tr,
+                        title: getTranslated('accept', context)!.tr,
                         height: 45,
                         width: double.infinity,
                         buttonColor: AppColor.appTheme,
                         onTap: () {
                           confirmationDialogBox(
-                              title: StringKey.accept.tr,
-                              subTitle:
-                                  StringKey.confirmationToAcceptRequest.tr,
+                              title: getTranslated('accept', context)!.tr,
+                              subTitle: getTranslated(
+                                      'confirmationToAcceptRequest', context)!
+                                  .tr,
                               noTap: () {
                                 Navigator.pop(context);
                               },
@@ -409,15 +410,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ScreenSize.width(20),
                   Flexible(
                     child: AppButton(
-                        title: StringKey.reject.tr,
+                        title: getTranslated('reject', context)!.tr,
                         height: 45,
                         width: double.infinity,
                         buttonColor: AppColor.rejectColor,
                         onTap: () {
                           confirmationDialogBox(
-                              title: StringKey.reject.tr,
-                              subTitle:
-                                  StringKey.confirmationToRejectRequest.tr,
+                              title: getTranslated('reject', context)!.tr,
+                              subTitle: getTranslated(
+                                      'confirmationToRejectRequest', context)!
+                                  .tr,
                               noTap: () {
                                 Navigator.pop(context);
                               },
