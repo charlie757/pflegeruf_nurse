@@ -261,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.w600),
                 getText(
                     title: TimeFormat.convertBookingTime(provider.bookingModel!
-                        .data!.myListing![index].productCreatedAt),
+                        .data!.myListing![index].statusCreatedAt),
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.rejectColor,
@@ -281,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Flexible(
                   child: getText(
                       title:
-                          "${provider.bookingModel!.data!.myListing![index].address ?? ''}, ${provider.bookingModel!.data!.myListing![index].street ?? ''}, ${provider.bookingModel!.data!.myListing![index].city ?? ''}, ${provider.bookingModel!.data!.myListing![index].postalCode ?? ''}",
+                          "${provider.bookingModel!.data!.myListing![index].address.isEmpty||provider.bookingModel!.data!.myListing![index].address!=null?'':"${provider.bookingModel!.data!.myListing![index].address},"} ${provider.bookingModel!.data!.myListing![index].street ?? ''}, ${provider.bookingModel!.data!.myListing![index].city ?? ''}, ${provider.bookingModel!.data!.myListing![index].postalCode ?? ''}",
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.lightTextColor,
@@ -331,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .productCreatedAt !=
                               null
                           ? TimeFormat.convertBookingTime(provider.bookingModel!
-                              .data!.myListing![index].productCreatedAt)
+                              .data!.myListing![index].statusCreatedAt)
                           : '',
                       size: 15,
                       fontFamily: FontFamily.poppinsMedium,

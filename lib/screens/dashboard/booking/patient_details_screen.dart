@@ -20,6 +20,8 @@ import 'package:nurse/widgets/ratingwidget.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../utils/utils.dart';
+
 class PatientDetailSreen extends StatefulWidget {
   final bookingId;
   const PatientDetailSreen({super.key, this.bookingId});
@@ -115,12 +117,12 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               Flexible(
                   child: Text(
                 provider.model!.data!.myListing!.patient != null &&
-                        provider.model!.data!.myListing!.patient!.name != null
-                    ? provider.model!.data!.myListing!.patient!.name
+                        provider.model!.data!.myListing!.patient!.profileName != null
+                    ? provider.model!.data!.myListing!.patient!.profileName
                             .toString()
                             .substring(0)
                             .toUpperCase()[0] +
-                        provider.model!.data!.myListing!.patient!.name
+                        provider.model!.data!.myListing!.patient!.profileName
                             .toString()
                             .substring(1)
                     : '',
@@ -189,6 +191,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
+                ScreenSize.width(5),
                 getText(
                     title: provider.model!.data!.myListing!.bookingDate != null
                         ? TimeFormat.convertBookingDate(
@@ -212,6 +215,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
+                ScreenSize.width(5),
                 getText(
                     title: provider.model!.data!.myListing!.bookingDate != null
                         ? TimeFormat.convertBookingTime(
@@ -235,6 +239,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontFamily: FontFamily.poppinsSemiBold,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
+                ScreenSize.width(5),
                 Flexible(
                   child: Text(
                     provider.model!.data!.myListing!.service != null &&
@@ -263,6 +268,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               fontWeight: FontWeight.w500),
           ScreenSize.height(10),
           detailsWidget(provider),
+          ScreenSize.height(10),
+          provider.model!.data!.myListing!.bookingMessage2!.isNotEmpty&&provider.model!.data!.myListing!.bookingMessage2!=null?
+          completeBookingMsgWidget(provider):Container(),
           ScreenSize.height(43),
           provider.model!.data!.myListing!.bookingStatus ==
                   BookingTypes.NEW.value
@@ -298,6 +306,80 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
       ),
     );
   }
+  completeBookingMsgWidget(PatientDetailsProvider myProvider){
+    return Container(
+      padding: const EdgeInsets.only(top: 33,left: 0,right: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          getText(title: StringKey.nurseFinalMessage.tr,size: 14,
+              fontFamily: FontFamily.poppinsSemiBold,
+              color: AppColor.textBlackColor,
+              fontWeight: FontWeight.w600),
+          ScreenSize.height(20),
+          Container(
+            width: double.infinity,
+            padding:const EdgeInsets.symmetric(horizontal: 16,vertical: 18),
+            decoration: BoxDecoration(
+                color: AppColor.whiteColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                      offset:const Offset(0, -1),
+                      color: AppColor.blackColor.withOpacity(.2),
+                      blurRadius: 5
+                  )
+                ]
+            ),
+            child: getText(title:
+            myProvider.model!.data!.myListing!.bookingMessage2??"",
+                size: 12, fontFamily: FontFamily.poppinsRegular,
+                color: AppColor.lightTextColor, fontWeight: FontWeight.w400),
+          ),
+          ScreenSize.height(20),
+          myProvider.model!.data!.myListing!.nurseDoc!=null&&myProvider.model!.data!.myListing!.nurseDoc.toString().isNotEmpty?
+          GestureDetector(
+            onTap: (){
+              Utils.openUrl(myProvider.model!.data!.myListing!.nurseDoc.toString());
+            },
+            child: Container(
+                width: double.infinity,
+                padding:const EdgeInsets.symmetric(horizontal: 16,vertical: 18),
+                decoration: BoxDecoration(
+                    color: AppColor.whiteColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          offset:const Offset(0, -1),
+                          color: AppColor.blackColor.withOpacity(.2),
+                          blurRadius: 5
+                      )]
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(AppImages.documentIcon,height: 20,width: 20,),
+                    ScreenSize.width(5),
+                    Expanded(
+                      child: Text(myProvider.model!.data!.myListing!.nurseDoc.toString().split('/').last,
+                          maxLines: 1,overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 12, fontFamily: FontFamily.poppinsMedium,
+                              color: AppColor.blackColor, fontWeight: FontWeight.w600
+                          )
+                      ),
+                    ),
+                    ScreenSize.width(5),
+                    Image.asset(AppImages.downloadIcon,height: 20,width: 20,),
+                  ],
+                )
+            ),
+          ):Container(),
+
+        ],
+      ),
+    );
+  }
+
 
   Widget reviewsWidget(PatientDetailsProvider provider) {
     int iterations = 0;
@@ -491,6 +573,15 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          customDetailsRow(
+              StringKey.patientName.tr,
+              provider.model!.data!.myListing!.patient != null &&
+                  provider.model!.data!.myListing!.patient!.bookingName !=
+                      null
+                  ? provider.model!.data!.myListing!.patient!.bookingName.toString().substring(0).toUpperCase()[0]+
+                  provider.model!.data!.myListing!.patient!.bookingName.toString().substring(1)
+                  : ''),
+          ScreenSize.height(10),
           customDetailsRow(
               StringKey.insurance.tr,
               provider.model!.data!.myListing!.patient != null &&

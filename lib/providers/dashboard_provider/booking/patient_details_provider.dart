@@ -13,6 +13,7 @@ import 'package:nurse/model/review_model.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/showcircleprogressdialog.dart';
 import 'package:nurse/utils/utils.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PatientDetailsProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -108,7 +109,8 @@ class PatientDetailsProvider extends ChangeNotifier {
     Map<String, String> headers = {
       "Authorization": "Bearer ${SessionManager.token}"
     };
-
+print(SessionManager.token);
+print(bookingId);
     var request =
         http.MultipartRequest('POST', Uri.parse(ApiUrl.updateNurseDocUrl));
     request.headers.addAll(headers);
@@ -121,7 +123,11 @@ class PatientDetailsProvider extends ChangeNotifier {
     var res = await request.send();
     var vb = await http.Response.fromStream(res);
     Navigator.pop(navigatorKey.currentContext!);
+    print(vb.request);
+    log(vb.body);
+    print(vb.statusCode);
     if (vb.statusCode == 200) {
+      print('dsfdfsgsd');
       var dataAll = json.decode(vb.body);
       Utils.successSnackBar(dataAll['message'], navigatorKey.currentContext!);
       completeBookingApiFunction(bookingId);
@@ -132,22 +138,37 @@ class PatientDetailsProvider extends ChangeNotifier {
   }
 
   documentPicker(state) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowMultiple: false,
-      allowedExtensions: [
-        'pdf',
-      ],
-    );
-    final checkSize =
-        checkFileSize(result!.files.first.path, navigatorKey.currentContext!);
-    if (checkSize == true) {
-      documentName = result.files.first.name;
-      documentPath = result.files.first.path.toString();
-      notifyListeners();
-    }
+    await Permission.storage.request();
+    // if (await Permission.storage.request().isGranted) {
+      print('vdfdsvdf');
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: false,
+        allowedExtensions: [
+          'pdf',
+        ],
+      );
+      if(result!=null) {
+        PlatformFile file = result!.files.first;
+        print(file.extension);
+        if (file.extension == 'pdf') {
+          final checkSize =
+          checkFileSize(result!.files.first.path, navigatorKey.currentContext!);
+          if (checkSize == true) {
+            documentName = result.files.first.name;
+            documentPath = result.files.first.path.toString();
+            notifyListeners();
+          }
+        }
+        else {
+          EasyLoading.showToast('Unsupported file');
+        }
+      }
+    // } else {
+    //   print('sdgdffdvdffd');
+    //   // Handle permission denial
+    // }
 
-    // return result;
   }
 
   bool checkFileSize(path, context) {

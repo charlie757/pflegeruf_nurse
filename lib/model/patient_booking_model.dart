@@ -54,6 +54,9 @@ class MyListing {
   dynamic bookingNumber;
   dynamic bookingDate;
   dynamic bookingStatus;
+  dynamic bookingMessage;
+  dynamic bookingMessage2;
+  dynamic nurseDoc;
   Patient? patient;
   Service? service;
 
@@ -62,6 +65,9 @@ class MyListing {
       this.bookingNumber,
       this.bookingDate,
       this.bookingStatus,
+        this.bookingMessage,
+        this.bookingMessage2,
+        this.nurseDoc,
       this.patient,
       this.service});
 
@@ -70,6 +76,9 @@ class MyListing {
     bookingNumber = json['booking_number'];
     bookingDate = json['booking_date'];
     bookingStatus = json['booking_status'];
+    bookingMessage = json['booking_message'];
+    bookingMessage2 = json['booking_message2'];
+    nurseDoc = json['nurse_doc'];
     patient =
         json['patient'] != null ? Patient.fromJson(json['patient']) : null;
     service =
@@ -82,6 +91,9 @@ class MyListing {
     data['booking_number'] = bookingNumber;
     data['booking_date'] = bookingDate;
     data['booking_status'] = bookingStatus;
+    data['nurse_doc'] = nurseDoc;
+    data['booking_message'] = bookingMessage;
+    data['booking_message2'] = bookingMessage2;
     if (patient != null) {
       data['patient'] = patient!.toJson();
     }
@@ -95,6 +107,8 @@ class MyListing {
 class Patient {
   dynamic id;
   dynamic name;
+  dynamic profileName;
+  dynamic bookingName;
   dynamic photo;
   dynamic insurance;
   dynamic insuranceNumber;
@@ -110,6 +124,8 @@ class Patient {
   Patient(
       {this.id,
       this.name,
+        this.bookingName,
+        this.profileName,
       this.photo,
       this.insurance,
       this.insuranceNumber,
@@ -125,6 +141,8 @@ class Patient {
   Patient.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    profileName= json['profile_name'];
+    bookingName = json['booking_name'];
     photo = json['photo'];
     insurance = json['insurance'];
     insuranceNumber = json['insurance_number'];
@@ -142,6 +160,8 @@ class Patient {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['name'] = name;
+    data['profile_name']=profileName;
+    data['booking_name'] = bookingName;
     data['photo'] = photo;
     data['insurance'] = insurance;
     data['insurance_number'] = insuranceNumber;

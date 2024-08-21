@@ -23,6 +23,7 @@ class _SplashSCreenState extends State<SplashSCreen> {
 
   callNavigate() {
     Future.delayed(const Duration(seconds: 3), () {
+
       if (SessionManager.firstTimeOpenApp) {
         if (SessionManager.token.isNotEmpty) {
           AppRoutes.pushReplacementNavigation(const DashboardScreen());

@@ -13,6 +13,7 @@ import 'package:nurse/widgets/appBar.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 
+
 class ForgotVerificationScreen extends StatefulWidget {
   final email;
   final route;
@@ -148,6 +149,7 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
                       offset: provider.otp1Controller.text.length);
                 },
                 onChanged: (val) {
+                  print(val);
                   if (val.length >= 1) {
                     provider.showUnderlineOtp1 = true;
                     FocusScope.of(context)
@@ -174,6 +176,7 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
                   }
                 },
                 onChanged: (val) {
+                  print(val);
                   if (val.isNotEmpty) {
                     provider.showUnderlineOtp2 = true;
                     FocusScope.of(context)
@@ -183,7 +186,9 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
                     FocusScope.of(context)
                         .requestFocus(provider.controller1Focus);
                   }
-
+                  if (val.isEmpty) {
+                    FocusScope.of(context).requestFocus(provider.controller1Focus);
+                  }
                   setState(() {});
                 }),
             roundedTextField(
@@ -290,6 +295,7 @@ class _ForgotVerificationScreenState extends State<ForgotVerificationScreen> {
       alignment: Alignment.center,
       child: TextFormField(
         focusNode: focusNode,
+        enabled: true,
         enableInteractiveSelection: true,
         controller: controller,
         textAlign: TextAlign.center,

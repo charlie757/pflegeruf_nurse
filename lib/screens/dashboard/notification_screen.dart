@@ -42,7 +42,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body:
           Consumer<NotificationProvider>(builder: (context, myProvider, child) {
         return myProvider.model != null
-            ? myProvider.model!.data!.isEmpty
+            ? myProvider.model!.data!.isEmpty||myProvider.model!.data!=null
                 ? Align(alignment: Alignment.center, child: noDataWidget())
                 : ListView.separated(
                     separatorBuilder: (context, sp) {

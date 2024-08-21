@@ -101,6 +101,8 @@ class StringKey {
   static const messageForPatientExample = "messageForPatientExample";
   static const messageForCompleteBookingHintText =
       'messageForCompleteBookingHintText';
+  static const nurseFinalMessage = "nurseFinalMessage";
+
 
   /// patient
   static const patientDetails = "patientDetails";

@@ -155,16 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       myProvider.emailValidationMsg =
                           AppValidation.emailValidator(val);
                       setState(() {});
-                    },
-                    icon: GestureDetector(
-                      onTap: () {},
-                      child: Icon(
-                        Icons.edit,
-                        color: AppColor.textBlackColor.withOpacity(.3),
-                        size: 20,
-                      ),
-                    ),
-                  ),
+                    },),
                   ScreenSize.height(20),
                   getText(
                       title: StringKey.phoneNumber.tr,
@@ -259,6 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       alignment: Alignment.center,
       child: Stack(
         children: [
+          provider.profileModel!=null&&provider.profileModel!.data!=null&&
           provider.profileModel!.data!.details!.displayProfileImage.isNotEmpty
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(50),

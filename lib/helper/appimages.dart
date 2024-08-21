@@ -16,4 +16,6 @@ class AppImages {
   static const locationIcon = 'assets/icons/locationIcon.png';
   static const mapLocationIcon = 'assets/icons/map_location.png';
   static const uploadIcon = 'assets/icons/upload.png';
+  static const downloadIcon = 'assets/icons/download.png';
+  static const documentIcon = 'assets/icons/document.png';
 }

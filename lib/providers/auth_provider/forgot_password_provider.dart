@@ -5,6 +5,8 @@ import 'package:nurse/config/approutes.dart';
 import 'package:nurse/screens/auth/forgot_verification_screen.dart';
 import 'package:nurse/utils/app_validation.dart';
 
+import '../../utils/utils.dart';
+
 class ForgotPasswordProvider extends ChangeNotifier {
   final emailController = TextEditingController();
   bool isLoading = false;
@@ -33,6 +35,7 @@ class ForgotPasswordProvider extends ChangeNotifier {
 
   callApiFunction() {
     updateLoading(true);
+    Utils.hideTextField();
     var data = {"username": emailController.text, 'appType': '2'};
     String body = Uri(queryParameters: data).query;
     print(body);

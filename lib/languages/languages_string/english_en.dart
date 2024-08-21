@@ -103,6 +103,7 @@ const englishEN = {
   StringKey.accept: "Accept",
   StringKey.accepted: "Accepted",
   StringKey.reject: "Reject",
+  StringKey.nurseFinalMessage:"Final message",
   StringKey.messgeForPatient: "Message for patient",
   StringKey.messageForPatientExample:
       "ex. I’ll be there in 1 hour, I’m stuck in traffic",

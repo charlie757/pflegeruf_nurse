@@ -66,6 +66,7 @@ class LoginProvider extends ChangeNotifier {
 
   callApiFunction() {
     /// set the values
+    Utils.hideTextField();
     SessionManager.setUserEmail = emailController.text;
     SessionManager.setuserPassword = passwordController.text;
 
@@ -96,7 +97,7 @@ class LoginProvider extends ChangeNotifier {
               updateIsVisiblePassword(true);
             }
             SessionManager.setToken = loginModel!.data!.token;
-            AppRoutes.pushReplacementNavigation(const DashboardScreen());
+            AppRoutes.pushReplacementNavigation(const DashboardScreen(index: 0,));
           } else {
             Utils.errorSnackBar('User not found', navigatorKey.currentContext);
           }

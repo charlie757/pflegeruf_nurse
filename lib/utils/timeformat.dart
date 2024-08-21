@@ -18,7 +18,7 @@ class TimeFormat {
     DateTime dateTime = dateFormat.parse(utcDate, true).toLocal();
 
     // String roughTimeString = DateFormat('jm').format(dateTime);
-    return '${DateFormat('HH:MM').format(dateTime)}';
+    return DateFormat('HH:mm').format(dateTime);
   }
 
   static String convertReviewDate(myDateTime) {

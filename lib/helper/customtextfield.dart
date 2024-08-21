@@ -26,7 +26,7 @@ class CustomTextfield extends StatelessWidget {
     this.errorMsg = '',
     this.onChanged,
     this.inputFormatters,
-    this.textInputType = TextInputType.name,
+    this.textInputType = TextInputType.text,
   });
 
   @override

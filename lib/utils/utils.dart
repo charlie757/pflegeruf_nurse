@@ -4,6 +4,7 @@ import 'package:nurse/config/approutes.dart';
 import 'package:nurse/helper/appcolor.dart';
 import 'package:nurse/screens/auth/login_screen.dart';
 import 'package:nurse/utils/session_manager.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 MediaQueryData mediaQuery = MediaQuery.of(navigatorKey.currentState!.context)
@@ -89,5 +90,13 @@ class Utils {
         CupertinoPageRoute(builder: (context) => const LoginScreen()),
         (route) => false);
     // AppRoutes.pushReplacementNavigation(const LoginScreen());
+  }
+  static openUrl(String url)async{
+    // const url = url;
+    if(await canLaunch(url)){
+      await launch(url);
+    }else {
+      throw 'Could not launch $url';
+    }
   }
 }

@@ -174,9 +174,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     fontWeight: FontWeight.w500),
                 getText(
                     title:
-                        model.data!.myListing![index].productCreatedAt != null
+                        model.data!.myListing![index].statusCreatedAt != null
                             ? TimeFormat.convertBookingDate(
-                                model.data!.myListing![index].productCreatedAt)
+                                model.data!.myListing![index].statusCreatedAt)
                             : '',
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,
@@ -196,9 +196,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     fontWeight: FontWeight.w500),
                 getText(
                     title:
-                        model.data!.myListing![index].productCreatedAt != null
+                        model.data!.myListing![index].statusCreatedAt != null
                             ? TimeFormat.convertBookingTime(
-                                model.data!.myListing![index].productCreatedAt)
+                                model.data!.myListing![index].statusCreatedAt)
                             : '',
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,

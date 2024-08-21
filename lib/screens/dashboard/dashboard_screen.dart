@@ -11,6 +11,7 @@ import 'package:nurse/screens/dashboard/home_screen.dart';
 import 'package:nurse/screens/dashboard/profile_screen.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen>
     with WidgetsBindingObserver {
   @override
-  void initState() {
+  void initState(){
     WidgetsBinding.instance.addObserver(this);
     callInitFunction();
     super.initState();
@@ -61,7 +62,8 @@ class _DashboardScreenState extends State<DashboardScreen>
     }
   }
 
-  callInitFunction() {
+  callInitFunction()async {
+    await Permission.storage.request();
     final myProvider = Provider.of<DashboardProvider>(context, listen: false);
     myProvider.selectedIndex = widget.index;
     final profileProvider =

@@ -23,6 +23,7 @@ import 'package:nurse/utils/location_service.dart';
 import 'package:nurse/utils/notifiaction_service.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -30,7 +31,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await SessionManager().init();
-
+  await Permission.storage.request();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
