@@ -15,6 +15,8 @@ import 'package:nurse/widgets/appBar.dart';
 import 'package:nurse/widgets/no_data_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/location_service.dart';
+
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({super.key});
 
@@ -137,7 +139,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   child: model.data!.myListing![index].user != null &&
                           model.data!.myListing![index].user!
                                   .displayProfileImage !=
-                              null
+                              null&& model.data!.myListing![index].user!
+                      .displayProfileImage.toString().isNotEmpty
                       ? NetworkImageHelper(
                           img: model.data!.myListing![index].user!
                               .displayProfileImage,

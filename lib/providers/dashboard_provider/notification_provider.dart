@@ -3,6 +3,7 @@ import 'package:nurse/api/apiservice.dart';
 import 'package:nurse/api/apiurl.dart';
 import 'package:nurse/model/notification_model.dart';
 import 'package:nurse/screens/dashboard/dashboard_screen.dart';
+import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/showcircleprogressdialog.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:nurse/widgets/send_message_booking.dart';
@@ -17,7 +18,11 @@ class NotificationProvider extends ChangeNotifier {
   getNotificationApiFunction(bool showLoading) async {
     model = null;
     showLoading ? showCircleProgressDialog(navigatorKey.currentContext!) : null;
-    var data = {'': ''};
+    var data = {
+      'lat': SessionManager.lat,
+      'lon':SessionManager.lng
+    };
+    print("data...$data");
     String body = Uri(queryParameters: data).query;
     ApiService.apiMethod(
             url: ApiUrl.notificationurl,

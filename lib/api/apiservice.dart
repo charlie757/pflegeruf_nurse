@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 
+import '../utils/constants.dart';
+
 enum httpMethod { post, get, delete, put }
 
 checkApiMethod(type) {
@@ -73,7 +75,7 @@ class ApiService {
           Map<String, String> headers = {
             "Authorization": "Bearer ${SessionManager.token}"
           };
-
+          print(headers);
           var request = http.MultipartRequest('POST', Uri.parse(url));
           request.headers.addAll(headers);
           request.fields.addAll(body);
@@ -99,6 +101,16 @@ class ApiService {
       var dataAll = json.decode(response.body);
       if (dataAll['code'] == 200) {
         return json.decode(response.body);
+      } /// in case of user not found
+      else if(dataAll['code']==422||dataAll['authStatus']==false) {
+        Utils.errorSnackBar(
+            dataAll['message'], navigatorKey.currentContext);
+        if(Constants.is401Error==false){
+          Future.delayed(const Duration(seconds: 1),(){
+            Constants.is401Error=true;
+            Utils.logOut();
+          });
+        }
       } else {
         isErrorMessageShow
             ? Utils.errorSnackBar(
@@ -106,9 +118,15 @@ class ApiService {
             : null;
       }
       return null;
-    } else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401||response.statusCode==422) {
       var dataAll = json.decode(response.body);
       // SessionManager.unauthorizedUser(navigatorKey.currentState!.context);
+      if(Constants.is401Error==false){
+        Future.delayed(const Duration(milliseconds: 300),(){
+          Constants.is401Error=true;
+          Utils.logOut();
+        });
+      }
       isErrorMessageShow
           ? Utils.errorSnackBar(dataAll['message'], navigatorKey.currentContext)
           : null;

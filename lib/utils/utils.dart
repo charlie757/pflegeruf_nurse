@@ -6,6 +6,8 @@ import 'package:nurse/screens/auth/login_screen.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'constants.dart';
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 MediaQueryData mediaQuery = MediaQuery.of(navigatorKey.currentState!.context)
     .copyWith(textScaleFactor: 1.0);
@@ -17,6 +19,7 @@ extension StringExtension on String {
 }
 
 class Utils {
+
   static hideTextField() {
     FocusManager.instance.primaryFocus?.unfocus();
   }
@@ -85,6 +88,7 @@ class Utils {
 
   static logOut() {
     SessionManager.setToken = '';
+    Constants.is401Error=true;
     Navigator.pushAndRemoveUntil(
         navigatorKey.currentContext!,
         CupertinoPageRoute(builder: (context) => const LoginScreen()),

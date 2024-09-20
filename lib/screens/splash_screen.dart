@@ -6,6 +6,8 @@ import 'package:nurse/screens/dashboard/dashboard_screen.dart';
 import 'package:nurse/screens/onboarding_screen.dart';
 import 'package:nurse/utils/session_manager.dart';
 
+import '../utils/location_service.dart';
+
 class SplashSCreen extends StatefulWidget {
   const SplashSCreen({super.key});
 
@@ -21,6 +23,7 @@ class _SplashSCreenState extends State<SplashSCreen> {
   }
 
   callNavigate() {
+    getLocationPermission();
     Future.delayed(const Duration(seconds: 3), () {
       if (SessionManager.firstTimeOpenApp) {
         if (SessionManager.token.isNotEmpty) {

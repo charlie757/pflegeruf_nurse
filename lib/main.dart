@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,7 +32,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
@@ -95,8 +96,65 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver  {
   final NotificationService notificationService = NotificationService();
+
+  @override
+  void initState(){
+    // WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  callLocation()async{
+    Timer.periodic(const Duration(seconds: 10), (val){
+      if(Provider.of<DashboardProvider>(context,listen: false).isAllowLocationPermission){
+        getLocationPermission().then((val){
+          if(val=='location'){
+            Provider.of<DashboardProvider>(context,listen: false).isAllowLocationPermission=true;
+            getCurrentLocation();
+          }
+          else{
+            Provider.of<DashboardProvider>(context,listen: false).isAllowLocationPermission=false;
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        callLocation();
+        print('App is inactive');
+        break;
+      case AppLifecycleState.paused:
+        callLocation();
+        print('App is paused');
+        break;
+      case AppLifecycleState.resumed:
+        callLocation();
+        // if (SessionManager.token.isNotEmpty) {
+        //   Provider.of<NotificationProvider>(navigatorKey.currentContext!,
+        //       listen: false)
+        //       .unreadNotificationApiFunction();
+        // }
+        break;
+      case AppLifecycleState.detached:
+        callLocation();
+        print('App is detached');
+        break;
+      case AppLifecycleState.hidden:
+      // TODO: Handle this case.
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

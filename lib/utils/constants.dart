@@ -13,6 +13,7 @@ class Constants {
   static String FCM_TOKEN = 'FCM_TOKEN';
   static const String countryCode = 'country_code';
   static const String languageCode = 'language_code';
+  static bool is401Error=false;
   static List<LanguageModel> languages = [
     LanguageModel(
         imageUrl: '',

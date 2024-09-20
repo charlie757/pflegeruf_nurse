@@ -8,6 +8,8 @@ import 'package:nurse/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:nurse/widgets/send_message_booking.dart';
 
+import '../../utils/session_manager.dart';
+
 class HomeProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   final commentController = TextEditingController();
@@ -21,6 +23,7 @@ class HomeProvider extends ChangeNotifier {
 
   homeApiFunction() {
     var data = {'': ''};
+    print(data);
     homeModel != null
         ? null
         : showCircleProgressDialog(navigatorKey.currentContext!);
@@ -42,7 +45,11 @@ class HomeProvider extends ChangeNotifier {
   }
 
   bookingApiFunction(bool isLoading) {
-    var data = {'': ''};
+    var data = {
+      'lat': SessionManager.lat,
+      'lon':SessionManager.lng
+    };
+    print("data..$data");
     isLoading ? showCircleProgressDialog(navigatorKey.currentContext!) : null;
     String body = Uri(queryParameters: data).query;
     ApiService.apiMethod(

@@ -11,7 +11,10 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/language_constants.dart';
+import 'package:nurse/utils/constants.dart';
 import 'package:nurse/utils/map_utils.dart';
+
+import '../../../utils/utils.dart';
 
 class ShowNavigationScreen extends StatefulWidget {
   final String lat;
@@ -66,36 +69,65 @@ class _ShowNavigationScreenState extends State<ShowNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: lat != 0.0
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height * .5,
-                    child: GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(lat, lng),
-                        zoom: 13.5,
-                      ),
-                      scrollGesturesEnabled: true, // Enable scrolling
-                      zoomGesturesEnabled: true, // Enable zooming
-                      markers: {
-                        Marker(
-                          markerId: MarkerId("pickup"),
-                          infoWindow: InfoWindow(
-                            title: 'Current Location',
+          Column(
+            children: [
+              Expanded(
+                child: lat != 0.0
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * .5,
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(lat, lng),
+                            zoom: 13.5,
                           ),
-                          position: LatLng(lat, lng),
+                          scrollGesturesEnabled: true, // Enable scrolling
+                          zoomGesturesEnabled: true, // Enable zooming
+                          markers: {
+                            Marker(
+                              markerId: MarkerId("pickup"),
+                              infoWindow: InfoWindow(
+                                title: 'Current Location',
+                              ),
+                              position: LatLng(lat, lng),
+                            ),
+                          },
+                          onMapCreated: (mapController) {
+                            controller.complete(mapController);
+                          },
                         ),
-                      },
-                      onMapCreated: (mapController) {
-                        controller.complete(mapController);
-                      },
-                    ),
-                  )
-                : Container(),
+                      )
+                    : Container(
+                  height: MediaQuery.of(context).size.height * .5,
+                  alignment: Alignment.center,
+                  child: getText(title:getTranslated('somethingWrong', context)!, size: 12
+                      , fontFamily: FontFamily.poppinsRegular,
+                      color: AppColor.redColor, fontWeight: FontWeight.w400),
+                ),
+              ),
+              addressWidget()
+            ],
           ),
-          addressWidget()
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(left: 18,top: 50),
+              alignment: Alignment.center,
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                  color: AppColor.appTheme,
+                  borderRadius: BorderRadius.circular(100)),
+              child: Icon(
+                Icons.arrow_back_ios_new_outlined,
+                color: AppColor.whiteColor,
+                size: 18,
+              ),
+            ),
+          ),
         ],
       ),
     );

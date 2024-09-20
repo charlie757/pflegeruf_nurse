@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nurse/api/apiservice.dart';
 import 'package:nurse/api/apiurl.dart';
 import 'package:nurse/config/approutes.dart';
@@ -8,6 +9,9 @@ import 'package:nurse/screens/dashboard/dashboard_screen.dart';
 import 'package:nurse/utils/app_validation.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
+
+import '../../utils/constants.dart';
+import '../../utils/location_service.dart';
 
 class LoginProvider extends ChangeNotifier {
   LoginModel? loginModel;
@@ -65,46 +69,59 @@ class LoginProvider extends ChangeNotifier {
   }
 
   callApiFunction() {
-    /// set the values
-    Utils.hideTextField();
-    SessionManager.setUserEmail = emailController.text;
-    SessionManager.setuserPassword = passwordController.text;
+    getLocationPermission().then((val){
+      print('object$val');
+      if(val=='deniedForever'){
+        Geolocator.openAppSettings();
+      }
+      else if(val=='deniedPermission'){
+        getLocationPermission();
+      }
+      else{
+        Constants.is401Error=false;
+        Utils.hideTextField();
+        SessionManager.setUserEmail = emailController.text;
+        SessionManager.setuserPassword = passwordController.text;
+        updateLoading(true);
+        notifyListeners();
+        var data = {
+          "username": emailController.text,
+          "password": passwordController.text,
+          "device": Platform.isIOS ? 'ios' : 'android',
+          'latitude': SessionManager.lat,
+          'longitude': SessionManager.lng,
+          'fcm_key': SessionManager.fcmToken
+        };
+        String body = Uri(queryParameters: data).query;
+        print(body);
+        ApiService.apiMethod(
+          url: ApiUrl.loginUrl,
+          body: body,
+          method: checkApiMethod(httpMethod.post),
+        ).then((value) {
+          updateLoading(false);
+          if (value != null) {
+            loginModel = LoginModel.fromJson(value);
 
-    updateLoading(true);
-    var data = {
-      "username": emailController.text,
-      "password": passwordController.text,
-      "device": Platform.isIOS ? 'ios' : 'android',
-      'latitude': SessionManager.lat,
-      'longitude': SessionManager.lng,
-      'fcm_key': SessionManager.fcmToken
-    };
-    String body = Uri(queryParameters: data).query;
-    print(body);
-    ApiService.apiMethod(
-      url: ApiUrl.loginUrl,
-      body: body,
-      method: checkApiMethod(httpMethod.post),
-    ).then((value) {
-      updateLoading(false);
-      if (value != null) {
-        loginModel = LoginModel.fromJson(value);
-
-        if (loginModel!.data != null && loginModel!.data!.status == true) {
-          /// check account type
-          if (loginModel!.data!.userDetails!.userAccountType == 2) {
-            if (SessionManager.keepMySignedIn) {
-              updateIsVisiblePassword(true);
+            if (loginModel!.data != null && loginModel!.data!.status == true) {
+              /// check account type
+              if (loginModel!.data!.userDetails!.userAccountType == 2) {
+                if (SessionManager.keepMySignedIn) {
+                  updateIsVisiblePassword(true);
+                }
+                SessionManager.setToken = loginModel!.data!.token;
+                AppRoutes.pushReplacementNavigation(const DashboardScreen(index: 0,));
+              } else {
+                Utils.errorSnackBar('User not found', navigatorKey.currentContext);
+              }
+            } else {
+              Utils.errorSnackBar(loginModel!.message, navigatorKey.currentContext);
             }
-            SessionManager.setToken = loginModel!.data!.token;
-            AppRoutes.pushReplacementNavigation(const DashboardScreen(index: 0,));
-          } else {
-            Utils.errorSnackBar('User not found', navigatorKey.currentContext);
           }
-        } else {
-          Utils.errorSnackBar(loginModel!.message, navigatorKey.currentContext);
-        }
+        });
+
       }
     });
+    /// set the values
   }
 }

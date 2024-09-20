@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nurse/config/approutes.dart';
 import 'package:nurse/helper/appbutton.dart';
 import 'package:nurse/helper/appcolor.dart';
@@ -153,10 +154,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       buttonColor: AppColor.appTheme,
                       isLoading: myProvider.isLoading,
                       onTap: () {
+                        print(SessionManager.lng);
                         getLocationPermission();
-                        myProvider.isLoading
-                            ? null
-                            : myProvider.checkValidation();
+                            myProvider.isLoading
+                                ? null
+                                : myProvider.checkValidation();
+
                       }),
                 ],
               ),

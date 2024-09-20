@@ -497,12 +497,17 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+                model.byPatient!=null&&model.byPatient!.displayProfileImage!=null&&model.byPatient!.displayProfileImage.toString().isNotEmpty?
               ClipOval(
                 child: NetworkImageHelper(
                   img: model.byPatient!.displayProfileImage,
                   height: 46.0,
                   width: 46.0,
                 ),
+              ):Container(
+                height: 46.0,
+                width: 46.0,
+                child: Image.asset(AppImages.bottomIcon3),
               ),
               ScreenSize.width(12),
               Expanded(
@@ -716,7 +721,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       ScreenSize.height(31),
                       getText(
                           title:
-                              getTranslated('finalMessageForPatient', context)!
+                              getTranslated('pleaseDocumentProvidedService', context)!
                                   .tr,
                           size: 12,
                           fontFamily: FontFamily.poppinsSemiBold,

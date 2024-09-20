@@ -56,6 +56,7 @@ class SessionManager {
     sharedPrefs.setString(Constants.FCM_TOKEN, value);
   }
 
+  // de
   static String get languageCode =>
       sharedPrefs.getString(Constants.languageCode) ?? "de";
   static set setLanguageCode(String value) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:nurse/helper/appcolor.dart';
@@ -14,6 +16,9 @@ import 'package:nurse/utils/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/dashboard_provider/home_provider.dart';
+import '../../utils/location_service.dart';
+
 class DashboardScreen extends StatefulWidget {
   final int index;
   const DashboardScreen({this.index = 0});
@@ -22,13 +27,45 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen>
-    with WidgetsBindingObserver {
+class _DashboardScreenState extends State<DashboardScreen>with WidgetsBindingObserver {
   @override
   void initState(){
-    WidgetsBinding.instance.addObserver(this);
     callInitFunction();
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        getCurrentLocation();
+        print('App is inactive');
+        break;
+      case AppLifecycleState.paused:
+        getCurrentLocation();
+        print('App is paused');
+        break;
+      case AppLifecycleState.resumed:
+        getCurrentLocation();
+        Future.delayed(const Duration(seconds: 2),(){
+          Provider.of<HomeProvider>(context, listen: false).bookingApiFunction(false);
+        });
+        if (SessionManager.token.isNotEmpty) {
+          Provider.of<NotificationProvider>(navigatorKey.currentContext!,
+              listen: false)
+              .unreadNotificationApiFunction();
+        }
+        break;
+      case AppLifecycleState.detached:
+        getCurrentLocation();
+        print('App is detached');
+        break;
+      case AppLifecycleState.hidden:
+      // TODO: Handle this case.
+    }
   }
 
   @override
@@ -37,33 +74,8 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    switch (state) {
-      case AppLifecycleState.inactive:
-        print('App is inactive');
-        break;
-      case AppLifecycleState.paused:
-        print('App is paused');
-        break;
-      case AppLifecycleState.resumed:
-        if (SessionManager.token.isNotEmpty) {
-          Provider.of<NotificationProvider>(navigatorKey.currentContext!,
-                  listen: false)
-              .unreadNotificationApiFunction();
-        }
-        break;
-      case AppLifecycleState.detached:
-        print('App is detached');
-        break;
-      case AppLifecycleState.hidden:
-      // TODO: Handle this case.
-    }
-  }
 
   callInitFunction()async {
-    await Permission.storage.request();
     final myProvider = Provider.of<DashboardProvider>(context, listen: false);
     myProvider.selectedIndex = widget.index;
     final profileProvider =
@@ -71,6 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     Future.delayed(Duration.zero, () {
       profileProvider.getProfileApiFunction(true);
     });
+    await Permission.storage.request();
   }
 
   List screenList = [
@@ -85,7 +98,6 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    // getLcoation();
     return MediaQuery(
       data: mediaQuery,
       child: Consumer<DashboardProvider>(builder: (context, myProvider, child) {
@@ -111,14 +123,18 @@ class _DashboardScreenState extends State<DashboardScreen>
                 children: [
                   bottomNavigationItems(AppImages.bottomIcon1, 0, myProvider,
                       () {
+                    print(SessionManager.token);
+                        getLocationPermission();
                     myProvider.updateSelectedIndex(0);
                   }),
                   bottomNavigationItems(AppImages.bottomIcon2, 1, myProvider,
                       () {
+                        getLocationPermission();
                     myProvider.updateSelectedIndex(1);
                   }),
                   bottomNavigationItems(AppImages.bottomIcon3, 2, myProvider,
                       () {
+                        getLocationPermission();
                     myProvider.updateSelectedIndex(2);
                   }),
                 ],

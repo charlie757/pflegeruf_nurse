@@ -13,6 +13,8 @@ import 'package:nurse/widgets/no_data_widget.dart';
 import 'package:nurse/widgets/ratingwidget.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../helper/appimages.dart';
+
 class ReviewsScreen extends StatefulWidget {
   ReviewModel? model;
   ReviewsScreen({this.model});
@@ -67,13 +69,18 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              model.byPatient!=null&&model.byPatient!.displayProfileImage!=null&&model.byPatient!.displayProfileImage.toString().isNotEmpty?
               ClipOval(
                 child: NetworkImageHelper(
                   img: model.byPatient!.displayProfileImage,
                   height: 46.0,
                   width: 46.0,
                 ),
-              ),
+              ):Container(
+              height: 46.0,
+        width: 46.0,
+        child: Image.asset(AppImages.bottomIcon3),
+      ),
               ScreenSize.width(12),
               Expanded(
                 child: Column(

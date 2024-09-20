@@ -23,6 +23,8 @@ import 'package:nurse/widgets/no_data_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 
+import '../../utils/location_service.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -34,23 +36,25 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      callInitFunction();
+      callInitFunction(false);
     });
     super.initState();
   }
 
-  callInitFunction() {
+  callInitFunction(bool isLoading) async{
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
+  await getLocationPermission();
     myProvider.homeApiFunction();
-    myProvider.bookingApiFunction(false);
     Provider.of<NotificationProvider>(context, listen: false)
         .unreadNotificationApiFunction();
+    Future.delayed(const Duration(seconds: 2),(){
+      myProvider.bookingApiFunction(isLoading);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final notificationProvider = Provider.of<NotificationProvider>(context);
     final dashboardProvider = Provider.of<DashboardProvider>(context);
     return MediaQuery(
       data: mediaQuery,
@@ -64,32 +68,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(left: 0, right: 0),
                 child: Row(
                   children: [
-                    profileProvider.profileModel != null &&
-                            profileProvider.profileModel!.data != null &&
-                            profileProvider.profileModel!.data!.details !=
-                                null &&
-                            profileProvider.profileModel!.data!.details!
-                                .displayProfileImage.isNotEmpty
-                        ? GestureDetector(
-                            onTap: () {
-                              dashboardProvider.updateSelectedIndex(2);
-                            },
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: NetworkImageHelper(
-                                  img: profileProvider.profileModel!.data!
-                                      .details!.displayProfileImage,
-                                  height: 40.0,
-                                  width: 40.0,
-                                  isAnotherColorOfLodingIndicator: true,
-                                )),
-                          )
-                        : Image.asset(
-                            'assets/images/dummyProfile.png',
-                            height: 40,
-                            width: 40,
-                            fit: BoxFit.cover,
-                          ),
+                    GestureDetector(
+                      onTap: (){
+                        dashboardProvider.updateSelectedIndex(2);
+                      },
+                      child: profileProvider.profileModel != null &&
+                              profileProvider.profileModel!.data != null &&
+                              profileProvider.profileModel!.data!.details !=
+                                  null &&
+                              profileProvider.profileModel!.data!.details!
+                                  .displayProfileImage.isNotEmpty
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: NetworkImageHelper(
+                                img: profileProvider.profileModel!.data!
+                                    .details!.displayProfileImage,
+                                height: 40.0,
+                                width: 40.0,
+                                isAnotherColorOfLodingIndicator: true,
+                              ))
+                          : Image.asset(
+                              AppImages.bottomIcon3,
+                              height: 30,
+                              width: 30,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
                     ScreenSize.width(10),
                     Flexible(
                       child: getText(
@@ -171,9 +175,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            body: RefreshIndicator(
+              onRefresh: ()async{
+                Future.delayed(const Duration(milliseconds: 1),(){
+                  callInitFunction(true);
+                });
+              },
+              child: ListView(
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   headerWidget(myProvider),
                   ScreenSize.height(40),
@@ -374,65 +383,103 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ScreenSize.height(30),
             Padding(
-              padding: const EdgeInsets.only(left: 40),
+              padding: const EdgeInsets.only(left: 0),
               child: Row(
                 children: [
                   Flexible(
-                    child: AppButton(
-                        title: getTranslated('accept', context)!.tr,
-                        height: 45,
-                        width: double.infinity,
-                        buttonColor: AppColor.appTheme,
-                        onTap: () {
-                          confirmationDialogBox(
-                              title: getTranslated('accept', context)!.tr,
-                              subTitle: getTranslated(
-                                      'confirmationToAcceptRequest', context)!
-                                  .tr,
-                              noTap: () {
-                                Navigator.pop(context);
-                              },
-                              yesTap: () {
-                                print(
-                                  provider.bookingModel!.data!.myListing![index]
-                                      .bookingId
-                                      .toString(),
-                                );
-                                Navigator.pop(context);
-                                provider.acceptBookingApiFunction(
-                                  provider.bookingModel!.data!.myListing![index]
-                                      .bookingId
-                                      .toString(),
-                                );
-                              });
-                        }),
+                    child:  GestureDetector(
+                      onTap: (){
+                        confirmationDialogBox(
+                            title: getTranslated('accept', context)!.tr,
+                            subTitle: getTranslated(
+                                'confirmationToAcceptRequest', context)!
+                                .tr,
+                            noTap: () {
+                              Navigator.pop(context);
+                            },
+                            yesTap: () {
+                              print(
+                                provider.bookingModel!.data!.myListing![index]
+                                    .bookingId
+                                    .toString(),
+                              );
+                              Navigator.pop(context);
+                              provider.acceptBookingApiFunction(
+                                provider.bookingModel!.data!.myListing![index]
+                                    .bookingId
+                                    .toString(),
+                              );
+                            });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 55,
+                        padding:const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: AppColor.appTheme,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: getText(title: getTranslated('accept', context)!.tr,size: 16,
+                            fontFamily: FontFamily.poppinsSemiBold,
+                            textAlign: TextAlign.center,
+                            color: AppColor.whiteColor,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    // AppButton(
+                    //     title: getTranslated('accept', context)!.tr,
+                    //     height: 45,
+                    //     width: double.infinity,
+                    //     buttonColor: AppColor.appTheme,
+                    //     onTap: () {
+                    //       confirmationDialogBox(
+                    //           title: getTranslated('accept', context)!.tr,
+                    //           subTitle: getTranslated(
+                    //                   'confirmationToAcceptRequest', context)!
+                    //               .tr,
+                    //           noTap: () {
+                    //             Navigator.pop(context);
+                    //           },
+                    //           yesTap: () {
+                    //             print(
+                    //               provider.bookingModel!.data!.myListing![index]
+                    //                   .bookingId
+                    //                   .toString(),
+                    //             );
+                    //             Navigator.pop(context);
+                    //             provider.acceptBookingApiFunction(
+                    //               provider.bookingModel!.data!.myListing![index]
+                    //                   .bookingId
+                    //                   .toString(),
+                    //             );
+                    //           });
+                    //     }),
+                    //
                   ),
-                  ScreenSize.width(20),
-                  Flexible(
-                    child: AppButton(
-                        title: getTranslated('reject', context)!.tr,
-                        height: 45,
-                        width: double.infinity,
-                        buttonColor: AppColor.rejectColor,
-                        onTap: () {
-                          confirmationDialogBox(
-                              title: getTranslated('reject', context)!.tr,
-                              subTitle: getTranslated(
-                                      'confirmationToRejectRequest', context)!
-                                  .tr,
-                              noTap: () {
-                                Navigator.pop(context);
-                              },
-                              yesTap: () {
-                                Navigator.pop(context);
-                                provider.rejectBookingApiFunction(
-                                  provider.bookingModel!.data!.myListing![index]
-                                      .bookingId
-                                      .toString(),
-                                );
-                              });
-                        }),
-                  ),
+                  ScreenSize.width(15),
+                  AppButton(
+                      title: getTranslated('reject', context)!.tr,
+                      height: 55,
+                      width: 80,
+                      buttonColor: AppColor.rejectColor,
+                      onTap: () {
+                        confirmationDialogBox(
+                            title: getTranslated('reject', context)!.tr,
+                            subTitle: getTranslated(
+                                    'confirmationToRejectRequest', context)!
+                                .tr,
+                            noTap: () {
+                              Navigator.pop(context);
+                            },
+                            yesTap: () {
+                              Navigator.pop(context);
+                              provider.rejectBookingApiFunction(
+                                provider.bookingModel!.data!.myListing![index]
+                                    .bookingId
+                                    .toString(),
+                              );
+                            });
+                      }),
                 ],
               ),
             )

@@ -7,6 +7,12 @@ class DashboardProvider extends ChangeNotifier {
   int selectedIndex = 0;
   DateTime? currentBackPressTime;
   bool isPopScope = false;
+  bool isAllowLocationPermission = false;
+
+  updateLocationPermission(val){
+    isAllowLocationPermission=val;
+    notifyListeners();
+  }
 
   updateSelectedIndex(value) {
     selectedIndex = value;

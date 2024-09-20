@@ -43,7 +43,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body:
           Consumer<NotificationProvider>(builder: (context, myProvider, child) {
         return myProvider.model != null
-            ? myProvider.model!.data!.isEmpty || myProvider.model!.data != null
+            ? myProvider.model!.data!.isEmpty || myProvider.model!.data == null
                 ? Align(alignment: Alignment.center, child: noDataWidget())
                 : ListView.separated(
                     separatorBuilder: (context, sp) {
@@ -119,7 +119,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ScreenSize.height(model.currentStatus == 'NEW' ? 25 : 0),
         model.currentStatus == 'NEW'
             ? Padding(
-                padding: const EdgeInsets.only(left: 100, right: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
                   children: [
                     Flexible(
@@ -140,7 +140,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             );
                           });
                     })),
-                    ScreenSize.width(20),
+                    ScreenSize.width(10),
                     Flexible(
                         child: customBtn(AppColor.rejectColor,
                             getTranslated('reject', context)!.tr, () {
@@ -176,15 +176,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 37,
+        height: 55,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         width: double.infinity,
         decoration:
             BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
         child: getText(
             title: title,
             size: 14,
+            textAlign: TextAlign.center,
             fontFamily: FontFamily.poppinsSemiBold,
             color: AppColor.whiteColor,
             fontWeight: FontWeight.w600),

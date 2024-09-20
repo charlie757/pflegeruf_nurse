@@ -74,7 +74,7 @@ class NotificationService {
                     color: const Color.fromRGBO(71, 79, 156, 1),
                     playSound: true,
                     enableLights: true,
-                    icon: '@mipmap/ic_launcher_notification',
+                    icon: '@mipmap/ic_launcher',
                     styleInformation: const BigTextStyleInformation(''),
                     channelAction:
                         AndroidNotificationChannelAction.createIfNotExists)));
@@ -100,7 +100,7 @@ class NotificationService {
 
   void configLocalNotification() {
     var initializationSettingsAndroid =
-        const AndroidInitializationSettings('@mipmap/ic_launcher_notification');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = const DarwinInitializationSettings();
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
