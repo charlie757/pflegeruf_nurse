@@ -37,7 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen>with WidgetsBindingObs
 
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async{
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.inactive:
@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen>with WidgetsBindingObs
         print('App is paused');
         break;
       case AppLifecycleState.resumed:
-        getCurrentLocation();
+       await getCurrentLocation();
         Future.delayed(const Duration(seconds: 2),(){
           Provider.of<HomeProvider>(context, listen: false).bookingApiFunction(false);
         });

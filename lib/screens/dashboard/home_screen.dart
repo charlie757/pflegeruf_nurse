@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +35,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  Timer? timer;
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
       callInitFunction(false);
     });
+
     super.initState();
   }
+
+  
+  @override
+  void dispose() {
+   timer!=null? timer!.cancel():null;
+    super.dispose();
+  }
+
+
 
   callInitFunction(bool isLoading) async{
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -47,8 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
     myProvider.homeApiFunction();
     Provider.of<NotificationProvider>(context, listen: false)
         .unreadNotificationApiFunction();
-    Future.delayed(const Duration(seconds: 2),(){
       myProvider.bookingApiFunction(isLoading);
+      timer= Timer.periodic(const Duration(seconds:5),(val){
+       getLocationPermission();
+       Future.delayed(const Duration(seconds:4),(){
+        myProvider.bookingApiFunction(false);
+       });
     });
   }
 
