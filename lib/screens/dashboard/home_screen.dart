@@ -62,7 +62,7 @@ int apiCallingCount = 0;
     Provider.of<NotificationProvider>(context, listen: false)
         .unreadNotificationApiFunction();
       myProvider.bookingApiFunction(isLoading);
-      timer= Timer.periodic(const Duration(seconds:10),(val){
+      timer= Timer.periodic(const Duration(seconds:8),(val){
        getLocationPermission();
        Future.delayed(const Duration(seconds: 5),(){
         myProvider.bookingApiFunction(false);
