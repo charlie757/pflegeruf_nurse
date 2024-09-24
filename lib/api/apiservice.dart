@@ -49,6 +49,7 @@ class ApiService {
           final client = http.Client();
           final streamedResponse = await client.send(request);
           final response = await http.Response.fromStream(streamedResponse);
+          print(SessionManager.token);
           print(response.request);
           log(response.body);
           print(response.statusCode);

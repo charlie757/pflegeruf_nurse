@@ -51,11 +51,10 @@ class HomeProvider extends ChangeNotifier {
     };
     print("data..$data");
     isLoading ? showCircleProgressDialog(navigatorKey.currentContext!) : null;
-    String body = Uri(queryParameters: data).query;
-    ApiService.apiMethod(
+    // String body = Uri(queryParameters: data).query;
+    ApiService.multiPartApiMethod(
             url: ApiUrl.homeBookingListUrl,
-            body: body,
-            method: checkApiMethod(httpMethod.post),
+            body: data,
             isErrorMessageShow: false,
             isBodyNotRequired: true)
         .then((value) {

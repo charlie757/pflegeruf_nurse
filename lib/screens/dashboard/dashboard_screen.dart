@@ -50,9 +50,6 @@ class _DashboardScreenState extends State<DashboardScreen>with WidgetsBindingObs
         break;
       case AppLifecycleState.resumed:
        await getCurrentLocation();
-        Future.delayed(const Duration(seconds: 2),(){
-          Provider.of<HomeProvider>(context, listen: false).bookingApiFunction(false);
-        });
         if (SessionManager.token.isNotEmpty) {
           Provider.of<NotificationProvider>(navigatorKey.currentContext!,
               listen: false)

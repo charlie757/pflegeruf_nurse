@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fontWeight: FontWeight.w600),
           actions: [
             GestureDetector(
-              onTap: () {
+              onTap: () { 
                 openBottomSheetOptions();
                 // Navigator.pop(context);
               },

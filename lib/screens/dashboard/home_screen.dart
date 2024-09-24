@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-
+int apiCallingCount = 0;
 
   callInitFunction(bool isLoading) async{
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -62,10 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<NotificationProvider>(context, listen: false)
         .unreadNotificationApiFunction();
       myProvider.bookingApiFunction(isLoading);
-      timer= Timer.periodic(const Duration(seconds:5),(val){
+      timer= Timer.periodic(const Duration(seconds:10),(val){
        getLocationPermission();
-       Future.delayed(const Duration(seconds:4),(){
+       Future.delayed(const Duration(seconds: 5),(){
         myProvider.bookingApiFunction(false);
+        apiCallingCount+=1;
        });
     });
   }

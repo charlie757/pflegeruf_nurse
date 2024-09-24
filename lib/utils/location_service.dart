@@ -32,10 +32,10 @@ Future getLocationPermission() async {
 
 Future currentLocation()async{
   LocationSettings locationSettings =const LocationSettings(
-    distanceFilter: 10,accuracy: LocationAccuracy.medium
+    distanceFilter: 10,accuracy: LocationAccuracy.best
   );
   Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.low,locationSettings: locationSettings);
+      desiredAccuracy: LocationAccuracy.best,locationSettings: locationSettings);
   print("currentpositiodfgedn${position.latitude}+${position.longitude}");
   SessionManager.setLat = position.latitude.toString();
   SessionManager.setLng = position.longitude.toString();
@@ -45,7 +45,7 @@ Future currentLocation()async{
 Future getCurrentLocation() async {
   try {
     Position? lastPosition = await Geolocator.getLastKnownPosition();
-    print("${lastPosition!.latitude}+${lastPosition!.longitude}");
+    print("${lastPosition!.latitude}+${lastPosition.longitude}");
     currentLocation().then((val){
       if(val!=null){
       }
