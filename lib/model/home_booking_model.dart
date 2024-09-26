@@ -75,6 +75,7 @@ class MyListing {
   dynamic patientId;
   dynamic nurseId;
   dynamic bookingId;
+  dynamic houseNUmber;
   dynamic address;
   dynamic street;
   dynamic postalCode;
@@ -108,6 +109,7 @@ class MyListing {
       this.patientId,
       this.nurseId,
       this.bookingId,
+      this.houseNUmber,
       this.address,
       this.street,
       this.postalCode,
@@ -141,6 +143,7 @@ class MyListing {
     patientId = json['patient_id'];
     nurseId = json['nurse_id'];
     bookingId = json['booking_id'];
+    houseNUmber = json['house_number'];
     address = json['address'];
     street = json['street'];
     postalCode = json['postal_code'];
@@ -177,6 +180,7 @@ class MyListing {
     data['patient_id'] = patientId;
     data['nurse_id'] = nurseId;
     data['booking_id'] = bookingId;
+    data['house_number']=houseNUmber ;
     data['address'] = address;
     data['street'] = street;
     data['postal_code'] = postalCode;

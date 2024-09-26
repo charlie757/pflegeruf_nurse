@@ -256,7 +256,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               child: Column(
                 children: [
                   getText(
-                      title: getTranslated('active', context)!.tr,
+                      title: getTranslated('active', context)!.tr.toLowerCase(),
                       size: 14,
                       fontFamily: FontFamily.poppinsMedium,
                       color: provier.isSelectedTabBar == 0
@@ -285,7 +285,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               child: Column(
                 children: [
                   getText(
-                      title: getTranslated('completed', context)!.tr,
+                      title: getTranslated('completed', context)!.tr.toLowerCase(),
                       size: 14,
                       fontFamily: FontFamily.poppinsMedium,
                       color: provier.isSelectedTabBar == 1

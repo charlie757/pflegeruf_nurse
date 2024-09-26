@@ -126,6 +126,7 @@
   "messageForCompleteBookingHintText":
       "ex. It’s my pleasure to work with you",
       "noReviews":"No Reviews",
-      "enterYourMessage":"Enter your message"
+      "enterYourMessage":"Enter your message",
+      "somethingWrong":"Something went wrong"
     
     }

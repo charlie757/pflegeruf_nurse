@@ -19,6 +19,7 @@ import '../../../utils/utils.dart';
 class ShowNavigationScreen extends StatefulWidget {
   final String lat;
   final String lng;
+  final String houseNumber;
   final String address;
   final String city;
   final String street;
@@ -27,6 +28,7 @@ class ShowNavigationScreen extends StatefulWidget {
   const ShowNavigationScreen(
       {required this.lat,
       required this.lng,
+      required this.houseNumber,
       required this.address,
       required this.city,
       required this.street,
@@ -179,7 +181,7 @@ class _ShowNavigationScreenState extends State<ShowNavigationScreen> {
                       ScreenSize.height(4),
                       getText(
                           title:
-                              "${widget.address}, ${widget.street}, ${widget.city}, ${widget.postalCode}",
+                              "${widget.houseNumber}, ${widget.address.isEmpty?'':"${widget.address},"} ${widget.street}, ${widget.city}, ${widget.postalCode}",
                           size: 13,
                           fontFamily: FontFamily.poppinsRegular,
                           color: AppColor.lightTextColor,

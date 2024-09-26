@@ -99,6 +99,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
   }
 
   Widget patientDetailsWidget(PatientDetailsProvider provider) {
+    var model =provider.model!.data!.myListing!;
     return Container(
       margin: const EdgeInsets.only(left: 9, right: 6),
       clipBehavior: Clip.none,
@@ -120,14 +121,14 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
             children: [
               Flexible(
                   child: Text(
-                provider.model!.data!.myListing!.patient != null &&
+                model.patient != null &&
                         provider.model!.data!.myListing!.patient!.profileName !=
                             null
-                    ? provider.model!.data!.myListing!.patient!.profileName
+                    ? model.patient!.profileName
                             .toString()
                             .substring(0)
                             .toUpperCase()[0] +
-                        provider.model!.data!.myListing!.patient!.profileName
+                        model.patient!.profileName
                             .toString()
                             .substring(1)
                     : '',
@@ -140,13 +141,13 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontWeight: FontWeight.w600),
               )),
               getText(
-                  title: provider.model!.data!.myListing!.bookingStatus ==
+                  title: model.bookingStatus ==
                           BookingTypes.NEW.value
                       ? "(${getTranslated('pending', context)!.tr})"
-                      : provider.model!.data!.myListing!.bookingStatus ==
+                      : model.bookingStatus ==
                               BookingTypes.ACCEPTED.value
                           ? "(${getTranslated('accepted', context)!.tr})"
-                          : provider.model!.data!.myListing!.bookingStatus ==
+                          : model.bookingStatus ==
                                   BookingTypes.REJECTED.value
                               ? ''
                               : "(${getTranslated('completed', context)!.tr})",
@@ -174,8 +175,8 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
               ScreenSize.width(17),
               Flexible(
                 child: getText(
-                    title: provider.model!.data!.myListing!.patient != null
-                        ? "${provider.model!.data!.myListing!.patient!.address ?? ""}, ${provider.model!.data!.myListing!.patient!.street ?? ""}, ${provider.model!.data!.myListing!.patient!.city ?? ""}, ${provider.model!.data!.myListing!.patient!.postalCode.toString()}"
+                    title: model.patient != null
+                        ? "${model.patient!.houseNumber??""}, ${model.patient!.address.toString().isEmpty?"":"${model.patient!.address}," } ${model.patient!.street ?? ""}, ${model.patient!.city ?? ""}, ${model.patient!.postalCode.toString()}"
                         : '',
                     size: 13,
                     fontFamily: FontFamily.poppinsRegular,
@@ -198,9 +199,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontWeight: FontWeight.w600),
                 ScreenSize.width(5),
                 getText(
-                    title: provider.model!.data!.myListing!.bookingDate != null
+                    title: model.bookingDate != null
                         ? TimeFormat.convertBookingDate(
-                            provider.model!.data!.myListing!.bookingDate)
+                            model.bookingDate)
                         : "",
                     size: 15,
                     fontFamily: FontFamily.poppinsMedium,
@@ -222,9 +223,9 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                     fontWeight: FontWeight.w600),
                 ScreenSize.width(5),
                 getText(
-                    title: provider.model!.data!.myListing!.bookingDate != null
+                    title: model.bookingDate != null
                         ? TimeFormat.convertBookingTime(
-                            provider.model!.data!.myListing!.bookingDate)
+                            model.bookingDate)
                         : "",
                     size: 15,
                     fontFamily: FontFamily.poppinsMedium,
@@ -247,10 +248,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                 ScreenSize.width(5),
                 Flexible(
                   child: Text(
-                    provider.model!.data!.myListing!.service != null &&
-                            provider.model!.data!.myListing!.service!.name !=
+                    model.service != null &&
+                            model.service!.name !=
                                 null
-                        ? provider.model!.data!.myListing!.service!.name
+                        ? model.service!.name
                         : "",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -274,12 +275,12 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
           ScreenSize.height(10),
           detailsWidget(provider),
           ScreenSize.height(10),
-          provider.model!.data!.myListing!.bookingMessage2!.isNotEmpty &&
-                  provider.model!.data!.myListing!.bookingMessage2 != null
+          model.bookingMessage2!.isNotEmpty &&
+                  model.bookingMessage2 != null
               ? completeBookingMsgWidget(provider)
               : Container(),
           ScreenSize.height(43),
-          provider.model!.data!.myListing!.bookingStatus ==
+          model.bookingStatus ==
                   BookingTypes.NEW.value
               ? Container()
               : AppButton(
@@ -289,22 +290,22 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                   buttonColor: AppColor.rejectColor,
                   onTap: () {
                     String address =
-                        "${provider.model!.data!.myListing!.patient!.address ?? ""}, ${provider.model!.data!.myListing!.patient!.street ?? ""},${provider.model!.data!.myListing!.patient!.city ?? ""}, ${provider.model!.data!.myListing!.patient!.postalCode ?? ""}";
+                        "${model.patient!.address ?? ""}, ${model.patient!.street ?? ""},${model.patient!.city ?? ""}, ${model.patient!.postalCode ?? ""}";
                     AppRoutes.pushCupertinoNavigation(ShowNavigationScreen(
-                      lat: provider.model!.data!.myListing!.patient!.lat
+                      lat: model.patient!.lat
                           .toString(),
-                      lng: provider.model!.data!.myListing!.patient!.lng
+                      lng: model.patient!.lng
                           .toString(),
+                          houseNumber: model.patient!.houseNumber??"",
                       city:
-                          provider.model!.data!.myListing!.patient!.city ?? '',
+                          model.patient!.city ?? '',
                       address:
-                          provider.model!.data!.myListing!.patient!.address ??
+                          model.patient!.address ??
                               "",
                       street:
-                          provider.model!.data!.myListing!.patient!.street ??
+                          model.patient!.street ??
                               "",
-                      postalCode: provider
-                              .model!.data!.myListing!.patient!.postalCode ??
+                      postalCode: model.patient!.postalCode ??
                           "",
                       fullAddress: address,
                     ));
@@ -315,6 +316,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
   }
 
   completeBookingMsgWidget(PatientDetailsProvider myProvider) {
+    var model = myProvider.model!.data!.myListing!;
     return Container(
       padding: const EdgeInsets.only(top: 33, left: 0, right: 0),
       child: Column(
@@ -340,21 +342,21 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       blurRadius: 5)
                 ]),
             child: getText(
-                title: myProvider.model!.data!.myListing!.bookingMessage2 ?? "",
+                title: model.bookingMessage2 ?? "",
                 size: 12,
                 fontFamily: FontFamily.poppinsRegular,
                 color: AppColor.lightTextColor,
                 fontWeight: FontWeight.w400),
           ),
           ScreenSize.height(20),
-          myProvider.model!.data!.myListing!.nurseDoc != null &&
-                  myProvider.model!.data!.myListing!.nurseDoc
+          model.nurseDoc != null &&
+                  model.nurseDoc
                       .toString()
                       .isNotEmpty
               ? GestureDetector(
                   onTap: () {
                     Utils.openUrl(
-                        myProvider.model!.data!.myListing!.nurseDoc.toString());
+                        model.nurseDoc.toString());
                   },
                   child: Container(
                       width: double.infinity,
@@ -379,7 +381,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                           ScreenSize.width(5),
                           Expanded(
                             child: Text(
-                                myProvider.model!.data!.myListing!.nurseDoc
+                                model.nurseDoc
                                     .toString()
                                     .split('/')
                                     .last,
@@ -721,9 +723,10 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                       ScreenSize.height(31),
                       getText(
                           title:
-                              getTranslated('pleaseDocumentProvidedService', context)!
+                              getTranslated('finalMessageForPatient', context)!
                                   .tr,
                           size: 12,
+                          textAlign: TextAlign.center,
                           fontFamily: FontFamily.poppinsSemiBold,
                           color: AppColor.appTheme,
                           fontWeight: FontWeight.w600),
@@ -738,6 +741,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
                                   .tr,
                           size: 12,
                           fontFamily: FontFamily.poppinsSemiBold,
+                          textAlign: TextAlign.center,
                           color: AppColor.appTheme,
                           fontWeight: FontWeight.w600),
                       ScreenSize.height(35),
@@ -855,6 +859,7 @@ class _PatientDetailSreenState extends State<PatientDetailSreen> {
         if (val!.isEmpty) {
           return getTranslated('enterYourMessage', context)!.tr;
         }
+        return null;
       },
     );
   }

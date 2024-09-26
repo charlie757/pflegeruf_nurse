@@ -120,7 +120,8 @@
   "messageForCompleteBookingHintText":
       "Ex. Es ist mir eine Freude, mit Ihnen zusammenzuarbeiten",
       "noReviews":"Keine Bewertungen",
-      "enterYourMessage":"Geben Sie Ihre Nachricht ein"
+      "enterYourMessage":"Geben Sie Ihre Nachricht ein",
+      "somethingWrong":"Da ist etwas schiefgelaufen"
 }
   
   

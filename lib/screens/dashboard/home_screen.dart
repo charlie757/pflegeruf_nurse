@@ -64,7 +64,7 @@ int apiCallingCount = 0;
       myProvider.bookingApiFunction(isLoading);
       timer= Timer.periodic(const Duration(seconds:8),(val){
        getLocationPermission();
-       Future.delayed(const Duration(seconds: 5),(){
+       Future.delayed(const Duration(seconds: 3),(){
         myProvider.bookingApiFunction(false);
         apiCallingCount+=1;
        });
@@ -251,10 +251,11 @@ int apiCallingCount = 0;
   }
 
   bookingUi(HomeProvider provider, int index) {
+    var model = provider.bookingModel!.data!.myListing![index];
     return GestureDetector(
       onTap: () {
         AppRoutes.pushCupertinoNavigation(PatientDetailSreen(
-          bookingId: provider.bookingModel!.data!.myListing![index].bookingId
+          bookingId: model.bookingId
               .toString(),
         ));
       },
@@ -278,18 +279,16 @@ int apiCallingCount = 0;
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getText(
-                    title: provider
-                                .bookingModel!.data!.myListing![index].user !=
+                    title: model.user !=
                             null
-                        ? "${provider.bookingModel!.data!.myListing![index].user!.pUserName != null ? provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserName.toString().substring(1) : ''} ${provider.bookingModel!.data!.myListing![index].user!.pUserSurname != null ? provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(0).toUpperCase()[0] + provider.bookingModel!.data!.myListing![index].user!.pUserSurname.toString().substring(1) : ''}"
+                        ? "${model.user!.pUserName != null ? model.user!.pUserName.toString().substring(0).toUpperCase()[0] + model.user!.pUserName.toString().substring(1) : ''} ${model.user!.pUserSurname != null ? model.user!.pUserSurname.toString().substring(0).toUpperCase()[0] + model.user!.pUserSurname.toString().substring(1) : ''}"
                         : '',
                     size: 20,
                     fontFamily: FontFamily.poppinsMedium,
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.w600),
                 getText(
-                    title: TimeFormat.convertBookingTime(provider
-                        .bookingModel!.data!.myListing![index].statusCreatedAt),
+                    title: TimeFormat.convertBookingTime(model.statusCreatedAt),
                     size: 14,
                     fontFamily: FontFamily.poppinsRegular,
                     color: AppColor.rejectColor,
@@ -309,7 +308,7 @@ int apiCallingCount = 0;
                 Flexible(
                   child: getText(
                       title:
-                          "${provider.bookingModel!.data!.myListing![index].address.isEmpty || provider.bookingModel!.data!.myListing![index].address != null ? '' : "${provider.bookingModel!.data!.myListing![index].address},"} ${provider.bookingModel!.data!.myListing![index].street ?? ''}, ${provider.bookingModel!.data!.myListing![index].city ?? ''}, ${provider.bookingModel!.data!.myListing![index].postalCode ?? ''}",
+                          "${model.houseNUmber??''}, ${model.address.isEmpty || model.address != null ? '' : "${model.address},"} ${model.street ?? ''}, ${model.city ?? ''}, ${model.postalCode ?? ''}",
                       size: 13,
                       fontFamily: FontFamily.poppinsRegular,
                       color: AppColor.lightTextColor,
@@ -330,11 +329,10 @@ int apiCallingCount = 0;
                       color: AppColor.blackColor,
                       fontWeight: FontWeight.w600),
                   getText(
-                      title: provider.bookingModel!.data!.myListing![index]
+                      title: model
                                   .productCreatedAt !=
                               null
-                          ? TimeFormat.convertBookingDate(provider.bookingModel!
-                              .data!.myListing![index].productCreatedAt)
+                          ? TimeFormat.convertBookingDate(model.productCreatedAt)
                           : '',
                       size: 15,
                       fontFamily: FontFamily.poppinsMedium,
@@ -355,11 +353,10 @@ int apiCallingCount = 0;
                       color: AppColor.blackColor,
                       fontWeight: FontWeight.w600),
                   getText(
-                      title: provider.bookingModel!.data!.myListing![index]
+                      title:model
                                   .productCreatedAt !=
                               null
-                          ? TimeFormat.convertBookingTime(provider.bookingModel!
-                              .data!.myListing![index].statusCreatedAt)
+                          ? TimeFormat.convertBookingTime(model.statusCreatedAt)
                           : '',
                       size: 15,
                       fontFamily: FontFamily.poppinsMedium,
@@ -382,9 +379,9 @@ int apiCallingCount = 0;
                   ScreenSize.width(5),
                   Flexible(
                     child: Text(
-                      provider.bookingModel!.data!.myListing![index].category !=
+                      model.category !=
                               null
-                          ? provider.bookingModel!.data!.myListing![index]
+                          ? model
                                   .category!.categoryName ??
                               ""
                           : "",
@@ -418,13 +415,13 @@ int apiCallingCount = 0;
                             },
                             yesTap: () {
                               print(
-                                provider.bookingModel!.data!.myListing![index]
+                                model
                                     .bookingId
                                     .toString(),
                               );
                               Navigator.pop(context);
                               provider.acceptBookingApiFunction(
-                                provider.bookingModel!.data!.myListing![index]
+                                model
                                     .bookingId
                                     .toString(),
                               );
@@ -493,7 +490,7 @@ int apiCallingCount = 0;
                             yesTap: () {
                               Navigator.pop(context);
                               provider.rejectBookingApiFunction(
-                                provider.bookingModel!.data!.myListing![index]
+                                model
                                     .bookingId
                                     .toString(),
                               );

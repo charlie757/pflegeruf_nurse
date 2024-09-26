@@ -113,6 +113,7 @@ class Patient {
   dynamic insurance;
   dynamic insuranceNumber;
   dynamic dob;
+  dynamic houseNumber;
   dynamic address;
   dynamic street;
   dynamic postalCode;
@@ -130,6 +131,7 @@ class Patient {
       this.insurance,
       this.insuranceNumber,
       this.dob,
+      this.houseNumber,
       this.address,
       this.street,
       this.postalCode,
@@ -147,6 +149,7 @@ class Patient {
     insurance = json['insurance'];
     insuranceNumber = json['insurance_number'];
     dob = json['dob'];
+    houseNumber =json['house_number'];
     address = json['address'];
     street = json['street'];
     postalCode = json['postal-code'];
@@ -166,6 +169,7 @@ class Patient {
     data['insurance'] = insurance;
     data['insurance_number'] = insuranceNumber;
     data['dob'] = dob;
+    data['house_number'] = houseNumber;
     data['address'] = address;
     data['street'] = street;
     data['postal-code'] = postalCode;
