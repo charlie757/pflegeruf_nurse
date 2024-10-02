@@ -6,7 +6,6 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/language_constants.dart';
-import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/forgot_password_provider.dart';
 import 'package:nurse/utils/app_validation.dart';
 import 'package:nurse/utils/utils.dart';

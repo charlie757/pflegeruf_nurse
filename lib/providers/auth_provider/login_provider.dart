@@ -15,6 +15,7 @@ import '../../utils/location_service.dart';
 
 class LoginProvider extends ChangeNotifier {
   LoginModel? loginModel;
+   bool isChecked = false;
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -31,6 +32,7 @@ class LoginProvider extends ChangeNotifier {
     passwordController.clear();
     isKeepSigned = false;
     isVisiblePassword = true;
+    isChecked=false;
   }
 
   updateIsVisiblePassword(value) {
@@ -52,14 +54,25 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  
+  updateIsChecked(value) {
+    isChecked = value;
+    notifyListeners();
+  }
+
   checkValidation() {
     if (AppValidation.emailValidator(emailController.text) == null &&
         AppValidation.passwordValidator(passwordController.text) == null) {
       emailValidationMsg = AppValidation.emailValidator(emailController.text);
       passwordValidationMsg =
           AppValidation.passwordValidator(passwordController.text);
-
-      callApiFunction();
+ if (!isChecked) {
+        Utils.errorSnackBar(
+            'Accept terms & condition', navigatorKey.currentContext);
+      }
+      else{
+        callApiFunction();
+      }
     } else {
       emailValidationMsg = AppValidation.emailValidator(emailController.text);
       passwordValidationMsg =
@@ -102,7 +115,6 @@ class LoginProvider extends ChangeNotifier {
           updateLoading(false);
           if (value != null) {
             loginModel = LoginModel.fromJson(value);
-
             if (loginModel!.data != null && loginModel!.data!.status == true) {
               /// check account type
               if (loginModel!.data!.userDetails!.userAccountType == 2) {

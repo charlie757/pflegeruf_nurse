@@ -121,7 +121,11 @@
       "Ex. Es ist mir eine Freude, mit Ihnen zusammenzuarbeiten",
       "noReviews":"Keine Bewertungen",
       "enterYourMessage":"Geben Sie Ihre Nachricht ein",
-      "somethingWrong":"Da ist etwas schiefgelaufen"
+      "somethingWrong":"Da ist etwas schiefgelaufen",
+      "iAcceptTheGeneral":"Ich akzeptiere die allgemeinen",
+      "ternsCondition":"Allgemeine Nutzungsbedingungen",
+        "andThe":"und die",
+        "privacyPolicy":"Datenschutzrichtlinie"
 }
   
   

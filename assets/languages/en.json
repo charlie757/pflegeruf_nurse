@@ -127,6 +127,10 @@
       "ex. It’s my pleasure to work with you",
       "noReviews":"No Reviews",
       "enterYourMessage":"Enter your message",
-      "somethingWrong":"Something went wrong"
+      "somethingWrong":"Something went wrong",
+      "iAcceptTheGeneral":"I accept the general",
+      "ternsCondition":"terms & conditions",
+      "andThe":"and the",
+      "privacyPolicy":"privacy policy"
     
     }

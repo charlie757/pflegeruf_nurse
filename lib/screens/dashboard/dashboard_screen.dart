@@ -15,8 +15,6 @@ import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/dashboard_provider/home_provider.dart';
 import '../../utils/location_service.dart';
 
 class DashboardScreen extends StatefulWidget {

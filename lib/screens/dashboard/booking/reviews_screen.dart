@@ -15,6 +15,7 @@ import 'package:readmore/readmore.dart';
 
 import '../../../helper/appimages.dart';
 
+// ignore: must_be_immutable
 class ReviewsScreen extends StatefulWidget {
   ReviewModel? model;
   ReviewsScreen({this.model});

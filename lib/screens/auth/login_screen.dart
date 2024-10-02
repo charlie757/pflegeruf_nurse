@@ -1,5 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:nurse/api/apiurl.dart';
 import 'package:nurse/config/approutes.dart';
 import 'package:nurse/helper/appbutton.dart';
 import 'package:nurse/helper/appcolor.dart';
@@ -8,7 +9,6 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/language_constants.dart';
-import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/login_provider.dart';
 import 'package:nurse/screens/auth/forgot_password_screen.dart';
 import 'package:nurse/utils/app_validation.dart';
@@ -146,6 +146,55 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
+                  ScreenSize.height(20),
+                           Row(
+                    children: [
+                      customCheckBox(myProvider),
+                      ScreenSize.width(10),
+                     Flexible(child: Text.rich(TextSpan(
+                       text: "${getTranslated(
+                           'iAcceptTheGeneral', context)!
+                           .tr} ",style: TextStyle(
+                         fontSize: 9, fontFamily: FontFamily.poppinsMedium, color: AppColor.textBlackColor.withOpacity(.7), fontWeight: FontWeight.w500
+                     ),children: [
+                       TextSpan(
+                         recognizer: TapGestureRecognizer()..onTap = () {
+                           Utils.openUrl(ApiUrl.termsConditionUrl);
+                         },
+                         text:"${getTranslated(
+                             'ternsCondition', context)!
+                             .tr} ",
+                           style: TextStyle(
+                             decoration: TextDecoration.underline,
+                           fontSize: 9, fontFamily: FontFamily.poppinsMedium, color: AppColor.appTheme, fontWeight: FontWeight.w500
+                       ),children: [
+                         TextSpan(
+                           text:  "${getTranslated(
+                               'andThe', context)!
+                               .tr} ",style: TextStyle(
+                             decoration: TextDecoration.none,
+                             fontSize: 9, fontFamily: FontFamily.poppinsMedium, color: AppColor.textBlackColor.withOpacity(.7), fontWeight: FontWeight.w500
+                         ),children: [
+                           TextSpan(
+                               recognizer: TapGestureRecognizer()..onTap = () {
+                                 Utils.openUrl(ApiUrl.privacyPolicyUrl);
+                               },
+                             text: getTranslated(
+                                 'privacyPolicy', context)!
+                                 .tr,
+                             style: TextStyle(
+                                 decoration: TextDecoration.underline,
+                                 fontSize: 9, fontFamily: FontFamily.poppinsMedium, color: AppColor.appTheme, fontWeight: FontWeight.w500
+                             )
+                           )
+                         ]
+                         )
+                       ]
+                       )
+                     ]
+                     )))
+                    ],
+                  ),
                   ScreenSize.height(49),
                   AppButton(
                       title: getTranslated('logIn', context)!.tr,
@@ -199,4 +248,43 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  
+  customCheckBox(LoginProvider provider) {
+    return GestureDetector(
+      onTap: () {
+        if (provider.isChecked) {
+          provider.updateIsChecked(false);
+        } else {
+          provider.updateIsChecked(true);
+        }
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        height: 20,
+        width: 20,
+        decoration: BoxDecoration(
+            color: provider.isChecked ? AppColor.appTheme : AppColor.whiteColor,
+            border: Border.all(
+                color: provider.isChecked
+                    ? AppColor.appTheme
+                    : AppColor.textBlackColor.withOpacity(.3)),
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: [
+              BoxShadow(
+                  offset: const Offset(0, 2),
+                  blurRadius: 20,
+                  color: AppColor.blackColor.withOpacity(.2))
+            ]),
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.check,
+          size: 15,
+          color: AppColor.whiteColor,
+        ),
+      ),
+    );
+  }
+
 }

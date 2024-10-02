@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:nurse/api/apiurl.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
 
@@ -53,7 +54,7 @@ class ApiService {
           print(response.request);
           log(response.body);
           print(response.statusCode);
-          return _handleResponse(response, isErrorMessageShow);
+          return _handleResponse(response, isErrorMessageShow,url);
         } on Exception catch (_) {
           rethrow;
         }
@@ -83,7 +84,7 @@ class ApiService {
           var res = await request.send();
           var vb = await http.Response.fromStream(res);
           log(vb.body);
-          return _handleResponse(vb, isErrorMessageShow);
+          return _handleResponse(vb, isErrorMessageShow, url);
         } on Exception catch (_) {
           rethrow;
         }
@@ -96,7 +97,7 @@ class ApiService {
 
   // Helper method to handle API response
   static Map<String, dynamic>? _handleResponse(
-      http.Response response, isErrorMessageShow) {
+      http.Response response, isErrorMessageShow, String url) {
     if (response.statusCode == 200) {
       /// checking status code inside of "response status code"
       var dataAll = json.decode(response.body);
@@ -106,7 +107,7 @@ class ApiService {
       else if(dataAll['code']==422||dataAll['authStatus']==false) {
         Utils.errorSnackBar(
             dataAll['message'], navigatorKey.currentContext);
-        if(Constants.is401Error==false){
+        if(Constants.is401Error==false&&url!=ApiUrl.loginUrl){
           Future.delayed(const Duration(seconds: 1),(){
             Constants.is401Error=true;
             Utils.logOut();

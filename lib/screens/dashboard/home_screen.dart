@@ -57,11 +57,10 @@ int apiCallingCount = 0;
 
   callInitFunction(bool isLoading) async{
     final myProvider = Provider.of<HomeProvider>(context, listen: false);
-  await getLocationPermission();
     myProvider.homeApiFunction();
+      myProvider.bookingApiFunction(isLoading);
     Provider.of<NotificationProvider>(context, listen: false)
         .unreadNotificationApiFunction();
-      myProvider.bookingApiFunction(isLoading);
       timer= Timer.periodic(const Duration(seconds:8),(val){
        getLocationPermission();
        Future.delayed(const Duration(seconds: 3),(){

@@ -7,7 +7,6 @@ import 'package:nurse/helper/fontfamily.dart';
 import 'package:nurse/helper/getText.dart';
 import 'package:nurse/helper/screensize.dart';
 import 'package:nurse/languages/language_constants.dart';
-import 'package:nurse/languages/string_key.dart';
 import 'package:nurse/providers/auth_provider/forgot_verification_provider.dart';
 import 'package:nurse/utils/utils.dart';
 import 'package:nurse/widgets/appBar.dart';
