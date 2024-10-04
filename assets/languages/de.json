@@ -125,7 +125,9 @@
       "iAcceptTheGeneral":"Ich akzeptiere die allgemeinen",
       "ternsCondition":"Allgemeine Nutzungsbedingungen",
         "andThe":"und die",
-        "privacyPolicy":"Datenschutzrichtlinie"
+        "privacyPolicy":"Datenschutzrichtlinie",
+        "acceptTermsCondition":"Allgemeine Geschäftsbedingungen akzeptieren",
+        "userNotFound":"Benutzer nicht gefunden"
 }
   
   

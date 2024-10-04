@@ -4,12 +4,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:nurse/api/apiservice.dart';
 import 'package:nurse/api/apiurl.dart';
 import 'package:nurse/config/approutes.dart';
+import 'package:nurse/languages/language_constants.dart';
 import 'package:nurse/model/login_model.dart';
 import 'package:nurse/screens/dashboard/dashboard_screen.dart';
 import 'package:nurse/utils/app_validation.dart';
 import 'package:nurse/utils/session_manager.dart';
 import 'package:nurse/utils/utils.dart';
-
+import 'package:get/get.dart';
 import '../../utils/constants.dart';
 import '../../utils/location_service.dart';
 
@@ -68,7 +69,7 @@ class LoginProvider extends ChangeNotifier {
           AppValidation.passwordValidator(passwordController.text);
  if (!isChecked) {
         Utils.errorSnackBar(
-            'Accept terms & condition', navigatorKey.currentContext);
+            getTranslated("acceptTermsCondition", navigatorKey.currentContext!)!.tr, navigatorKey.currentContext);
       }
       else{
         callApiFunction();
@@ -124,7 +125,7 @@ class LoginProvider extends ChangeNotifier {
                 SessionManager.setToken = loginModel!.data!.token;
                 AppRoutes.pushReplacementNavigation(const DashboardScreen(index: 0,));
               } else {
-                Utils.errorSnackBar('User not found', navigatorKey.currentContext);
+                Utils.errorSnackBar(getTranslated("userNotFound", navigatorKey.currentContext!)!.tr, navigatorKey.currentContext);
               }
             } else {
               Utils.errorSnackBar(loginModel!.message, navigatorKey.currentContext);

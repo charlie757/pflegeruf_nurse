@@ -131,6 +131,7 @@
       "iAcceptTheGeneral":"I accept the general",
       "ternsCondition":"terms & conditions",
       "andThe":"and the",
-      "privacyPolicy":"privacy policy"
-    
+      "privacyPolicy":"privacy policy",
+      "acceptTermsCondition":"Accept terms & condition",
+      "userNotFound":"User not found"
     }
